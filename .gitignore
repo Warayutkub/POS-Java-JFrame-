@@ -1,0 +1,40 @@
+# Ignore Gradle files
+.gradle/
+build/
+
+# Ignore IntelliJ IDEA files
+.idea/
+
+# Ignore Eclipse project files
+.project
+.classpath
+.settings/
+
+# Ignore NetBeans project files
+nbproject/
+
+# Ignore Java compiled files
+*.class
+
+# Ignore Java archives
+*.jar
+*.war
+*.ear
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.swp
+*.swo
+
+# Ignore IDE specific files
+*.iml
+*.ipr
+*.iws
+
+# Ignore Maven target directory
+target/
+
+# Ignore VSCode settings
+.vscode/
