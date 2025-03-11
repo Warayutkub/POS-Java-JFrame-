@@ -1,6 +1,7 @@
 package backend.models.Products;
 
 public class Product {
+    private int id;
     private String name;
     private double price;
     private double discount;
@@ -37,6 +38,7 @@ public class Product {
     public double getDiscount(){return this.discount;}
     public double getTax(){return this.tax;}
     public int getStock(){return this.stock;}
+    public int getID(){return this.id;}
     public String getType(){return this.type;}
 
 
@@ -46,7 +48,8 @@ public class Product {
 
 
     public String toString(){
-        return ("Name : " + name + "\n" + 
+        return ("ID : " + id + "\n" + 
+            "Name : " + name + "\n" + 
         "Price : " + price + "\n" + 
         "Discount : " + discount + "%\n" + 
         "Tax : " + tax + "%\n" + 

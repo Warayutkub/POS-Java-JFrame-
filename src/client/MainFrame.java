@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
@@ -58,6 +59,11 @@ public class MainFrame extends JFrame{
 
     private void TopPanelManage(){
         topPanel.setLayout(new FlowLayout());
+        topPanel.add(new JLabel("POS"));
+        topPanel.add(new JLabel("POS"));
+        topPanel.add(new JLabel("POS"));
+        topPanel.add(new JLabel("POS"));
+        topPanel.add(new JLabel("POS"));
         topPanel.add(new POSDateTimeFrame());
     }
 
