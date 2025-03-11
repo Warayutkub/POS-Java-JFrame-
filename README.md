@@ -3,12 +3,13 @@
 │   ├── /client
 │   │   ├── MainFrame.java         # Main window of the program, used to switch between panels
 │   │   ├── LoginPanel.java        # UI for login (username, password fields)
-│   │   ├── RegisterPanel.java     # หน้า UI สำหรับสมัครสมาชิก (สร้างผู้ใช้ใหม่)
+│   │   ├── RegisterPanel.java     # หน้า UI สำหรับสมัครสมาชิก (สร้างผู้ใช้ใหม่ ลูกค้า)
 │   │   ├── POSPanel.java          # หน้า UI หลักของระบบ POS (เลือกสินค้า, ตะกร้า, ชำระเงิน)
 │   │   ├── InventoryPanel.java    # หน้า UI สำหรับจัดการสต็อกสินค้า (ดู, เพิ่ม, แก้ไข)
 │   │   └── components
 │   │       ├── ProductCard.java   # คอมโพเนนต์ UI แสดงข้อมูลสินค้า (เช่น ชื่อ, ราคา)
 │   │       └── CartTable.java     # คอมโพเนนต์ UI แสดงตะกร้าสินค้าแบบตาราง
+|   |
 │   ├── /backend
 │   │   ├── /models
 │   │   │   ├── User.java         # โมเดลผู้ใช้ (เก็บ username, password, role)

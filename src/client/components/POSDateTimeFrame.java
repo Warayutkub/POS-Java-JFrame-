@@ -1,0 +1,30 @@
+package client.components;
+import javax.swing.*;
+import java.awt.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class POSDateTimeFrame extends JLabel{
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    private LocalDateTime now = LocalDateTime.now();
+
+    public POSDateTimeFrame() {
+        setFont(new Font("Arial", Font.BOLD, 16));
+        setText(now.format(formatter));
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateDateTime();
+            }
+        });
+        timer.start();
+
+    }
+
+    private void updateDateTime() {
+        LocalDateTime now = LocalDateTime.now();
+        setText(now.format(formatter));
+    }
+}

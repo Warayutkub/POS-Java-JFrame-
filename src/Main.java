@@ -1,8 +1,8 @@
-import client.PosPanel;
+import client.MainFrame;
 
 public class Main {
     
     public static void main(String[] args) throws Exception {
-        new PosPanel();
+        new MainFrame();
     }
 }
