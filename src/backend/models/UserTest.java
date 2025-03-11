@@ -1,8 +1,8 @@
 package backend.models;
 
-public class User {
+public class UserTest {
     private String data;
-    public User(String userName,String password,int type){
+    public UserTest(String userName,String password,int type){
         this.data = (type == 0) ? Login(userName,password): Register(userName,password);
     }
 
