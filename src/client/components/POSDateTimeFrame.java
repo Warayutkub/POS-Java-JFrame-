@@ -23,7 +23,6 @@ public class POSDateTimeFrame extends JLabel{
             }
         });
         timer.start();
-
     }
 
     private void updateDateTime() {
