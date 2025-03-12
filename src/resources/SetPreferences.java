@@ -2,10 +2,10 @@ package resources;
 
 import java.awt.Font;
 
-public class SetPreferences{
-    private Font font = new Font("Arial", Font.BOLD, 16);
+public class SetPreferences {
 
-    public Font getFont() {
-        return this.font;
+    public Font getFont(int size) {
+        Font font = new Font("Arial", Font.BOLD, size);
+        return font;
     }
 }
