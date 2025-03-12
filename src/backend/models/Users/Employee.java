@@ -25,6 +25,9 @@ public class Employee extends User {
         this.trackSalesTotal = data;
     }
 
+    public void setPermission(String permission){this.permission = permission;}
+    public void setRole(String Role){this.role = Role;}
+
     public String toString(){
         return (super.toString() + "\nPermission : " + permission + "\n" + 
         "Role : " + role + "\n" + 

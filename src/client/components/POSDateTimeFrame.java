@@ -11,10 +11,10 @@ import java.awt.event.ActionListener;
 public class POSDateTimeFrame extends JLabel{
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private LocalDateTime now = LocalDateTime.now();
-    private SetPreferences preferences = new SetPreferences();
+    private SetPreferences preferences = new SetPreferences(); 
     
     public POSDateTimeFrame() {
-        setFont(preferences.getFont());
+        setFont(preferences.getFont(12));
         setText(now.format(formatter));
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
