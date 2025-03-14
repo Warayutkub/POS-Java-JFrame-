@@ -50,7 +50,7 @@ public class DashboardService {
 
         for (int c = 0; c < tableData.length; c++) {
             switch (tableData[c][1]) {
-                case "1" -> tableData[c][1] = "Electronic";
+                case "1" -> tableData[c][1] = "Electronic"; 
                 case "2" -> tableData[c][1] = "Food";
                 case "3" -> tableData[c][1] = "Fashion";
                 case "4" -> tableData[c][1] = "Cosmetic";
@@ -60,11 +60,6 @@ public class DashboardService {
                 case "8" -> tableData[c][1] = "Toy";
             }
         }
-
-        for (String[] test : Users) {
-            System.out.println(Arrays.toString(test));
-        }
-
         return tableData;
     }
 
@@ -84,13 +79,15 @@ public class DashboardService {
 
     public double getDataTopDashboard(String type, String date) {
         if (type.equals("order")) {
-            double order = 0;
+            ArrayList<String> dataOrder = new ArrayList<String>();
             for (int line = 0; line < History.length; line++) {
                 if (History[line][2].equals(date)) {
-                    order++;
+                    if (!(new Tools().LinearSearch(dataOrder, date))){
+                        dataOrder.add(date);
+                    }
                 }
             }
-            return order;
+            return dataOrder.size();
         } else {
             double total = 0;
             for (int line = 0; line < History.length; line++) {
@@ -105,11 +102,14 @@ public class DashboardService {
 
     public double getDataAllForTopBoard(String type) {
         if (type.equals("order")) {
-            double order = 0;
+            ArrayList<String> dataOrder = new ArrayList<String>();
             for (int line = 0; line < History.length; line++) {
-                order++;
+                System.out.println(Arrays.toString(dataOrder.toArray()));
+                if (!(new Tools().LinearSearch(dataOrder, History[line][0]))){
+                    dataOrder.add(History[line][0]);
+                }
             }
-            return order;
+            return dataOrder.size();
         } else {
             double total = 0;
             for (int line = 0; line < History.length; line++) {

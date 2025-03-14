@@ -38,3 +38,6 @@ target/
 
 # Ignore VSCode settings
 .vscode/
+
+# Ignore Test File
+.Test/

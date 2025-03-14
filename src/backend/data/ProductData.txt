@@ -1,3 +1,1 @@
-001,Shampoo,49,5,7,90,2
-002,Shampoo_Bright,59,0,7,21,2
-003,Shampoo2,9,0,7,1,2
+1,CeraVe,510,0,7,199,4,./src/backend/images/CeraVe.jpg

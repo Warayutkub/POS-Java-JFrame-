@@ -14,9 +14,9 @@ Data Structure
     User
         id,name,phone,email,password
     Product
-        id,name,price,discount,tax,stock,type
+        id,name,price,discount,tax,stock,type,PathImage
     InMemory(History)
-        BillId,typeProduct,date,time,costumerName,productName,QTY,total(Bath)
+        BillId,typeProduct,date,time,costumerName,productName,QTY,total(Bath) 
 
 
 /backend
