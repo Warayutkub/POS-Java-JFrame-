@@ -2,26 +2,24 @@ package backend.services;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Arrays;
+import java.io.IOException;
 
 public class InventoryService {
-    private final String productPath = "../data/ProductData.txt";
-    private final String historyPath = "../data/InMemoryStore.txt";
+    private final String productPath = "./src/backend/data/ProductData.txt";
+    private final String historyPath = "./src/backend/data/InMemoryStore.txt";
 
     public String[][] getAllProductData() {
         String[][] product = new String[0][0];
-        try (BufferedReader br = new BufferedReader(
-                new FileReader(getClass().getResource(productPath).getFile()))) {
+        try(BufferedReader bf = new BufferedReader(new FileReader(productPath))){
             String line;
-            product = new String[(int) br.lines().count()][7];
+            product = new String[(int) bf.lines().count()][7];
             int i = 0;
-            try (BufferedReader br2 = new BufferedReader(
-                    new FileReader(getClass().getResource(productPath).getPath()))) {
-                while ((line = br2.readLine()) != null) {
-                    product[i] = line.split(",");
-                    i++;
-                }
+            BufferedReader bf2 = new BufferedReader(new FileReader(productPath));
+            while ((line = bf2.readLine()) != null) {
+                product[i] = line.split(",");
+                i++;
             }
+            bf2.close();
             return product;
 
         } catch (Exception e) {
@@ -32,22 +30,22 @@ public class InventoryService {
 
     public String[][] getAllSalesHistory() {
         String data[][] = new String[0][0];
-        try (BufferedReader bf = new BufferedReader(
-                new FileReader(getClass().getResource(historyPath).getPath()))) {
+
+        try {
+            BufferedReader bf = new BufferedReader(new FileReader(historyPath));
+            BufferedReader bf2 = new BufferedReader(new FileReader(historyPath));
             String line;
             data = new String[(int) bf.lines().count()][7];
             int i = 0;
-            try (BufferedReader bf2 = new BufferedReader(
-                    new FileReader(getClass().getResource(historyPath).getPath()))) {
-                while ((line = bf2.readLine()) != null) {
-                    data[i] = line.split(",");
-                    i++;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            while ((line = bf2.readLine()) != null) {
+                System.out.print("Test");
+                data[i] = line.split(",");
+                i++;
             }
+            bf.close();
+            bf2.close();
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return data;

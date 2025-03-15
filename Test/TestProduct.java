@@ -36,9 +36,11 @@ public class TestProduct extends JFrame {
         panel.setBorder(new LineBorder(Color.pink));
         Container c = getContentPane();
         c.setLayout(new FlowLayout(FlowLayout.CENTER));
+
         for (int i = 0; i < 12; i++) {
             panel.add(new ProductCard("001", "Shampoo", "59.99", "./src/backend/data/images/Default_image.png"));
         }
+        
         JScrollPane scroller = new JScrollPane(panel);
         scroller.setPreferredSize(new Dimension((cardWidth + 10) * column,((cardHeight + 10) * 4)/4*row));
         System.out.println((cardWidth + 10) * column);

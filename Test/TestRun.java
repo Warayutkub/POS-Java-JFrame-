@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 import backend.services.AuthService;
 import backend.services.InventoryService;
 import client.Dashboard;
@@ -9,9 +11,15 @@ public class TestRun {
         // new ProductCardWithImageSave();
         // new Dashboard().On();
         // new Tools().genNewId(new InventoryService().getAllProductData());
-        // new Tools().genNewId(new AuthService().getAllUserData("user"));
+        // String id = new Tools().genNewId(new AuthService().getAllUserData("user"));
+        // System.out.println(id);
         // new Tools().genNewId(new AuthService().getAllUserData("emp"));
-        new Tools().SaveFileCopy("./src/backend/data/images/Default_image.png","./Test/Default_image.png");
-    }
+        // new Tools().SaveFileCopy("./src/backend/data/images/Default_image.png","./Test/Default_image.png");
+        String[][] data = new InventoryService().getAllProductData();
+
+        for (String[] u : data){
+            System.out.println(Arrays.toString(u));
+        }
+        }
 } 
  
