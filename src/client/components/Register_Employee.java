@@ -8,27 +8,30 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Register extends JFrame implements ActionListener{
+public class Register_Employee extends JFrame implements ActionListener{
     User u = new User(getName(), getTitle(), getWarningString(), getName());
-    JLabel regis , name , email , password , confirmps , phone;
+    JLabel regis , name , email , password , confirmps , phone,roling;
     JTextField tf1 , tf2 , tf3 , tf4;
     JButton bt1 , bt2;
     JPasswordField ps1 ,ps2;
+    @SuppressWarnings("rawtypes")
+    JComboBox role = new JComboBox<>(new String[]{"Employee","Maneger"});
 
 
     
-    public Register(){
+    public Register_Employee(){
         setSize(500,500);
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Register");
-        regis = new JLabel("Register for User");
+        regis = new JLabel("Register for Employee");
         regis.setFont(new Font("Senif" , Font.BOLD , 20));
         name = new JLabel("Name : ");
         email = new JLabel("E-Mail : ");
         password = new JLabel("Password : ");
         confirmps = new JLabel("Confirm Password : ");
         phone = new JLabel("Phone : ");
+        roling = new JLabel("Role : ");
         tf1 = new JTextField();
         tf2 = new JTextField();
         ps1 = new JPasswordField();
@@ -49,8 +52,11 @@ public class Register extends JFrame implements ActionListener{
         tf3.setBounds(200, 180, 200, 30);
         ps1.setBounds(200,230, 200, 30);
         ps2.setBounds(200, 280, 200, 30);
-        bt1.setBounds(100, 340, 120, 30);
-        bt2.setBounds(250, 340, 120, 30);
+        bt1.setBounds(100,380, 120, 30);
+        bt2.setBounds(250, 380, 120, 30);
+        roling.setBounds(80, 330, 200, 30);
+        role.setBounds(200, 330, 200, 30);
+
         add(regis);
         add(name);
         add(tf1);
@@ -62,9 +68,12 @@ public class Register extends JFrame implements ActionListener{
         add(ps1);
         add(confirmps);
         add(ps2);
+        add(roling);
+        add(role);
         add(bt1);
         add(bt2);
         setResizable(false);
+        setVisible(true);
 
     }
 
@@ -80,19 +89,21 @@ public class Register extends JFrame implements ActionListener{
 
     public void saveLogin(){
         String dataAll;
+        String getRole = (String)role.getSelectedItem();
         String id = new Tools().genNewId(new AuthService().getAllUserData("user"));
             String s1 = tf1.getText();
             String s2 = tf2.getText();
             char[] s3 = ps1.getPassword();
-            char[] s4 = ps2.getPassword(); 
+            char[] s4 = ps2.getPassword();
             String s6 = new String(s3);
             String s7 = new String(s4);
             String s5 = tf3.getText();
-            dataAll = id +"," + s1 + "," + s5  + "," + s2 + "," +  new String(ps1.getPassword());
+
+            dataAll = id +"," + s1 + "," + s5  + "," + s2 + "," +  new String(ps1.getPassword()) + "," + getRole + ",0,0";
 
             if (s6.equals(s7)){
                 try {
-                    FileWriter out = new FileWriter("./src/backend/data/UserData.txt",true);
+                    FileWriter out = new FileWriter("./src/backend/data/EmployeeData.txt",true);
                     BufferedWriter writer = new BufferedWriter(out);
                     writer.write(dataAll+"\n");
                     JOptionPane.showMessageDialog(null, "Success");
@@ -108,6 +119,6 @@ public class Register extends JFrame implements ActionListener{
         }
 
     public void goToLogin(){
-        
+
     }
 }

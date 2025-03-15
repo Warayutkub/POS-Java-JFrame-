@@ -9,14 +9,14 @@ public class AuthService {
     private String[][] Users = getAllUserData("user");
     private String[][] Emps = getAllUserData("emp");
 
-    public String[][] getAllUserData(String typeUser) {
+    public String[][] getAllUserData(String typeUser) { //เอายูเสอทั้งหมดมา
         if (typeUser.equals("user")) {
             String[][] Users = new String[0][0];
-            try (BufferedReader br = new BufferedReader(new FileReader("./src/backend/data/Employee.txt"))) {
+            try (BufferedReader br = new BufferedReader(new FileReader("./src/backend/data/UserData.txt"))) {
                 String line;
                 Users = new String[(int) br.lines().count()][4];
                 int i = 0;
-                try (BufferedReader br2 = new BufferedReader(new FileReader("./src/backend/data/Employee.txt"))) {
+                try (BufferedReader br2 = new BufferedReader(new FileReader("./src/backend/data/UserData.txt"))) {
                     while ((line = br2.readLine()) != null) {
                         Users[i] = line.split(",");
                         i++;
