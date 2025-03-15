@@ -38,6 +38,7 @@ public class Tools {
         for (int i = 0; i < data.length; i++) {
             ids[i] = data[i][0];
         }
+
         newId = String.valueOf(Integer.parseInt(ids[ids.length - 1]) + 1);
         return newId;
     }
