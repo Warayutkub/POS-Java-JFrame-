@@ -5,16 +5,14 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-
+import java.awt.GridLayout;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
-
-import client.components.POSDateTimeFrame;
 
 public class MainFrame extends JFrame{
-    private int width = 900;
+    private int width = 1000;
     private int height = 500;
     private JPanel leftPanel,rightPanel,topPanel,bodyPanel;
     private Container container = getContentPane();
@@ -40,31 +38,51 @@ public class MainFrame extends JFrame{
         bodyPanel = new JPanel();
 
         leftPanel.setPreferredSize(new Dimension(width-800,height));
-        leftPanel.setBorder(new LineBorder(Color.BLUE,2));
         
-        rightPanel.setPreferredSize(new Dimension(width-700,height));
-        rightPanel.setBorder(new LineBorder(Color.red,2));
+        
+        
 
         TopPanelManage();
         topPanel.setPreferredSize(new Dimension(width,height-470));
-        topPanel.setBorder(new LineBorder(Color.PINK));
+    
+        bodyPanelManage();
 
-        bodyPanel.setBorder(new LineBorder(Color.BLUE));
 
         container.add(bodyPanel,BorderLayout.CENTER);
         container.add(leftPanel, BorderLayout.WEST);
-        container.add(rightPanel, BorderLayout.EAST);
         container.add(topPanel, BorderLayout.NORTH);
     }
 
     private void TopPanelManage(){
         topPanel.setLayout(new FlowLayout());
-        topPanel.add(new JLabel("POS"));
-        topPanel.add(new JLabel("POS"));
-        topPanel.add(new JLabel("POS"));
-        topPanel.add(new JLabel("POS"));
-        topPanel.add(new JLabel("POS"));
-        topPanel.add(new POSDateTimeFrame());
+        topPanel.setBackground(Color.white);
     }
+
+    public void bodyPanelManage(){
+        bodyPanel.setLayout(new FlowLayout());
+        bodyPanel.setBackground(Color.white);
+
+
+        bodyPanel.setSize(500, 400);
+
+        // ใช้ BorderLayout
+        bodyPanel.setLayout(new BorderLayout());
+
+        // สร้าง Panel ที่มี GridLayout
+        JPanel gridPanel = new JPanel(new GridLayout(3, 3, 10, 10)); // 2x2 Grid พร้อมช่องว่าง
+        gridPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // กำหนด Padding
+
+        // เพิ่มองค์ประกอบลงใน Grid
+        gridPanel.add(new JButton("Warayut"));
+        gridPanel.add(new JButton("Button 2"));
+        gridPanel.add(new JButton("Button 3"));
+        gridPanel.add(new JButton("Button 4"));
+
+        // นำ Grid Panel ใส่ลงใน CENTER ของ JFrame
+        bodyPanel.add(gridPanel, BorderLayout.CENTER);
+
+        bodyPanel.setVisible(true);
+    }
+    
 
 }
