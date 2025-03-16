@@ -95,6 +95,9 @@ public class ProductCardRight extends JPanel {
                 revalidate();
                 repaint();
             }else if(store.equals("1")){
+                this.amount = this.amount - 1;
+                modelCart.setAmountProduct(this.id,getAmount());
+                modelCart.setFooter();
                 modelCart.deleteProduct(this);
             }
         });

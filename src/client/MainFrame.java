@@ -16,6 +16,7 @@ public class MainFrame extends JFrame{
     private int height = 500;
     private JPanel leftPanel,rightPanel,topPanel,bodyPanel;
     private Container container = getContentPane();
+    
     public MainFrame(){
         CreateGui();
         CreateWindow();
@@ -38,9 +39,6 @@ public class MainFrame extends JFrame{
         bodyPanel = new JPanel();
 
         leftPanel.setPreferredSize(new Dimension(width-800,height));
-        
-        
-        
 
         TopPanelManage();
         topPanel.setPreferredSize(new Dimension(width,height-470));
@@ -65,24 +63,19 @@ public class MainFrame extends JFrame{
 
         bodyPanel.setSize(500, 400);
 
-        // ใช้ BorderLayout
         bodyPanel.setLayout(new BorderLayout());
 
-        // สร้าง Panel ที่มี GridLayout
-        JPanel gridPanel = new JPanel(new GridLayout(3, 3, 10, 10)); // 2x2 Grid พร้อมช่องว่าง
-        gridPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // กำหนด Padding
+        JPanel gridPanel = new JPanel(new GridLayout(3, 3, 10, 10)); 
+        gridPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // เพิ่มองค์ประกอบลงใน Grid
         gridPanel.add(new JButton("Warayut"));
         gridPanel.add(new JButton("Button 2"));
         gridPanel.add(new JButton("Button 3"));
         gridPanel.add(new JButton("Button 4"));
 
-        // นำ Grid Panel ใส่ลงใน CENTER ของ JFrame
         bodyPanel.add(gridPanel, BorderLayout.CENTER);
 
         bodyPanel.setVisible(true);
     }
     
-
 }

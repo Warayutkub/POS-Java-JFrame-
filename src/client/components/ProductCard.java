@@ -79,6 +79,9 @@ public class ProductCard extends JPanel {
         Btn.setFont(setFontO.getFont(cardHeight/17));
         Btn.addActionListener(e -> {
             if (!cart.CheckProduct(this.id)){
+                if (cart.getStoreProduct().size() == 0) {
+                    cart.setTimeCart();
+                }
                 cart.addProductToStoreID(id);
                 cart.addProduct(this);
                 cart.revalidate();

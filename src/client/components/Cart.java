@@ -42,7 +42,6 @@ public class Cart extends JPanel {
         add(footer, BorderLayout.SOUTH);
     }
 
-
     private JPanel Body() {
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
         return area;
@@ -59,7 +58,7 @@ public class Cart extends JPanel {
     private JPanel TotalPrice() {
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel totalLabel = new JLabel("Total Price : ");
-        JLabel totalPrice = new JLabel(modelCart.getTotalPrice());
+        JLabel totalPrice = new JLabel(modelCart.getTotalPrice() + "$");
         area.add(totalLabel);
         area.add(totalPrice);
         return area;
@@ -83,11 +82,12 @@ public class Cart extends JPanel {
             this.key = "0";
             modelCart.resetData();
             storeProduct.removeAll(storeProduct);
+            setFooter();
             revalidate();
             repaint();
         });
         return Btn;
-        
+
     }
 
     // For click in mainframe
@@ -107,7 +107,7 @@ public class Cart extends JPanel {
         footer.repaint();
     }
 
-    public void deleteProduct(ProductCardRight card){
+    public void deleteProduct(ProductCardRight card) {
         body.remove(card);
         body.revalidate();
         body.repaint();
@@ -123,15 +123,23 @@ public class Cart extends JPanel {
         this.key = String.valueOf(Integer.parseInt(this.key) + 1);
     }
 
-    public void addProductToStoreID(String id){
+    public void addProductToStoreID(String id) {
         this.storeProduct.add(id);
     }
 
-    public Boolean CheckProduct(String id){
+    public Boolean CheckProduct(String id) {
         return storeProduct.contains(id);
     }
 
-    public void setFooter(){
+    public ArrayList<String> getStoreProduct() {
+        return this.storeProduct;
+    }
+
+    public void setTimeCart() {
+        modelCart.setTime();
+    }
+
+    public void setFooter() {
         footer.removeAll();
         footer.add(TotalPrice());
         footer.add(TotalAmount());
@@ -140,23 +148,21 @@ public class Cart extends JPanel {
         footer.repaint();
     }
 
-
-
 }
 
 class InnerCart {
     private String TotalAmount = "0";
     private String TotalPrice = "0";
-    private DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern(" HH:mm:ss");
-    private LocalDateTime now = LocalDateTime.now();
 
     // type,ProductName,price,Amount,Total,id,key
     private ArrayList<String[]> dataProduct = new ArrayList<>();
     private ArrayList<String> dataOut = new ArrayList<>();
+    private DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern(" HH:mm:ss");
 
     // BillId,date,Time
     public InnerCart() {
+        LocalDateTime now = LocalDateTime.now();
         dataOut.add(new Tools().genNewId(new InventoryService().getAllSalesHistory()));
         dataOut.add(String.valueOf(now.format(formatterDate)));
         dataOut.add(String.valueOf(now.format(formatterTime)));
@@ -165,14 +171,26 @@ class InnerCart {
     public void addData(String[] newData) {
         this.dataProduct.add(newData);
         this.TotalAmount = String.valueOf(Integer.parseInt(newData[3]) + Integer.parseInt(this.TotalAmount));
-        this.TotalPrice = String.valueOf((Double.parseDouble(newData[2]) * Double.parseDouble(newData[3])) + Double.parseDouble(this.TotalPrice));
+        this.TotalPrice = String.valueOf((Double.parseDouble(newData[2]) * Double.parseDouble(newData[3]))
+                + Double.parseDouble(this.TotalPrice));
     }
 
     public void resetData() {
         dataProduct.removeAll(dataProduct);
+        this.TotalAmount = "0";
+        this.TotalPrice = "0.0";
     }
 
-    public void deleteData(String id){
+    public void setTime() {
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("Hey Time");
+        dataOut.clear();
+        dataOut.add(new Tools().genNewId(new InventoryService().getAllSalesHistory()));
+        dataOut.add(String.valueOf(now.format(formatterDate)));
+        dataOut.add(String.valueOf(now.format(formatterTime)));
+    }
+
+    public void deleteData(String id) {
         String[] item = new String[0];
         for (int c = 0; c < dataProduct.size(); c++) {
             if (dataProduct.get(c)[5].equals(id)) {
@@ -195,8 +213,12 @@ class InnerCart {
 
         for (int c = 0; c < dataProduct.size(); c++) {
             if (dataProduct.get(c)[6].equals(key)) {
-                this.TotalAmount = String.valueOf((Integer.parseInt(this.TotalAmount) - Integer.parseInt(dataProduct.get(c)[3])) + Integer.parseInt(amount));
-                this.TotalPrice = String.valueOf((Double.parseDouble(this.TotalPrice) - Double.parseDouble(dataProduct.get(c)[4])) + Double.parseDouble(amount) * Double.parseDouble(dataProduct.get(c)[2]));
+                this.TotalAmount = String
+                        .valueOf((Integer.parseInt(this.TotalAmount) - Integer.parseInt(dataProduct.get(c)[3]))
+                                + Integer.parseInt(amount));
+                this.TotalPrice = String
+                        .valueOf((Double.parseDouble(this.TotalPrice) - Double.parseDouble(dataProduct.get(c)[4]))
+                                + Double.parseDouble(amount) * Double.parseDouble(dataProduct.get(c)[2]));
                 dataProduct.get(c)[3] = amount;
                 dataProduct.get(c)[4] = String
                         .valueOf(Double.parseDouble(amount) * Double.parseDouble(dataProduct.get(c)[2]));
@@ -233,6 +255,5 @@ class InnerCart {
     public String getTotalPrice() {
         return this.TotalPrice;
     }
-
 
 }
