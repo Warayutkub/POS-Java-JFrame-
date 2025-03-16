@@ -1,4 +1,3 @@
-import client.Dashboard;
 import client.MainFrame;
 
 public class Main {

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+
 public class InventoryService {
     private final String productPath = "./src/backend/data/ProductData.txt";
     private final String historyPath = "./src/backend/data/InMemoryStore.txt";
@@ -38,7 +39,6 @@ public class InventoryService {
             data = new String[(int) bf.lines().count()][7];
             int i = 0;
             while ((line = bf2.readLine()) != null) {
-                System.out.print("Test");
                 data[i] = line.split(",");
                 i++;
             }

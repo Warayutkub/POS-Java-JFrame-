@@ -3,7 +3,6 @@ package backend.services;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import resources.Tools;
 
@@ -82,8 +81,8 @@ public class DashboardService {
             ArrayList<String> dataOrder = new ArrayList<String>();
             for (int line = 0; line < History.length; line++) {
                 if (History[line][2].equals(date)) {
-                    if (!(new Tools().LinearSearch(dataOrder, date))){
-                        dataOrder.add(date);
+                    if (!(new Tools().LinearSearch(dataOrder, History[line][0]))){
+                        dataOrder.add(History[line][0]);
                     }
                 }
             }
@@ -104,7 +103,6 @@ public class DashboardService {
         if (type.equals("order")) {
             ArrayList<String> dataOrder = new ArrayList<String>();
             for (int line = 0; line < History.length; line++) {
-                System.out.println(Arrays.toString(dataOrder.toArray()));
                 if (!(new Tools().LinearSearch(dataOrder, History[line][0]))){
                     dataOrder.add(History[line][0]);
                 }

@@ -9,38 +9,49 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import backend.services.InventoryService;
 import resources.SetPreferences;
+import resources.Tools;
 
 public class ProductCard extends JPanel {
     private SetPreferences setFontO = new SetPreferences();
     private int cardWidth = 275;
     private int cardHeight = 400;
+    private String pathImg;
+    private String name;
+    private String price;
     private String id;
+    private Cart cart;
 
     public ProductCard(){}
 
-    public ProductCard(String id,String name,String price,String pathImg) {
-        createGui(pathImg,name,price);
+    public ProductCard(int width,int height,String id,Cart cart) {
+        this.cardWidth = width;
+        this.cardHeight = height;
         this.id = id;
+        genName();
+        this.cart = cart;
+        createGui();
     }
 
-    private void createGui(String pathImg,String name,String price) {
+    private void createGui() {
         setLayout(new FlowLayout(FlowLayout.CENTER, cardWidth/28, cardHeight/40));
         setPreferredSize(new Dimension(this.cardWidth,this.cardHeight));
         setBackground(Color.white);
-        add(IMGShow(pathImg));
-        add(TextName(name));
-        add(TextPrice(price));
+        add(IMGShow());
+        add(TextName(this.name));
+        add(TextPrice(this.price));
         add(BtnSend());
     }
 
-    private JLabel IMGShow(String path) {
+    private JLabel IMGShow() {
         int width = cardWidth-25;
+        System.err.println("Hey in image");
         int height = width;
         JLabel image = new JLabel();
         image.setPreferredSize(new Dimension(width, height));
         image.setHorizontalAlignment(JLabel.CENTER);
-        ImageIcon originalIcon = new ImageIcon(path);
+        ImageIcon originalIcon = new ImageIcon(this.pathImg);
         Image resizedImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         image.setIcon(new ImageIcon(resizedImage));
         return image;
@@ -66,12 +77,33 @@ public class ProductCard extends JPanel {
         JButton Btn = new JButton("Add");
         Btn.setPreferredSize(new Dimension(cardWidth-25, cardHeight/8));
         Btn.setFont(setFontO.getFont(cardHeight/17));
+        Btn.addActionListener(e -> {
+            if (!cart.CheckProduct(this.id)){
+                cart.addProductToStoreID(id);
+                cart.addProduct(this);
+                cart.revalidate();
+                cart.repaint();
+            }
+        });
         return Btn;
+    }
+
+    private void genName(){
+        String[][] data = new InventoryService().getAllProductData();
+        for (String[] recode : data){
+            if (new Tools().LinearSearch(recode, this.id)){
+                this.name = recode[1];
+                this.price = recode[2];
+                this.pathImg = recode[7];
+            }
+        }
     }
 
     public  int getWidth(){return this.cardWidth;}
     public  int getHeight(){return this.cardHeight;}
     public  String getId(){return this.id;}
+    public String getName(){return this.name;}
+    public String getPrice(){return this.price;}
 
 
 }

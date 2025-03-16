@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import backend.services.DashboardService;
+import backend.services.InventoryService;
 import resources.SetPreferences;
 
 public class Dashboard extends JFrame {
@@ -34,6 +35,7 @@ public class Dashboard extends JFrame {
     private String[] columnNames = { "QUEUE ID", "TYPE", "DATE", "TIME", "CUSTOMER", "PRODUCT", "QTY", "TOTAL" };
     private String dateGet;
     private JPanel topCardDayOrder,topCardDayTotal,topCardAllOrder,topCardAllTotal;
+    private String[][] inventory = new InventoryService().getAllSalesHistory();
 
     @SuppressWarnings("rawtypes")
     private JComboBox dateSelect;
@@ -65,6 +67,7 @@ public class Dashboard extends JFrame {
 
         topCardDayOrder = TopCard(new DashboardService().getDataTopDashboard("order",dateGet), "Order", "Daily Total Order",true);
         topCardDayTotal = TopCard(new DashboardService().getDataTopDashboard("total", dateGet), "Bath", "Daily Total Income", false);
+        System.out.println(inventory[inventory.length-1][0]);
 
         topPanel.add(topCardAllOrder);
         topPanel.add(topCardAllTotal);
@@ -152,7 +155,6 @@ public class Dashboard extends JFrame {
         container.add(bottom);
         return container;
     }
-
     public void On() {
         setVisible(true);
     }
