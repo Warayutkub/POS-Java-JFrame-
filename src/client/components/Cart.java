@@ -38,17 +38,20 @@ public class Cart extends JPanel {
         setPreferredSize(new Dimension(width, height));
         setBorder(new LineBorder(Color.RED));
         setLayout(new BorderLayout());
+        setBackground(Color.WHITE);
         add(body, BorderLayout.CENTER);
         add(footer, BorderLayout.SOUTH);
     }
 
     private JPanel Body() {
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        area.setBackground(Color.WHITE);
         return area;
     }
 
     private JPanel Footer() {
         JPanel area = new JPanel(new GridLayout(5, 1));
+        area.setBackground(Color.WHITE);
         area.add(TotalPrice());
         area.add(TotalAmount());
         area.add(SubmitBTn());
@@ -59,6 +62,7 @@ public class Cart extends JPanel {
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel totalLabel = new JLabel("Total Price : ");
         JLabel totalPrice = new JLabel(modelCart.getTotalPrice() + "$");
+        area.setBackground(Color.WHITE);
         area.add(totalLabel);
         area.add(totalPrice);
         return area;
@@ -68,6 +72,7 @@ public class Cart extends JPanel {
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel totalLabel = new JLabel("Total Amount");
         JLabel totalAmount = new JLabel(modelCart.getTotalAmount());
+        area.setBackground(Color.WHITE);
         area.add(totalLabel);
         area.add(totalAmount);
         return area;
@@ -84,7 +89,7 @@ public class Cart extends JPanel {
             storeProduct.removeAll(storeProduct);
             setFooter();
             revalidate();
-            repaint();
+            repaint(); 
         });
         return Btn;
 

@@ -5,77 +5,63 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import backend.services.InventoryService;
+import client.components.Cart;
+import client.components.ProductCard;
+
 public class MainFrame extends JFrame{
-    private int width = 1000;
-    private int height = 500;
-    private JPanel leftPanel,rightPanel,topPanel,bodyPanel;
-    private Container container = getContentPane();
+    private Cart cart = new Cart();
+    private String[][] inventoryProduct = new InventoryService().getAllProductData();
     
     public MainFrame(){
         CreateGui();
-        CreateWindow();
+        SetupWindow();
     }
 
-    private void CreateWindow(){
-        setTitle("POS System");
-        setSize(width,height);
-        setResizable(false);
+    private void SetupWindow(){
+        setTitle("POS");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // setResizable(false);
         setVisible(true);
     }
 
     private void CreateGui(){
+        Container container = getContentPane();
         container.setLayout(new BorderLayout());
-        leftPanel = new JPanel();
-        rightPanel = new JPanel();
-        topPanel = new JPanel();
-        bodyPanel = new JPanel();
-
-        leftPanel.setPreferredSize(new Dimension(width-800,height));
-
-        TopPanelManage();
-        topPanel.setPreferredSize(new Dimension(width,height-470));
-    
-        bodyPanelManage();
-
-
-        container.add(bodyPanel,BorderLayout.CENTER);
-        container.add(leftPanel, BorderLayout.WEST);
-        container.add(topPanel, BorderLayout.NORTH);
+        container.add(cart,BorderLayout.EAST);
+        container.add(TopBar(),BorderLayout.NORTH);
+        container.add(DisplayProduct(),BorderLayout.CENTER);
+        container.add(SideBar(),BorderLayout.WEST);
     }
 
-    private void TopPanelManage(){
-        topPanel.setLayout(new FlowLayout());
-        topPanel.setBackground(Color.white);
+    private JPanel TopBar(){
+        JPanel area = new JPanel(new FlowLayout());
+        area.setPreferredSize(new Dimension(1000,50));
+        area.setBackground(Color.BLUE);
+        return area;
     }
 
-    public void bodyPanelManage(){
-        bodyPanel.setLayout(new FlowLayout());
-        bodyPanel.setBackground(Color.white);
-
-
-        bodyPanel.setSize(500, 400);
-
-        bodyPanel.setLayout(new BorderLayout());
-
-        JPanel gridPanel = new JPanel(new GridLayout(3, 3, 10, 10)); 
-        gridPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        gridPanel.add(new JButton("Warayut"));
-        gridPanel.add(new JButton("Button 2"));
-        gridPanel.add(new JButton("Button 3"));
-        gridPanel.add(new JButton("Button 4"));
-
-        bodyPanel.add(gridPanel, BorderLayout.CENTER);
-
-        bodyPanel.setVisible(true);
+    private JPanel SideBar(){
+        JPanel area = new JPanel(new FlowLayout());
+        area.setPreferredSize(new Dimension(150,500));
+        area.setBackground(Color.BLACK);
+        return area;
     }
-    
+
+    private JPanel DisplayProduct(){
+        JPanel area = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        for (String[] product : inventoryProduct){
+            area.add(new ProductCard(product[0], cart));
+        }
+        return area;
+    }
+
 }

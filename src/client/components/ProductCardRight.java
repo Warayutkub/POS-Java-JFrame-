@@ -18,7 +18,7 @@ public class ProductCardRight extends JPanel {
     private String name = "Default";
     private String price = "89";
     private int amount = 1;
-    private int width = 280;
+    private int width = 290;
     private int height = 50;
     private String id;
     private String type;
@@ -43,6 +43,7 @@ public class ProductCardRight extends JPanel {
     }
 
     private void CreateGui() {
+        setBackground(Color.WHITE);
         setPreferredSize(new Dimension(width, height));
         setBorder(new LineBorder(Color.BLACK));
         setLayout(new FlowLayout(FlowLayout.CENTER, 0, 4));
@@ -76,9 +77,16 @@ public class ProductCardRight extends JPanel {
         display.setPreferredSize(new Dimension(20,15));
         display.setHorizontalAlignment(JLabel.CENTER);
         display.setFont(new SetPreferences().getFont(10));
+        area.setBackground(Color.WHITE);
         area.add(minus);
         area.add(display);
         area.add(plus);
+        minus.setBackground(null);
+        plus.setBackground(null);
+        minus.setOpaque(true);
+        minus.setContentAreaFilled(false);
+        plus.setOpaque(true);
+        plus.setContentAreaFilled(false);
 
         minus.addActionListener(e -> {
             String store = display.getText();

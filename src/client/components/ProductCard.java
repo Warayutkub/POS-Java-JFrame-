@@ -15,8 +15,8 @@ import resources.Tools;
 
 public class ProductCard extends JPanel {
     private SetPreferences setFontO = new SetPreferences();
-    private int cardWidth = 275;
-    private int cardHeight = 400;
+    private int cardWidth = 150;
+    private int cardHeight = 219;
     private String pathImg;
     private String name;
     private String price;
@@ -25,9 +25,7 @@ public class ProductCard extends JPanel {
 
     public ProductCard(){}
 
-    public ProductCard(int width,int height,String id,Cart cart) {
-        this.cardWidth = width;
-        this.cardHeight = height;
+    public ProductCard(String id,Cart cart) {
         this.id = id;
         genName();
         this.cart = cart;
@@ -46,7 +44,6 @@ public class ProductCard extends JPanel {
 
     private JLabel IMGShow() {
         int width = cardWidth-25;
-        System.err.println("Hey in image");
         int height = width;
         JLabel image = new JLabel();
         image.setPreferredSize(new Dimension(width, height));
@@ -75,6 +72,7 @@ public class ProductCard extends JPanel {
     
     private JButton BtnSend() {
         JButton Btn = new JButton("Add");
+        Btn.setBackground(null);
         Btn.setPreferredSize(new Dimension(cardWidth-25, cardHeight/8));
         Btn.setFont(setFontO.getFont(cardHeight/17));
         Btn.addActionListener(e -> {
