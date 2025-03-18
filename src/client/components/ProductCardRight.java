@@ -56,7 +56,7 @@ public class ProductCardRight extends JPanel {
         JLabel nameLabel = new JLabel(this.name);
         nameLabel.setPreferredSize(new Dimension(width / 4, height - 10));
         nameLabel.setHorizontalAlignment(JLabel.LEFT);
-        nameLabel.setFont(new SetPreferences().getFont(12));
+        nameLabel.setFont(new SetPreferences().getFont(18));
         return nameLabel;
     }
 
@@ -64,7 +64,7 @@ public class ProductCardRight extends JPanel {
         JLabel priceLabel = new JLabel(String.valueOf((double) amount * Double.parseDouble(this.price))+ "$");
         priceLabel.setPreferredSize(new Dimension(width / 4, height - 10));
         priceLabel.setHorizontalAlignment(JLabel.LEFT);
-        priceLabel.setFont(new SetPreferences().getFont(10));
+        priceLabel.setFont(new SetPreferences().getFont(16));
         priceLabel.setForeground(Color.RED);
         return priceLabel;
     }
@@ -76,7 +76,7 @@ public class ProductCardRight extends JPanel {
         JLabel display = new JLabel(String.valueOf(this.amount));
         display.setPreferredSize(new Dimension(20,15));
         display.setHorizontalAlignment(JLabel.CENTER);
-        display.setFont(new SetPreferences().getFont(10));
+        display.setFont(new SetPreferences().getFont(16));
         area.setBackground(Color.WHITE);
         area.add(minus);
         area.add(display);

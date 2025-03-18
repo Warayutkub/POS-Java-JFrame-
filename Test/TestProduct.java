@@ -38,7 +38,7 @@ public class TestProduct extends JFrame {
         c.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         for (int i = 0; i < 12; i++) {
-            panel.add(new ProductCard(100,146,"1",new Cart()));
+            panel.add(new ProductCard("1",new Cart()));
         }
         
         JScrollPane scroller = new JScrollPane(panel);

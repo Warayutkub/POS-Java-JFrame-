@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,19 +15,33 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import backend.services.AuthService;
 import backend.services.InventoryService;
+import client.MainFrame;
+import resources.SetPreferences;
 import resources.Tools;
 
 public class Cart extends JPanel {
+    private String[] userData = new String[] { "null", "-", "null", "null", "null" };
     private ArrayList<String> storeProduct = new ArrayList<>();
     private String key = "0";
+    private String phone;
+    private boolean statusNewUser = false;
     private int width = 300;
     private int height = 600;
     private InnerCart modelCart = new InnerCart();
     private JPanel body = Body();
     private JPanel footer = Footer();
+    private MainFrame mainFrame;
+    private NewUserPopup newUserPopup;
+
+    public Cart(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        CreateGui();
+    }
 
     public Cart() {
         CreateGui();
@@ -50,18 +63,82 @@ public class Cart extends JPanel {
     }
 
     private JPanel Footer() {
-        JPanel area = new JPanel(new GridLayout(5, 1));
+        JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        area.setPreferredSize(new Dimension(this.width, this.height / 3));
+        area.setBorder(new LineBorder(Color.black));
         area.setBackground(Color.WHITE);
+        area.add(CostumerArea());
         area.add(TotalPrice());
         area.add(TotalAmount());
         area.add(SubmitBTn());
         return area;
     }
 
+    private JPanel CostumerArea() {
+        JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JTextField display = new JTextField("User data");
+        JButton oldUser = new JButton("Old user");
+        JButton newUser = new JButton("New user");
+
+        area.setPreferredSize(new Dimension(this.width, 80));
+        area.setBackground(Color.WHITE);
+        display.setPreferredSize(new Dimension(this.width - 20, 30));
+        display.setEditable(false);
+        display.setBackground(Color.WHITE);
+        display.setBorder(new LineBorder(Color.BLACK, 1));
+        display.setHorizontalAlignment(JTextField.CENTER);
+
+        area.add(display);
+        area.add(oldUser);
+        area.add(newUser);
+        oldUser.addActionListener(e -> {
+            while (true) {
+                String input = JOptionPane.showInputDialog(mainFrame, "Enter User Phone", "Input user data", 1);
+                if (input == null) {
+                    break;
+                }
+                if (new AuthService().CheckDataUser(input, "user")) {
+                    this.phone = input;
+                    this.userData = new AuthService().getDataUser(this.phone);
+                    display.setText(this.userData[1]);
+                    display.setFont(new SetPreferences().getFont(14));
+                    modelCart.setCNameProductModel(userData[1]);
+                    break;
+                } else {
+                    int response = JOptionPane.showConfirmDialog(mainFrame, "User not found. Try again?", "Error",
+                    JOptionPane.YES_NO_OPTION);
+                    if (response == JOptionPane.NO_OPTION) {
+                        break;
+                    }
+                }
+            }
+        });
+        
+        newUser.addActionListener(e -> {
+            
+            newUserPopup = new NewUserPopup(mainFrame, this);
+            newUserPopup.setVisible(true);
+            newUserPopup.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                    if (statusNewUser) {
+                        userData = new AuthService().getDataUser(newUserPopup.getName());
+                        display.setText(userData[1]);
+                        display.setFont(new SetPreferences().getFont(14));
+                        modelCart.setCNameProductModel(userData[1]);
+                    }
+                }
+            });
+        });
+
+        return area;
+    };
+
     private JPanel TotalPrice() {
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel totalLabel = new JLabel("Total Price : ");
         JLabel totalPrice = new JLabel(modelCart.getTotalPrice() + "$");
+        area.setPreferredSize(new Dimension(this.width / 2, 30));
         area.setBackground(Color.WHITE);
         area.add(totalLabel);
         area.add(totalPrice);
@@ -70,8 +147,9 @@ public class Cart extends JPanel {
 
     private JPanel TotalAmount() {
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JLabel totalLabel = new JLabel("Total Amount");
+        JLabel totalLabel = new JLabel("Total Amount : ");
         JLabel totalAmount = new JLabel(modelCart.getTotalAmount());
+        area.setPreferredSize(new Dimension(this.width / 2 - 10, 30));
         area.setBackground(Color.WHITE);
         area.add(totalLabel);
         area.add(totalAmount);
@@ -80,16 +158,18 @@ public class Cart extends JPanel {
 
     private JButton SubmitBTn() {
         JButton Btn = new JButton("Submit Order");
-
+        Btn.setPreferredSize(new Dimension(this.width - 25, 30));
+        Btn.setBackground(Color.green);
         Btn.addActionListener(e -> {
             modelCart.WriteData();
             body.removeAll();
             this.key = "0";
             modelCart.resetData();
+            this.userData[1] = "null";
             storeProduct.removeAll(storeProduct);
             setFooter();
             revalidate();
-            repaint(); 
+            repaint();
         });
         return Btn;
 
@@ -100,14 +180,11 @@ public class Cart extends JPanel {
         ProductCardRight card = new ProductCardRight(dataForCard.getName(), dataForCard.getPrice(), this);
         String total = String.valueOf(Integer.parseInt(card.getAmount()) * Double.parseDouble(card.getPrice()));
         String cardData[] = new String[] { card.getType(), card.getName(), card.getPrice(), card.getAmount(), total,
-                card.getID(), this.key };
+                card.getID(), this.key, userData[1] };
         body.add(card);
         modelCart.addData(cardData);
         genKey();
-        footer.removeAll();
-        footer.add(TotalPrice());
-        footer.add(TotalAmount());
-        footer.add(SubmitBTn());
+        setFooter();
         footer.revalidate();
         footer.repaint();
     }
@@ -146,6 +223,7 @@ public class Cart extends JPanel {
 
     public void setFooter() {
         footer.removeAll();
+        footer.add(CostumerArea());
         footer.add(TotalPrice());
         footer.add(TotalAmount());
         footer.add(SubmitBTn());
@@ -153,11 +231,15 @@ public class Cart extends JPanel {
         footer.repaint();
     }
 
+    public void SendStatusOfRegister(Boolean status) {
+        this.statusNewUser = status;
+    }
+
 }
 
 class InnerCart {
     private String TotalAmount = "0";
-    private String TotalPrice = "0";
+    private String TotalPrice = "0.0";
 
     // type,ProductName,price,Amount,Total,id,key
     private ArrayList<String[]> dataProduct = new ArrayList<>();
@@ -231,13 +313,20 @@ class InnerCart {
         }
     }
 
+    public void setCNameProductModel(String name) {
+        for (int c = 0; c < dataProduct.size(); c++) {
+            dataProduct.get(c)[7] = name;
+        }
+    }
+
     // Write Data To File History(InMemoryStore.txt)
     // BillId,typeProduct,date,time,costumerName,productName,QTY,total(Bath)
     public void WriteData() {
-        String[][] DataFormatted = new String[dataProduct.size()][7];
+        String[][] DataFormatted = new String[dataProduct.size()][8];
         for (int index = 0; index < DataFormatted.length; index++) {
+            System.out.println("Test ro");
             DataFormatted[index] = new String[] { dataOut.get(0), dataProduct.get(index)[0], dataOut.get(1),
-                    dataOut.get(2), "Warayut", dataProduct.get(index)[1], dataProduct.get(index)[3],
+                    dataOut.get(2), dataProduct.get(index)[7], dataProduct.get(index)[1], dataProduct.get(index)[3],
                     dataProduct.get(index)[4] };
         }
 

@@ -37,8 +37,8 @@ public class TestCart extends JFrame{
     
     private JPanel Body(){
         JPanel Body = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        Body.add(new ProductCard(100,146,"1",cart),BorderLayout.CENTER);
-        Body.add(new ProductCard(100,146,"2",cart),BorderLayout.CENTER);
+        Body.add(new ProductCard("1",cart),BorderLayout.CENTER);
+        Body.add(new ProductCard("2",cart),BorderLayout.CENTER);
         return Body;
     }
 }
