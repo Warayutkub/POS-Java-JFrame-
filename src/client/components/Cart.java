@@ -10,16 +10,18 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 
 import backend.services.AuthService;
 import backend.services.InventoryService;
+import backend.services.SalesServices;
 import client.MainFrame;
 import resources.SetPreferences;
 import resources.Tools;
@@ -37,6 +39,8 @@ public class Cart extends JPanel {
     private JPanel footer = Footer();
     private MainFrame mainFrame;
     private NewUserPopup newUserPopup;
+    private int countProduct = 0;
+    private JScrollPane scroller = new JScrollPane(body);
 
     public Cart(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -48,24 +52,31 @@ public class Cart extends JPanel {
     }
 
     private void CreateGui() {
+        scroller.setBorder(null);
         setPreferredSize(new Dimension(width, height));
-        setBorder(new LineBorder(Color.RED));
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
-        add(body, BorderLayout.CENTER);
+        add(scroller, BorderLayout.CENTER);
         add(footer, BorderLayout.SOUTH);
     }
 
     private JPanel Body() {
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
         area.setBackground(Color.WHITE);
+        area.setBorder(null);
+
+        scroller = new JScrollPane(area);
+        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scroller.setBorder(null);
+
         return area;
     }
+
 
     private JPanel Footer() {
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         area.setPreferredSize(new Dimension(this.width, this.height / 3));
-        area.setBorder(new LineBorder(Color.black));
         area.setBackground(Color.WHITE);
         area.add(CostumerArea());
         area.add(TotalPrice());
@@ -75,7 +86,7 @@ public class Cart extends JPanel {
     }
 
     private JPanel CostumerArea() {
-        JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
         JTextField display = new JTextField("User data");
         JButton oldUser = new JButton("Old user");
         JButton newUser = new JButton("New user");
@@ -85,7 +96,6 @@ public class Cart extends JPanel {
         display.setPreferredSize(new Dimension(this.width - 20, 30));
         display.setEditable(false);
         display.setBackground(Color.WHITE);
-        display.setBorder(new LineBorder(Color.BLACK, 1));
         display.setHorizontalAlignment(JTextField.CENTER);
 
         area.add(display);
@@ -106,16 +116,16 @@ public class Cart extends JPanel {
                     break;
                 } else {
                     int response = JOptionPane.showConfirmDialog(mainFrame, "User not found. Try again?", "Error",
-                    JOptionPane.YES_NO_OPTION);
+                            JOptionPane.YES_NO_OPTION);
                     if (response == JOptionPane.NO_OPTION) {
                         break;
                     }
                 }
             }
         });
-        
+
         newUser.addActionListener(e -> {
-            
+
             newUserPopup = new NewUserPopup(mainFrame, this);
             newUserPopup.setVisible(true);
             newUserPopup.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -161,32 +171,45 @@ public class Cart extends JPanel {
         Btn.setPreferredSize(new Dimension(this.width - 25, 30));
         Btn.setBackground(Color.green);
         Btn.addActionListener(e -> {
-            modelCart.WriteData();
-            body.removeAll();
-            this.key = "0";
-            modelCart.resetData();
-            this.userData[1] = "null";
-            storeProduct.removeAll(storeProduct);
-            setFooter();
-            revalidate();
-            repaint();
+            if (!this.key.equals("0")) {
+                modelCart.WriteData();
+                body.removeAll();
+                this.key = "0";
+                modelCart.resetData();
+                mainFrame.resetPage();
+                this.userData[1] = "-";
+                storeProduct.removeAll(storeProduct);
+                setFooter();
+                revalidate();
+                repaint();
+            }
         });
         return Btn;
 
     }
 
-    // For click in mainframe
     public void addProduct(ProductCard dataForCard) {
-        ProductCardRight card = new ProductCardRight(dataForCard.getName(), dataForCard.getPrice(), this);
+        ProductCardRight card = new ProductCardRight(dataForCard.getId(), this);
         String total = String.valueOf(Integer.parseInt(card.getAmount()) * Double.parseDouble(card.getPrice()));
         String cardData[] = new String[] { card.getType(), card.getName(), card.getPrice(), card.getAmount(), total,
-                card.getID(), this.key, userData[1] };
+                card.getID(), this.key, userData[1], "0" };
         body.add(card);
         modelCart.addData(cardData);
         genKey();
         setFooter();
         footer.revalidate();
         footer.repaint();
+        this.countProduct++;
+
+        setScroller();
+    }
+
+    public void setScroller(){
+        int scrollerHeight = countProduct * 55; 
+        body.setPreferredSize(new Dimension(width, scrollerHeight));
+        scroller.setBorder(null);
+        scroller.revalidate();
+        scroller.repaint();
     }
 
     public void deleteProduct(ProductCardRight card) {
@@ -217,8 +240,9 @@ public class Cart extends JPanel {
         return this.storeProduct;
     }
 
-    public void setTimeCart() {
-        modelCart.setTime();
+    public void setCart() {
+        modelCart.setBill();
+        this.countProduct = 0;
     }
 
     public void setFooter() {
@@ -235,25 +259,19 @@ public class Cart extends JPanel {
         this.statusNewUser = status;
     }
 
+
 }
 
 class InnerCart {
     private String TotalAmount = "0";
     private String TotalPrice = "0.0";
 
-    // type,ProductName,price,Amount,Total,id,key
+    // type,ProductName,price,Amount,Total,id,key.Cname,StatusDiscount
     private ArrayList<String[]> dataProduct = new ArrayList<>();
-    private ArrayList<String> dataOut = new ArrayList<>();
+    private String BillId = new Tools().genNewId(new InventoryService().getAllSalesHistory());
     private DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern(" HH:mm:ss");
-
-    // BillId,date,Time
-    public InnerCart() {
-        LocalDateTime now = LocalDateTime.now();
-        dataOut.add(new Tools().genNewId(new InventoryService().getAllSalesHistory()));
-        dataOut.add(String.valueOf(now.format(formatterDate)));
-        dataOut.add(String.valueOf(now.format(formatterTime)));
-    }
+    private SalesServices salesServices = new SalesServices();
 
     public void addData(String[] newData) {
         this.dataProduct.add(newData);
@@ -262,30 +280,23 @@ class InnerCart {
                 + Double.parseDouble(this.TotalPrice));
     }
 
+    public void deleteData(String id) {
+        for (int c = 0; c < dataProduct.size(); c++) {
+            if (dataProduct.get(c)[5].equals(id)) {
+                dataProduct.remove(c);
+                break;
+            }
+        }
+    }
+
     public void resetData() {
         dataProduct.removeAll(dataProduct);
         this.TotalAmount = "0";
         this.TotalPrice = "0.0";
     }
 
-    public void setTime() {
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println("Hey Time");
-        dataOut.clear();
-        dataOut.add(new Tools().genNewId(new InventoryService().getAllSalesHistory()));
-        dataOut.add(String.valueOf(now.format(formatterDate)));
-        dataOut.add(String.valueOf(now.format(formatterTime)));
-    }
-
-    public void deleteData(String id) {
-        String[] item = new String[0];
-        for (int c = 0; c < dataProduct.size(); c++) {
-            if (dataProduct.get(c)[5].equals(id)) {
-                item = dataProduct.get(c);
-                break;
-            }
-        }
-        dataProduct.remove(item);
+    public void setBill() {
+        BillId = new Tools().genNewId(new InventoryService().getAllSalesHistory());
     }
 
     public void setAmountProductModel(String id, String amount) {
@@ -322,11 +333,14 @@ class InnerCart {
     // Write Data To File History(InMemoryStore.txt)
     // BillId,typeProduct,date,time,costumerName,productName,QTY,total(Bath)
     public void WriteData() {
+        LocalDateTime now = LocalDateTime.now();
+        String time = String.valueOf(now.format(formatterTime));
+        String date = String.valueOf(now.format(formatterDate));
         String[][] DataFormatted = new String[dataProduct.size()][8];
+
         for (int index = 0; index < DataFormatted.length; index++) {
-            System.out.println("Test ro");
-            DataFormatted[index] = new String[] { dataOut.get(0), dataProduct.get(index)[0], dataOut.get(1),
-                    dataOut.get(2), dataProduct.get(index)[7], dataProduct.get(index)[1], dataProduct.get(index)[3],
+            DataFormatted[index] = new String[] { BillId, dataProduct.get(index)[0], date,
+                    time, dataProduct.get(index)[7], dataProduct.get(index)[1], dataProduct.get(index)[3],
                     dataProduct.get(index)[4] };
         }
 
@@ -336,10 +350,13 @@ class InnerCart {
                         dataWrite[3] + "," + dataWrite[4] + "," + dataWrite[5] + "," + dataWrite[6]
                         + "," + dataWrite[7] + "\n");
             }
+            salesServices.minusStock(dataProduct.toArray(new String[0][]));
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Cart modelCart");
         }
+        JOptionPane.showMessageDialog(null, "Success!");
+        salesServices.NotificationLowProduct(dataProduct.toArray(new String[0][]));
     }
 
     public String getTotalAmount() {

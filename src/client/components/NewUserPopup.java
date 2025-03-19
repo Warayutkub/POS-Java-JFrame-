@@ -16,7 +16,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import backend.services.AuthService;
-import backend.services.InventoryService;
 import client.MainFrame;
 import resources.Tools;
 

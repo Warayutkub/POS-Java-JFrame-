@@ -116,7 +116,7 @@ public class Dashboard extends JPanel {
         JTextField top = new JTextField();
         JTextField bottom = new JTextField();
 
-        container.setBackground(Color.GRAY);
+        container.setBackground(Color.WHITE);
         container.setPreferredSize(new Dimension(200, 60));
         container.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 
@@ -125,12 +125,14 @@ public class Dashboard extends JPanel {
         top.setEditable(false);
         top.setHorizontalAlignment(JTextField.CENTER);
         top.setBorder(BorderFactory.createEmptyBorder());
+        top.setBackground(Color.WHITE);
 
         bottom.setFont(preferences.getFont(12));
         bottom.setText(title);
         bottom.setEditable(false);
         bottom.setHorizontalAlignment(JTextField.CENTER);
         bottom.setBorder(BorderFactory.createEmptyBorder());
+        bottom.setBackground(Color.WHITE);
 
         if (setdecimal) {
             top.setText(format.format(amount) + " " + type);
