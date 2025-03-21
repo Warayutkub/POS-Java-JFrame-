@@ -67,10 +67,20 @@ public class MainFrame extends JFrame {
         mainPanel.add(dashboard, "Dashboard");
 
         // Type Btn
+        All.setName("All");
+        Electronics.setName("Electronics");
+        Foods.setName("Foods");
+        Fashions.setName("Fashions");
+        Cosmetics.setName("Cosmetics");
+        Households.setName("Households");
+        Tools.setName("Tools");
+        Sports.setName("Sports");
+        Toys.setName("Toys");
+
         outerBody.add(productPanel, BorderLayout.CENTER);
         productPanel.add(All, "All");
-        productPanel.add(Foods, "Foods");
         productPanel.add(Electronics, "Electronics");
+        productPanel.add(Foods, "Foods");
         productPanel.add(Fashions, "Fashions");
         productPanel.add(Cosmetics, "Cosmetics");
         productPanel.add(Households, "Households");
@@ -116,7 +126,7 @@ public class MainFrame extends JFrame {
         JButton ElectronicsBtn = new JButton("Electronics");
         JButton FoodsBtn = new JButton("Food");
         JButton FashionsBtn = new JButton("Fashion");
-        JButton CosmeticsBtn = new JButton("Electronics");
+        JButton CosmeticsBtn = new JButton("Cosmetics");
         JButton HouseholdsBtn = new JButton("Household");
         JButton ToolsBtn = new JButton("Tools");
         JButton SportsBtn = new JButton("Sport");
@@ -144,58 +154,50 @@ public class MainFrame extends JFrame {
 
             FoodsBtn.addActionListener(e -> {
                 CardLayout cl = (CardLayout) productPanel.getLayout();
-                productPanel.remove(Foods);
-                Foods = new DisplayProductPanel().getPanel(cart, "2");
-                productPanel.add(Foods, "Foods");
+                productPanel.revalidate();
+                productPanel.repaint();
                 cl.show(productPanel, "Foods");
             });
             ElectronicsBtn.addActionListener(e -> {
                 CardLayout cl = (CardLayout) productPanel.getLayout();
-                productPanel.remove(Electronics);
-                Electronics = new DisplayProductPanel().getPanel(cart, "1");
-                productPanel.add(Electronics, "Electronics");
+                productPanel.revalidate();
+                productPanel.repaint();
                 cl.show(productPanel, "Electronics");
             });
             FashionsBtn.addActionListener(e -> {
                 CardLayout cl = (CardLayout) productPanel.getLayout();
-                productPanel.remove(Fashions);
-                Fashions = new DisplayProductPanel().getPanel(cart, "3");
-                productPanel.add(Fashions, "Fashions");
+                productPanel.revalidate();
+                productPanel.repaint();
                 cl.show(productPanel, "Fashions");
             });
             CosmeticsBtn.addActionListener(e -> {
                 CardLayout cl = (CardLayout) productPanel.getLayout();
-                productPanel.remove(Cosmetics);
-                Cosmetics = new DisplayProductPanel().getPanel(cart, "4");
-                productPanel.add(Cosmetics, "Cosmetics");
+                productPanel.revalidate();
+                productPanel.repaint();
                 cl.show(productPanel, "Cosmetics");
             });
             HouseholdsBtn.addActionListener(e -> {
                 CardLayout cl = (CardLayout) productPanel.getLayout();
-                productPanel.remove(Households);
-                Households = new DisplayProductPanel().getPanel(cart, "5");
-                productPanel.add(Households, "Households");
+                productPanel.revalidate();
+                productPanel.repaint();
                 cl.show(productPanel, "Households");
             });
             ToolsBtn.addActionListener(e -> {
                 CardLayout cl = (CardLayout) productPanel.getLayout();
-                productPanel.remove(Tools);
-                Tools = new DisplayProductPanel().getPanel(cart, "6");
-                productPanel.add(Tools, "Tools");
+                productPanel.revalidate();
+                productPanel.repaint();
                 cl.show(productPanel, "Tools");
             });
             SportsBtn.addActionListener(e -> {
                 CardLayout cl = (CardLayout) productPanel.getLayout();
-                productPanel.remove(Sports);
-                Sports = new DisplayProductPanel().getPanel(cart, "7");
-                productPanel.add(Sports, "Sports");
+                productPanel.revalidate();
+                productPanel.repaint();
                 cl.show(productPanel, "Sports");
             });
             ToysBtn.addActionListener(e -> {
                 CardLayout cl = (CardLayout) productPanel.getLayout();
-                productPanel.remove(Toys);
-                Toys = new DisplayProductPanel().getPanel(cart, "8");
-                productPanel.add(Toys, "Toys");
+                productPanel.revalidate();
+                productPanel.repaint();
                 cl.show(productPanel, "Toys");
             });
 
@@ -220,10 +222,11 @@ public class MainFrame extends JFrame {
         CardLayout pr = (CardLayout) productPanel.getLayout();
         String page = "";
         for (Component comp : productPanel.getComponents()) {
-            if (comp.isVisible()) {
+            if (comp.isVisible() && comp.getName() != null) {
                 page = comp.getName();
             }
         }
+
         All = new DisplayProductPanel().getPanel(cart, "all");
         Electronics = new DisplayProductPanel().getPanel(cart, "1");
         Foods = new DisplayProductPanel().getPanel(cart, "2");
@@ -233,20 +236,34 @@ public class MainFrame extends JFrame {
         Tools = new DisplayProductPanel().getPanel(cart, "6");
         Sports = new DisplayProductPanel().getPanel(cart, "7");
         Toys = new DisplayProductPanel().getPanel(cart, "8");
+
+        All.setName("All");
+        Electronics.setName("Electronics");
+        Foods.setName("Foods");
+        Fashions.setName("Fashions");
+        Cosmetics.setName("Cosmetics");
+        Households.setName("Households");
+        Tools.setName("Tools");
+        Sports.setName("Sports");
+        Toys.setName("Toys");
         
-        productPanel.removeAll();;
+        productPanel.removeAll();
+
         productPanel.add(All, "All");
-        productPanel.add(Foods, "Foods");
         productPanel.add(Electronics, "Electronics");
+        productPanel.add(Foods, "Foods");
         productPanel.add(Fashions, "Fashions");
         productPanel.add(Cosmetics, "Cosmetics");
         productPanel.add(Households, "Households");
         productPanel.add(Tools, "Tools");
         productPanel.add(Sports, "Sports");
         productPanel.add(Toys, "Toys");
+
+        productPanel.revalidate();
+        productPanel.repaint();
         pr.show(productPanel, page);
     }
-    
+
     private JButton ButtonToHome() {
         JButton Home = new JButton("Home");
         Home.setBackground(null);
@@ -255,22 +272,23 @@ public class MainFrame extends JFrame {
         Home.setFont(new SetPreferences().getFont(14));
         Home.addActionListener(e -> {
             CardLayout cl = (CardLayout) mainPanel.getLayout();
+            CardLayout pr = (CardLayout) productPanel.getLayout();
             cl.show(mainPanel, "Body");
-            resetPage();
+            pr.show(productPanel, "All");
         });
-        
+
         Home.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 Home.setText("<html><u>Home</u></html>");
             }
-            
+
             @Override
             public void mouseExited(MouseEvent e) {
                 Home.setText("Home");
             }
         });
-        
+
         return Home;
     }
 

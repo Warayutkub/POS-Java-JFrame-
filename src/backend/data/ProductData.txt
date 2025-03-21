@@ -1,12 +1,12 @@
-1,CeraVe,510,0,195,4,./src/backend/data/images/CeraVe.jpg
-2,Sprite,910,0,32,2,./src/backend/data/images/Sprite.jpg
-3,Lenovo loq 15IRX9,32599,0,0,1,./src/backend/data/images/Lenovo_loq_15IRX9.jpg
-4,ASTROCK BADMINTON RACKET,3500,0,0,7,./src/backend/data/images/ASTROCK_BADMINTON_RACKET.jpg
-5,Metal Cutting,219,0,16,6,./src/backend/data/images/Metal_Cutting.jpg
-6,Mobs,229,0,17,5,./src/backend/data/images/Mobs.jpg
-7,NIKE+REACT+PHANTOM+RUN+FK+2,2900,0,19,3,./src/backend/data/images/NIKE+REACT+PHANTOM+RUN+FK+2.jpg
-8,Squirrel Doll,350,0,16,8,./src/backend/data/images/Squirrel_doll.jpg
-9,Aquafina,10,0,0,2,./src/backend/data/images/Aquafina.jpg
-10,Mama Tom Yum,10,0,17,2,./src/backend/data/images/mamaTomyum.jpg
-11,Mama Big Pack,10,0,0,2,./src/backend/data/images/MamaTomyumBigPack.jpg
-12,Nestle,10,0,0,2,./src/backend/data/images/Nestle.jpg
+1,CeraVe,510,0,192,4,./src/backend/data/images/CeraVe.jpg
+2,Sprite,910,0,31,2,./src/backend/data/images/Sprite.jpg
+3,Lenovo loq 15IRX9,32599,0,11,1,./src/backend/data/images/Lenovo_loq_15IRX9.jpg
+4,ASTROCK BADMINTON RACKET,3500,0,20,7,./src/backend/data/images/ASTROCK_BADMINTON_RACKET.jpg
+5,Metal Cutting,219,0,14,6,./src/backend/data/images/Metal_Cutting.jpg
+6,Mobs,229,0,200,5,./src/backend/data/images/Mobs.jpg
+7,NIKE+REACT+PHANTOM+RUN+FK+2,2900,0,5,3,./src/backend/data/images/NIKE+REACT+PHANTOM+RUN+FK+2.jpg
+8,Squirrel Doll,350,0,30,8,./src/backend/data/images/Squirrel_doll.jpg
+9,Aquafina,10,0,300,2,./src/backend/data/images/Aquafina.jpg
+10,Mama Tom Yum,10,0,40,2,./src/backend/data/images/mamaTomyum.jpg
+11,Mama Big Pack,10,0,12,2,./src/backend/data/images/MamaTomyumBigPack.jpg
+12,Nestle,10,0,300,2,./src/backend/data/images/Nestle.jpg
