@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -10,18 +11,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import backend.services.InventoryService;
+import backend.services.SalesServices;
 import resources.SetPreferences;
 import resources.Tools;
 
 public class ProductCard extends JPanel {
     private SetPreferences setFontO = new SetPreferences();
-    private int cardWidth = 150;
-    private int cardHeight = 219;
+    private int cardWidth = 172;
+    private int cardHeight = 248;
     private String pathImg;
     private String name;
     private String price;
     private String id;
     private Cart cart;
+    private String Stock;
 
     public ProductCard(){}
 
@@ -72,33 +75,41 @@ public class ProductCard extends JPanel {
     
     private JButton BtnSend() {
         JButton Btn = new JButton("Add");
-        Btn.setBackground(null);
+        Btn.setBackground(Color.WHITE); // Set a valid background color
         Btn.setPreferredSize(new Dimension(cardWidth-25, cardHeight/8));
         Btn.setFont(setFontO.getFont(cardHeight/17));
-        Btn.addActionListener(e -> {
-            if (!cart.CheckProduct(this.id)){
-                if (cart.getStoreProduct().size() == 0) {
-                    cart.setTimeCart();
+        if (this.Stock.equals("0")){
+            Btn.setEnabled(false);
+            Btn.setText("Out Of Stock");
+        }else{
+            Btn.addActionListener(e -> {
+                if (!cart.CheckProduct(this.id)){
+                    if (cart.getStoreProduct().size() == 0) {
+                        cart.setCart();
+                    }
+                    cart.addProductToStoreID(id);
+                    cart.addProduct(this);
+                    cart.revalidate();
+                    cart.repaint();
                 }
-                cart.addProductToStoreID(id);
-                cart.addProduct(this);
-                cart.revalidate();
-                cart.repaint();
-            }
-        });
+            });
+        }
         return Btn;
     }
 
     private void genName(){
         String[][] data = new InventoryService().getAllProductData();
+        
         for (String[] recode : data){
-            if (new Tools().LinearSearch(recode, this.id)){
+            if (recode[0].equals(this.id)){
                 this.name = recode[1];
                 this.price = recode[2];
-                this.pathImg = recode[7];
+                this.Stock = recode[4];
+                this.pathImg = recode[6];
             }
         }
     }
+
 
     public  int getWidth(){return this.cardWidth;}
     public  int getHeight(){return this.cardHeight;}

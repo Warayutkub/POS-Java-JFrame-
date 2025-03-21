@@ -2,7 +2,6 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -12,7 +11,6 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,39 +20,28 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import backend.services.DashboardService;
-import backend.services.InventoryService;
 import resources.SetPreferences;
 
-public class Dashboard extends JFrame {
+public class Dashboard extends JPanel {
     private int width = 900;
     private int height = 515;
-    private Container container = getContentPane();
     private JPanel topPanel, bodyPanel, topBody;
     private SetPreferences preferences = new SetPreferences();
     private String[][] data;
     private String[] columnNames = { "QUEUE ID", "TYPE", "DATE", "TIME", "CUSTOMER", "PRODUCT", "QTY", "TOTAL" };
     private String dateGet;
-    private JPanel topCardDayOrder,topCardDayTotal,topCardAllOrder,topCardAllTotal;
-    private String[][] inventory = new InventoryService().getAllSalesHistory();
+    private JPanel topCardDayOrder, topCardDayTotal, topCardAllOrder, topCardAllTotal;
 
     @SuppressWarnings("rawtypes")
     private JComboBox dateSelect;
 
     public Dashboard() {
+        setPreferredSize(new Dimension(width, height));
         CreateGui(14);
-        CreateWindow();
-    }
-
-    private void CreateWindow() {
-        setTitle("DashBoard to day");
-        setSize(this.width, this.height);
-        setAlwaysOnTop(true);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private void CreateGui(int font) {
-        container.setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
         
         topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20));
         
@@ -62,12 +49,11 @@ public class Dashboard extends JFrame {
         dateSelect.setSelectedIndex(0);
         dateGet = (String) dateSelect.getSelectedItem();
 
-        topCardAllOrder = TopCard(new DashboardService().getDataAllForTopBoard("order"),"Order","All Total Order",true);
-        topCardAllTotal = TopCard(new DashboardService().getDataAllForTopBoard("total"),"Bath","All Total Income",false);
+        topCardAllOrder = TopCard(new DashboardService().getDataAllForTopBoard("order"), "Order", "All Total Order", true);
+        topCardAllTotal = TopCard(new DashboardService().getDataAllForTopBoard("total"), "Bath", "All Total Income", false);
 
-        topCardDayOrder = TopCard(new DashboardService().getDataTopDashboard("order",dateGet), "Order", "Daily Total Order",true);
+        topCardDayOrder = TopCard(new DashboardService().getDataTopDashboard("order", dateGet), "Order", "Daily Total Order", true);
         topCardDayTotal = TopCard(new DashboardService().getDataTopDashboard("total", dateGet), "Bath", "Daily Total Income", false);
-        System.out.println(inventory[inventory.length-1][0]);
 
         topPanel.add(topCardAllOrder);
         topPanel.add(topCardAllTotal);
@@ -83,12 +69,11 @@ public class Dashboard extends JFrame {
 
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         JTable table = new JTable(model);
-        table.setPreferredScrollableViewportSize(new Dimension(850, 300));
+        table.setPreferredScrollableViewportSize(new Dimension(1000, 550));
         table.setFillsViewportHeight(true);
         table.setRowHeight(30);
         table.setEnabled(false);
         table.getTableHeader().setReorderingAllowed(false);
-
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -121,8 +106,8 @@ public class Dashboard extends JFrame {
             }
         });
 
-        container.add(topPanel, BorderLayout.NORTH);
-        container.add(bodyPanel, BorderLayout.CENTER);
+        add(topPanel, BorderLayout.NORTH);
+        add(bodyPanel, BorderLayout.CENTER);
     }
 
     private JPanel TopCard(double amount, String type, String title, boolean setdecimal) {
@@ -131,7 +116,7 @@ public class Dashboard extends JFrame {
         JTextField top = new JTextField();
         JTextField bottom = new JTextField();
 
-        container.setBackground(Color.GRAY);
+        container.setBackground(Color.WHITE);
         container.setPreferredSize(new Dimension(200, 60));
         container.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 
@@ -140,12 +125,14 @@ public class Dashboard extends JFrame {
         top.setEditable(false);
         top.setHorizontalAlignment(JTextField.CENTER);
         top.setBorder(BorderFactory.createEmptyBorder());
+        top.setBackground(Color.WHITE);
 
         bottom.setFont(preferences.getFont(12));
         bottom.setText(title);
         bottom.setEditable(false);
         bottom.setHorizontalAlignment(JTextField.CENTER);
         bottom.setBorder(BorderFactory.createEmptyBorder());
+        bottom.setBackground(Color.WHITE);
 
         if (setdecimal) {
             top.setText(format.format(amount) + " " + type);
@@ -155,8 +142,4 @@ public class Dashboard extends JFrame {
         container.add(bottom);
         return container;
     }
-    public void On() {
-        setVisible(true);
-    }
-
 }
