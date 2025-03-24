@@ -1,3 +1,5 @@
+package client.components;
+
 import javax.swing.*;
 import backend.models.Users.User;
 import backend.services.AuthService;

@@ -1,73 +1,181 @@
-import javax.swing.*;
-import javax.swing.border.LineBorder;
+package client.components;
 
-import backend.models.Users.User;
+import javax.swing.*;
+
+import javafx.scene.layout.Pane;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserPanels extends JFrame {
-    JPanel panelMain, sidePanel;
-    JButton newUser;
-    JPanel fileUserPanel; // ใช้ JPanel แทน JTextArea
-    JScrollPane scrollPane;
-    
+
+    private Container c = getContentPane();
+
     public UserPanels() {
-        setTitle("User Management");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 760);
-        setResizable(false);
-        setLayout(new FlowLayout());
-
-        newUser = new JButton("New User");
-        newUser.setPreferredSize(new Dimension(120, 60));
-        newUser.addActionListener(ev -> new NewUserRegister().setVisible(true));
-
-        panelMain = new JPanel();
-        panelMain.setPreferredSize(new Dimension(700, 600));
-        panelMain.setBorder(new LineBorder(Color.BLACK, 2));
-        panelMain.setLayout(new BorderLayout());
-
-        sidePanel = new JPanel();
-        sidePanel.setPreferredSize(new Dimension(670, 500));
-        sidePanel.setBorder(new LineBorder(Color.RED, 2));
-        sidePanel.setLayout(new BorderLayout());
-
-        fileUserPanel = new JPanel();
-        fileUserPanel.setLayout(new BoxLayout(fileUserPanel, BoxLayout.Y_AXIS));
-        scrollPane = new JScrollPane(fileUserPanel);
-        scrollPane.setPreferredSize(new Dimension(670, 100));
-
-        sidePanel.add(scrollPane, BorderLayout.CENTER);
-        panelMain.add(sidePanel, BorderLayout.NORTH);
-        
-        add(newUser);
-        add(panelMain);
-
-        loadUserData();
-
-        setVisible(true);
+        MainPanel();
+        setupWindow();
     }
 
-    public void openNewUser(){
-        new NewUserRegister();
-        setVisible(true);
-    }
-
-
-    public void loadUserData() {
-
-        try (BufferedReader read = new BufferedReader(new FileReader("./src/backend/data/UserData.txt"))) {
-            String line;
-            while ((line = read.readLine()) != null) {
-                
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+    private void MainPanel() {
+        c.setLayout(new FlowLayout(FlowLayout.CENTER));
+        for(String[] recode : pullData()){
+            c.add(new UserPanel(recode[0],recode[1],recode[2],recode[3]));
+            
         }
-        
+    }
+
+    private void setupWindow() {
+        setSize(800, 600);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    class UserPanel extends JPanel {
+        private String id;
+        private String name;
+        private String phone;
+        private String email;
+
+    public UserPanel(String id,String name,String phone,String email){
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setPreferredSize(new Dimension(700,40));
+        setBackground(Color.BLACK);
+        add(getPanelId());
+        add(getPanelName());
+        add(getPanelPhone());
+        add(getPanelEmail());
+        add(editPanel());
+        add(delPanel());
+
+    }
+
+
+    private JPanel getPanelId(){
+        JPanel Panel = new JPanel();
+        JLabel Label = new JLabel(this.id);
+        setBackground(Color.BLACK);
+        Panel.add(Label);
+        return Panel;
+    }
+
+    private JPanel getPanelName(){
+        JPanel Panel = new JPanel();
+        JLabel Label = new JLabel(this.name);
+        setBackground(Color.BLACK);
+        Panel.add(Label);
+        return Panel;
+    }
+
+    private JPanel getPanelPhone(){
+        JPanel Panel = new JPanel();
+        JLabel Label = new JLabel(this.phone);
+        setBackground(Color.BLACK);
+        Panel.add(Label);
+        return Panel;
+    }
+
+    private JPanel getPanelEmail(){
+        JPanel Panel = new JPanel();
+        JLabel Label = new JLabel(this.email);
+        setBackground(Color.BLACK);
+        Panel.add(Label);
+        return Panel;
+    }
+
+    private JButton editButton(){
+        JButton Button = new JButton("Edit");
+        c.removeAll();
+        Button.addActionListener(e ->{
+            new editUser();
+        });
+        for(String[] recode : pullData()){
+            c.add(new UserPanel(recode[0], recode[1], recode[2], recode[3]));
+        }
+        c.revalidate();
+        c.repaint();
+        Button.setPreferredSize(new Dimension(110,20));
+        return Button;
+    }
+
+    private JPanel editPanel(){
+        JPanel Panel = new JPanel();
+        Panel.add(editButton());
+        Panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        return Panel;
+    }
+
+    private JButton delButton(){
+        JButton Button = new JButton("Delete");
+        Button.addActionListener(e ->{
+        DeleteData(this.id);
+        c.removeAll(); 
+            for(String[] recode : pullData()){
+                c.add(new UserPanel(recode[0],recode[1],recode[2],recode[3]));
+            }
+            c.revalidate();
+            c.repaint();
+        });
+        return Button;
+    }
+
+    private JPanel delPanel(){
+        JPanel Panel = new JPanel();
+        Panel.add(delButton());
+        Panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        return Panel;
+    }
+
+    private void DeleteData(String id){
+        String[][] data = pullData();
+        String[][] newData = new String[data.length-1][data[0].length-1];
+        int c = 0;
+        for(String[] person : data){
+            if(!id.equals(person[0])){
+                newData[c++] = person;
+            }
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/UserData.txt"))){
+            for(String[] person : newData){
+                writer.write(person[0] + "," + person[1] + "," + person[2] + "," + person[3]);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    }
+
+    private String[][] pullData() {
+        String[][] data = new String[0][0];
+
+        try (BufferedReader rd = new BufferedReader(new FileReader("./src/backend/data/UserData.txt"))) {
+            String lines;
+            int row = 0;
+            int column = 0;
+            while ((lines = rd.readLine()) != null) {
+                row++;
+                column = lines.split(",").length;
+            }
+            data = new String[row][column];
+            try (BufferedReader rd2 = new BufferedReader(new FileReader("./src/backend/data/UserData.txt"))) {
+                int i = 0;
+                while ((lines = rd2.readLine()) != null) {
+                    data[i++] = lines.split(",");
+                }
+            } catch (Exception e) {
+
+            }
+        } catch (Exception e) {
+
+        }
+        return data;
+    }
+    public static void main(String[] args) {
+        new UserPanels();
     }
 }
