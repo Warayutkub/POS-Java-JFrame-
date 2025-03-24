@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
@@ -15,12 +16,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
+
+import backend.services.LoginServices;
 import client.components.Cart;
 import client.components.DisplayProductPanel;
+import client.components.POSDateTimeFrame;
 import resources.SetPreferences;
 
 public class MainFrame extends JFrame {
+    private String[] accountData = new LoginServices().getDataToken();
     private Cart cart = new Cart(this);
     private JPanel topBar = TopBar();
     private JPanel sideBar = SideBar();
@@ -40,6 +48,7 @@ public class MainFrame extends JFrame {
     private JPanel Tools = new DisplayProductPanel().getPanel(cart, "6");
     private JPanel Sports = new DisplayProductPanel().getPanel(cart, "7");
     private JPanel Toys = new DisplayProductPanel().getPanel(cart, "8");
+    private JPanel Search = new DisplayProductPanel().getSearchPanel(cart, "");
 
     public MainFrame() {
         CreateGui();
@@ -51,7 +60,7 @@ public class MainFrame extends JFrame {
         ImageIcon icon = new ImageIcon(getClass().getResource("/backend/data/images/logo.png"));
         setIconImage(icon.getImage());
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setSize(800, 600);
+        setSize(1600, 900);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -76,6 +85,7 @@ public class MainFrame extends JFrame {
         Tools.setName("Tools");
         Sports.setName("Sports");
         Toys.setName("Toys");
+        Search.setName("Search");
 
         outerBody.add(productPanel, BorderLayout.CENTER);
         productPanel.add(All, "All");
@@ -87,15 +97,106 @@ public class MainFrame extends JFrame {
         productPanel.add(Tools, "Tools");
         productPanel.add(Sports, "Sports");
         productPanel.add(Toys, "Toys");
+        productPanel.add(Search, "Search");
 
         container.add(mainPanel, BorderLayout.CENTER);
         container.add(cart, BorderLayout.EAST);
     }
 
     private JPanel TopBar() {
-        JPanel area = new JPanel(new FlowLayout());
+        JPopupMenu popupProfile = new JPopupMenu();
+        JMenuItem signOutItem = new JMenuItem("SignOut");
+        JTextField searchArea = new JTextField();
+        JButton searchBtn = new JButton("Search");
+        searchBtn.addActionListener(e -> {
+            String searchData = searchArea.getText();
+            if (!searchData.isEmpty()) {
+                productPanel.remove(Search);
+                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData);
+                this.Search.setName("Search");
+                productPanel.add(Search, "Search");
+                CardLayout pr = (CardLayout) productPanel.getLayout();
+                productPanel.revalidate();
+                productPanel.repaint();
+                pr.show(productPanel, "Search");
+                searchArea.setText("");
+            }
+        });
+
+        searchArea.addActionListener(e -> {
+            String searchData = searchArea.getText();
+            if (!searchData.isEmpty()) {
+                productPanel.remove(Search);
+                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData);
+                this.Search.setName("Search");
+                productPanel.add(Search, "Search");
+                CardLayout pr = (CardLayout) productPanel.getLayout();
+                productPanel.revalidate();
+                productPanel.repaint();
+                pr.show(productPanel, "Search");
+                searchArea.setText("");
+            }
+        });
+
+        searchBtn.setBackground(Color.white);
+        searchBtn.setPreferredSize(new Dimension(80,25));
+        searchArea.setBorder(null);
+
+        JPanel area = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel areaInner1 = new JPanel(new GridLayout(1, 1));
+        JPanel areaInner2 = new JPanel(new GridLayout(1, 2));
+        JPanel areaInner3 = new JPanel(new GridLayout(1, 1));
+        JPanel areaInner4 = new JPanel(new GridLayout(1, 1));
+        JPanel areaAroundSearch = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton accountName = new JButton(accountData[1]);
+        JLabel ApplicationName = new JLabel("  Point of sale  ");
+        JLabel time = new POSDateTimeFrame();
+
+        popupProfile.add(signOutItem);
+        signOutItem.setPreferredSize(new Dimension(150, 40));
+        signOutItem.setBackground(null);
+        accountName.setFont(new SetPreferences().getFont(24));
+        accountName.setBackground(null);
+        accountName.setBorder(null);
+        accountName.setForeground(Color.white);
+        accountName.addActionListener(e -> {
+            popupProfile.show(accountName, 0, accountName.getHeight());
+        });
+
+        ApplicationName.setFont(new SetPreferences().getFont(36));
+        ApplicationName.setForeground(Color.white);
+        ApplicationName.setPreferredSize(new Dimension(300, 50));
+
+        time.setForeground(Color.white);
+        time.setFont(new SetPreferences().getFont(16));
+
+        areaInner1.add(ApplicationName);
+        areaInner1.setBackground(null);
+        areaInner1.setPreferredSize(new Dimension(300, 45));
+
+        searchArea.setPreferredSize(new Dimension(200, 30));
+        areaAroundSearch.add(searchArea);
+        areaAroundSearch.add(searchBtn);
+        areaInner2.add(areaAroundSearch);
+        areaAroundSearch.setBackground(null);
+        areaInner2.setPreferredSize(new Dimension(850, 45));
+        areaInner2.setBackground(null);
+
+        areaInner3.add(time);
+        areaInner3.setBackground(null);
+        areaInner3.setPreferredSize(new Dimension(200, 40));
+
+        areaInner4.add(accountName);
+        areaInner4.setBackground(null);
+        areaInner4.setPreferredSize(new Dimension(150, 40));
+
+        area.add(areaInner1);
+        area.add(areaInner2);
+        area.add(areaInner3);
+        area.add(areaInner4);
         area.setPreferredSize(new Dimension(1000, 50));
-        area.setBackground(Color.BLUE);
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        area.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
         return area;
     }
 
@@ -112,6 +213,21 @@ public class MainFrame extends JFrame {
         area.add(ButtonToManageUser());
         area.add(ButtonToDashBoard());
         return area;
+    }
+
+    private void resetSideBar() {
+        int width = 150;
+        int height = 500;
+        this.accountData = new LoginServices().getDataToken();
+        System.out.println("In reset : " + accountData[5]);
+        sideBar.removeAll();
+        sideBar.add(LogoArea(width, height));
+        sideBar.add(ButtonToHome());
+        sideBar.add(ButtonToManageProduct());
+        sideBar.add(ButtonToManageUser());
+        sideBar.add(ButtonToDashBoard());
+        sideBar.revalidate();
+        sideBar.repaint();
     }
 
     private JPanel OuterBody() {
@@ -246,7 +362,7 @@ public class MainFrame extends JFrame {
         Tools.setName("Tools");
         Sports.setName("Sports");
         Toys.setName("Toys");
-        
+
         productPanel.removeAll();
 
         productPanel.add(All, "All");
@@ -289,6 +405,9 @@ public class MainFrame extends JFrame {
             }
         });
 
+        if (!accountData[5].equals("Manager") && !accountData[5].equals("Employee")) {
+            Home.setVisible(false);
+        }
         return Home;
     }
 
@@ -298,7 +417,6 @@ public class MainFrame extends JFrame {
         Btn.setFont(new SetPreferences().getFont(14));
         Btn.setBackground(null);
         Btn.setBorder(null);
-
         Btn.addActionListener(e -> {
         });
 
@@ -313,6 +431,9 @@ public class MainFrame extends JFrame {
                 Btn.setText("Manage Product");
             }
         });
+        if (!accountData[5].equals("Manager")) {
+            Btn.setVisible(false);
+        }
         return Btn;
     }
 
@@ -337,6 +458,9 @@ public class MainFrame extends JFrame {
                 Btn.setText("Manage User");
             }
         });
+        if (!accountData[5].equals("Manager")) {
+            Btn.setVisible(false);
+        }
         return Btn;
     }
 
@@ -366,7 +490,11 @@ public class MainFrame extends JFrame {
                 Btn.setText("History");
             }
         });
+        if (!accountData[5].equals("Manager") && !accountData[5].equals("Employee")) {
+            Btn.setVisible(false);
+        }
         return Btn;
     }
+
 
 }

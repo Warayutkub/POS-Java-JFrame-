@@ -10,7 +10,9 @@ import java.text.DecimalFormat;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,9 +22,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import backend.services.DashboardService;
+import client.components.FindBill;
 import resources.SetPreferences;
 
 public class Dashboard extends JPanel {
+    private DecimalFormat format = new DecimalFormat("#,###.##");
     private int width = 900;
     private int height = 515;
     private JPanel topPanel, bodyPanel, topBody;
@@ -31,6 +35,7 @@ public class Dashboard extends JPanel {
     private String[] columnNames = { "QUEUE ID", "TYPE", "DATE", "TIME", "CUSTOMER", "PRODUCT", "QTY", "TOTAL" };
     private String dateGet;
     private JPanel topCardDayOrder, topCardDayTotal, topCardAllOrder, topCardAllTotal;
+    private FindBill fb = new FindBill();
 
     @SuppressWarnings("rawtypes")
     private JComboBox dateSelect;
@@ -42,28 +47,43 @@ public class Dashboard extends JPanel {
 
     private void CreateGui(int font) {
         setLayout(new BorderLayout());
-        
+
         topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20));
-        
+
         dateSelect = new JComboBox<String>(new Vector<>(new DashboardService().getChoice()));
         dateSelect.setSelectedIndex(0);
         dateGet = (String) dateSelect.getSelectedItem();
+        JButton findBillBtn = new JButton("Find Bill");
+        findBillBtn.addActionListener(e -> {
+            if(fb.isVisible() == false) {
+                fb = new FindBill();
+                fb.setVisible(true);
+            }
+            else if (!fb.isActive() || fb.getState() == JFrame.ICONIFIED) {
+                fb.toFront();
+                fb.requestFocus();
+                fb.setState(JFrame.NORMAL);
+            }
+        });
 
-        topCardAllOrder = TopCard(new DashboardService().getDataAllForTopBoard("order"), "Order", "All Total Order", true);
-        topCardAllTotal = TopCard(new DashboardService().getDataAllForTopBoard("total"), "Bath", "All Total Income", false);
+        topCardAllOrder = TopCard(new DashboardService().getDataAllForTopBoard("order"), "Order", "All Total Order");
+        topCardAllTotal = TopCard(new DashboardService().getDataAllForTopBoard("total"), "Bath", "All Total Income");
 
-        topCardDayOrder = TopCard(new DashboardService().getDataTopDashboard("order", dateGet), "Order", "Daily Total Order", true);
-        topCardDayTotal = TopCard(new DashboardService().getDataTopDashboard("total", dateGet), "Bath", "Daily Total Income", false);
+        topCardDayOrder = TopCard(new DashboardService().getDataTopDashboard("order", dateGet), "Order",
+                "Daily Total Order");
+        topCardDayTotal = TopCard(new DashboardService().getDataTopDashboard("total", dateGet), "Bath",
+                "Daily Total Income");
 
         topPanel.add(topCardAllOrder);
         topPanel.add(topCardAllTotal);
         topPanel.add(topCardDayOrder);
         topPanel.add(topCardDayTotal);
-        
-        topBody = new JPanel(new FlowLayout(FlowLayout.RIGHT, 25, 5));
-        topBody.setPreferredSize(new Dimension(width, 35));
+
+        topBody = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 5));
+        topBody.setPreferredSize(new Dimension(width + 100, 35));
         topBody.add(dateSelect);
-        
+        topBody.add(findBillBtn);
+
         bodyPanel = new JPanel(new FlowLayout());
         data = new DashboardService().getTable((String) dateSelect.getSelectedItem());
 
@@ -97,8 +117,10 @@ public class Dashboard extends JPanel {
                 }
                 topPanel.remove(topCardDayOrder);
                 topPanel.remove(topCardDayTotal);
-                topCardDayOrder = TopCard(new DashboardService().getDataTopDashboard("order", dateString), "Order", "Daily Total Order", true);
-                topCardDayTotal = TopCard(new DashboardService().getDataTopDashboard("total", dateString), "Bath", "Daily Total Income", false);
+                topCardDayOrder = TopCard(new DashboardService().getDataTopDashboard("order", dateString), "Order",
+                        "Daily Total Order");
+                topCardDayTotal = TopCard(new DashboardService().getDataTopDashboard("total", dateString), "Bath",
+                        "Daily Total Income");
                 topPanel.add(topCardDayOrder);
                 topPanel.add(topCardDayTotal);
                 topPanel.revalidate();
@@ -110,8 +132,7 @@ public class Dashboard extends JPanel {
         add(bodyPanel, BorderLayout.CENTER);
     }
 
-    private JPanel TopCard(double amount, String type, String title, boolean setdecimal) {
-        DecimalFormat format = new DecimalFormat("#,###,##0");
+    private JPanel TopCard(double amount, String type, String title) {
         JPanel container = new JPanel(new GridLayout(2, 1));
         JTextField top = new JTextField();
         JTextField bottom = new JTextField();
@@ -121,7 +142,7 @@ public class Dashboard extends JPanel {
         container.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 
         top.setFont(preferences.getFont(16));
-        top.setText(amount + " " + type);
+        top.setText(format.format(amount) + " " + type);
         top.setEditable(false);
         top.setHorizontalAlignment(JTextField.CENTER);
         top.setBorder(BorderFactory.createEmptyBorder());
@@ -133,10 +154,6 @@ public class Dashboard extends JPanel {
         bottom.setHorizontalAlignment(JTextField.CENTER);
         bottom.setBorder(BorderFactory.createEmptyBorder());
         bottom.setBackground(Color.WHITE);
-
-        if (setdecimal) {
-            top.setText(format.format(amount) + " " + type);
-        }
 
         container.add(top);
         container.add(bottom);

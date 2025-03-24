@@ -1,8 +1,6 @@
 package client.components;
 
 import javax.swing.*;
-import backend.models.Users.User;
-import java.io.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

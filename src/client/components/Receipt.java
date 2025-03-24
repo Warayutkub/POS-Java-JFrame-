@@ -1,44 +1,44 @@
 package client.components;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import backend.services.InventoryService;
+import resources.SetPreferences;
+
 import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.DecimalFormat;
 
 public class Receipt extends JFrame {
-    Container c;
+    private DecimalFormat format = new DecimalFormat("#,###.##");
+    private Container c;
+    private String[][] dataInCart;
 
-    public Receipt() {
+    public Receipt(String[][] dataInCart) {
         super("Receipt");
+        this.dataInCart = dataInCart;
+        receiptGUI();
+        ImageIcon icon = new ImageIcon(getClass().getResource("/backend/data/images/logo.png"));
+        setIconImage(icon.getImage());
+        setSize(450, 500);
+        setLocationRelativeTo(null);
+    }
+    
+    public void receiptGUI() {
         c = getContentPane();
         c.setLayout(new FlowLayout());
-        receiptGUI();
-        setSize(450, 450);
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
+        c.setBackground(Color.WHITE);
 
-    public void receiptGUI() {
-
-        String salesFilePath = "sales.txt";
-        String productFilePath = "product.txt";
-        String customerFilePath = "customers.txt";
-
-        Object[][] data = readDataFromFile(salesFilePath, productFilePath);
-        if (data.length == 0) {
-            JOptionPane.showMessageDialog(this, "No Data in this File.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String[] columns = {"Qty", "Product", "Unit Price", "Total"};
+        String[][] dataUse = getData();
+        String[][] data = getDataTable();
+        String[] columns = {"Qty", "Product", "Unit Price", "Total Price"};
 
         DefaultTableModel model = new DefaultTableModel(data, columns);
         JTable table = new JTable(model);
         table.setEnabled(false);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        table.setBackground(Color.WHITE);
 
         table.getColumnModel().getColumn(0).setPreferredWidth(50);  // Qty
         table.getColumnModel().getColumn(1).setPreferredWidth(167); // Product
@@ -46,160 +46,146 @@ public class Receipt extends JFrame {
         table.getColumnModel().getColumn(3).setPreferredWidth(100); // Amount
 
         table.setPreferredScrollableViewportSize(new Dimension(500, 500));
+        table.setFillsViewportHeight(true);
+        table.setRowHeight(30);
+        table.setEnabled(false);
+        table.getTableHeader().setReorderingAllowed(false);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(400, 200));
+        scrollPane.setBackground(Color.WHITE);
 
         // CALCULATOR TOTAL
-        double totalPrice = calculateTotalPrice(data);
+        double totalPrice = calculateTotalPrice(dataUse);
         double cash = 1500.00;
         double change = cash >= totalPrice ? cash - totalPrice : 0;
 
-        String currentDate = getCurrentDate();
+        String currentDate = dataUse[0][1];
+        String currentTime = dataUse[0][2];
 
         // GET ID CUSTOMER
-        String customerId = "C001";
-        String memberName = getMemberNameFromFile(customerFilePath, customerId);
+        String memberName = dataUse[0][4];
 
         // Header
         JLabel headerLabel = new JLabel("SHOP", JLabel.CENTER);
-        headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        headerLabel.setFont(new SetPreferences().getFont(26));
 
         JLabel memberNameLabel = new JLabel("Member: " + memberName);
-        JLabel dateLabel = new JLabel("Date: " + currentDate);
-        JLabel empIdLabel = new JLabel("Emp: EMP1234");
+        memberNameLabel.setHorizontalAlignment(JLabel.CENTER);
+        JLabel dateLabel = new JLabel("Date : " + currentDate + "  Time : " + currentTime);
+        dateLabel.setHorizontalAlignment(JLabel.CENTER);
 
         // Payment Panel
         JPanel paymentPanel = new JPanel();
         paymentPanel.setLayout(new GridLayout(3, 1));
+        paymentPanel.setPreferredSize(new Dimension(400,100));
         paymentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        paymentPanel.setBackground(Color.WHITE);
 
         Font myFont = new Font("Arial", Font.BOLD, 18);
 
-        JLabel totalLabel = new JLabel("Total Price: " + totalPrice);
+        JLabel totalLabel = new JLabel("Total Price: " + format.format(totalPrice));
         totalLabel.setForeground(Color.RED);
         totalLabel.setFont(myFont);
-        JLabel cashLabel = new JLabel("Cash: " + cash);
+        JLabel cashLabel = new JLabel("Cash: " + format.format(cash));
         cashLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        JLabel changeLabel = new JLabel("Change: " + change);
+        JLabel changeLabel = new JLabel("Change: " + format.format(change));
         changeLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
         paymentPanel.add(totalLabel);
         paymentPanel.add(cashLabel);
         paymentPanel.add(changeLabel);
 
+        JLabel BillIdLabel = new JLabel("Bill Id : " + dataUse[0][0]);
+        BillIdLabel.setPreferredSize(new Dimension(400,20));
+        BillIdLabel.setHorizontalAlignment(JLabel.RIGHT);
+
         // Bottom Panel
         JLabel thankYouLabel = new JLabel("Thank you!", JLabel.CENTER);
         thankYouLabel.setFont(new Font("Arial", Font.BOLD, 20));
         thankYouLabel.setForeground(Color.BLACK);
+        thankYouLabel.setBackground(Color.WHITE);
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.add(thankYouLabel, BorderLayout.NORTH);
-        bottomPanel.add(empIdLabel, BorderLayout.EAST);
+        bottomPanel.setBackground(Color.WHITE);
 
         // Main Panel
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(headerLabel);
-        panel.add(memberNameLabel);
-        panel.add(dateLabel);
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panel.setPreferredSize(new Dimension(430,430));
+        panel.setBackground(Color.WHITE);
+        // panel.add(headerLabel);
+        // panel.add(memberNameLabel);
+        // panel.add(dateLabel);
         panel.add(scrollPane);
         panel.add(paymentPanel);
+        panel.add(BillIdLabel);
         panel.add(bottomPanel);
 
+        JPanel headPanel = new JPanel(new GridLayout(2,1));
+        JPanel bhJPanel = new JPanel(new GridLayout(1,2));
+        bhJPanel.add(dateLabel);
+        bhJPanel.add(memberNameLabel);
+        bhJPanel.setBackground(Color.WHITE);
+        headPanel.add(headerLabel);
+        headPanel.add(bhJPanel);
+        headPanel.setBackground(Color.WHITE);
+
+        c.add(headPanel,BorderLayout.NORTH);
         c.add(panel, BorderLayout.CENTER);
-
-      
     }
 
-    public Object[][] readDataFromFile(String salesFilePath, String productFilePath) {
-        ArrayList<Object[]> dataList = new ArrayList<>();
-        Map<String, String[]> productMap = readProductFile(productFilePath);
+    private String[][] getDataTable(){
+        String[][] data = new String[this.dataInCart.length][4];
+        for (int count = 0 ;count < this.dataInCart.length;count++){
+            data[count][0] = this.dataInCart[count][6];
+            data[count][1] = this.dataInCart[count][5];
+            data[count][2] = format.format(Double.parseDouble(getPrice(this.dataInCart[count][5])));
+            data[count][3] = format.format(Double.parseDouble(this.dataInCart[count][7]));
+        }
 
-        try (BufferedReader br = new BufferedReader(new FileReader(salesFilePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
-                if (values.length >= 5) {
-                    String receiptId = values[4].trim();  
+        return data;
+    }
+    private String[][] getData(){
+        String[][] data = new String[this.dataInCart.length][7];
+        for (int count = 0 ;count < this.dataInCart.length;count++){
+            data[count][0] = this.dataInCart[count][0];
+            data[count][1] = this.dataInCart[count][2];
+            data[count][2] = this.dataInCart[count][3];
+            data[count][3] = this.dataInCart[count][4];
+            data[count][4] = this.dataInCart[count][4];
+            data[count][5] = this.dataInCart[count][6];
+            data[count][6] = this.dataInCart[count][7];
+        }
 
-                    String productId = values[0].trim();
-                    int qty = Integer.parseInt(values[1].trim());
-                    String customerId = values[2].trim();
-                    String date = values[3].trim(); // Date 
-                    String[] productInfo = productMap.get(productId);
+        return data;
+    }
 
-                    if (productInfo != null) {
-                        String productName = productInfo[0];
-                        double price = Double.parseDouble(productInfo[1]);
-                        double amount = qty * price;
-                        dataList.add(new Object[]{qty, productName, price, amount});
-                    }
-                }
+    private double calculateTotalPrice(String[][] data){
+        double ttp = 0.0;
+        for (String[] recode : data){
+            ttp += Double.parseDouble(recode[6]);
+        }
+        return ttp;
+    }
+
+    private String getPrice(String name){
+        String[][] inventory = new InventoryService().getAllProductData();
+        String price = "";
+        for (int c = 0 ; c< inventory.length;c++){
+            if(inventory[c][1].equals(name)){
+                price = inventory[c][2];
+                break;
             }
-        } catch (IOException | NumberFormatException e) {
-            e.printStackTrace();
         }
-
-        return dataList.toArray(new Object[0][0]);
+        return price;
     }
 
-    // READ DATA PRODUCT
-    public static Map<String, String[]> readProductFile(String filePath) {
-        Map<String, String[]> productMap = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
-                if (values.length >= 3) {
-                    String productId = values[0].trim();
-                    String productName = values[1].trim();
-                    String priceStr = values[2].trim();
-
-                    // Remove commas
-                    priceStr = priceStr.replace(",", "");
-                    double price = Double.parseDouble(priceStr);
-
-                    productMap.put(productId, new String[]{productName, String.valueOf(price)});
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return productMap;
-    }
-
-    // TOTAL
-    public static double calculateTotalPrice(Object[][] data) {
-        double total = 0.0;
-        for (Object[] row : data) {
-            total += (double) row[3];  
-        }
-        return total;
-    }
-
-    // DATE
-    public static String getCurrentDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        return LocalDateTime.now().format(formatter);
-    }
-
-    // ID TO NAME
-    public static String getMemberNameFromFile(String filePath, String customerId) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
-                if (values[0].trim().equals(customerId)) {
-                    return values[1].trim();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "Unknown";
-    }
-
-    public static void main(String[] args) {
-        new Receipt();
-    }
 }

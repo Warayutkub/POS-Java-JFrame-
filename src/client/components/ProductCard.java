@@ -3,7 +3,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
-import java.util.Arrays;
+import java.text.DecimalFormat;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -11,11 +11,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import backend.services.InventoryService;
-import backend.services.SalesServices;
 import resources.SetPreferences;
-import resources.Tools;
 
 public class ProductCard extends JPanel {
+    private DecimalFormat format = new DecimalFormat("#,###.##");
     private SetPreferences setFontO = new SetPreferences();
     private int cardWidth = 172;
     private int cardHeight = 248;
@@ -66,7 +65,7 @@ public class ProductCard extends JPanel {
     }
 
     private JLabel TextPrice(String price) {
-        JLabel priceP = new JLabel(price + "$");
+        JLabel priceP = new JLabel(format.format(Double.parseDouble(price)) + "$");
         priceP.setHorizontalAlignment(JLabel.CENTER);
         priceP.setFont(setFontO.getFont(cardHeight/17));
         priceP.setPreferredSize(new Dimension(cardWidth-25, cardHeight/17));

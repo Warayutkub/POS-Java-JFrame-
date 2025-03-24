@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-
 public class InventoryService {
     private final String productPath = "./src/backend/data/ProductData.txt";
     private final String historyPath = "./src/backend/data/InMemoryStore.txt";
@@ -50,4 +49,6 @@ public class InventoryService {
         }
         return data;
     }
+
+
 }

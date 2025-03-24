@@ -3,6 +3,7 @@ package client.components;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.text.DecimalFormat;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,6 +14,7 @@ import backend.services.SalesServices;
 import resources.SetPreferences;
 
 public class ProductCardRight extends JPanel {
+    private DecimalFormat format = new DecimalFormat("#,###.##");
     private String name = "Default";
     private String price = "89";
     private int amount = 1;
@@ -64,7 +66,7 @@ public class ProductCardRight extends JPanel {
     }
 
     private JLabel setLabelPrice() {
-        JLabel priceLabel = new JLabel(String.valueOf((double) amount * Double.parseDouble(this.price))+ "$");
+        JLabel priceLabel = new JLabel(format.format((double) amount * Double.parseDouble(this.price))+ "$");
         priceLabel.setPreferredSize(new Dimension(width / 4, height - 10));
         priceLabel.setHorizontalAlignment(JLabel.LEFT);
         priceLabel.setFont(new SetPreferences().getFont(16));

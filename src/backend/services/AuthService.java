@@ -3,7 +3,6 @@ package backend.services;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-import backend.models.Users.User;
 import resources.Tools;
 
 public class AuthService {
@@ -80,6 +79,18 @@ public class AuthService {
             }
         }
 
+        return data;
+    }
+
+    public String[] getDataEmp(String dataFine){
+        String[] data = new String[0];
+    
+        for (String[] recode : Emps){
+            if (new Tools().LinearSearch(recode, dataFine)) {
+                data = recode;
+            }
+        }
+    
         return data;
     }
 }
