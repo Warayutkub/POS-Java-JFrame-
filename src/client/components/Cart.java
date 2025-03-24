@@ -7,10 +7,10 @@ import java.awt.FlowLayout;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,12 +21,14 @@ import javax.swing.JTextField;
 
 import backend.services.AuthService;
 import backend.services.InventoryService;
+import backend.services.LoginServices;
 import backend.services.SalesServices;
 import client.MainFrame;
 import resources.SetPreferences;
 import resources.Tools;
 
 public class Cart extends JPanel {
+    private DecimalFormat format = new DecimalFormat("#,###.##");
     private String[] userData = new String[] { "null", "-", "null", "null", "null" };
     private ArrayList<String> storeProduct = new ArrayList<>();
     private String key = "0";
@@ -41,6 +43,7 @@ public class Cart extends JPanel {
     private NewUserPopup newUserPopup;
     private int countProduct = 0;
     private JScrollPane scroller = new JScrollPane(body);
+    private String[] accountData = new LoginServices().getDataToken();
 
     public Cart(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -58,6 +61,7 @@ public class Cart extends JPanel {
         setBackground(Color.WHITE);
         add(scroller, BorderLayout.CENTER);
         add(footer, BorderLayout.SOUTH);
+        modelCart = new InnerCart(accountData);
     }
 
     private JPanel Body() {
@@ -147,7 +151,7 @@ public class Cart extends JPanel {
     private JPanel TotalPrice() {
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel totalLabel = new JLabel("Total Price : ");
-        JLabel totalPrice = new JLabel(modelCart.getTotalPrice() + "$");
+        JLabel totalPrice = new JLabel(format.format(Double.parseDouble(modelCart.getTotalPrice())) + "$");
         area.setPreferredSize(new Dimension(this.width / 2, 30));
         area.setBackground(Color.WHITE);
         area.add(totalLabel);
@@ -169,7 +173,9 @@ public class Cart extends JPanel {
     private JButton SubmitBTn() {
         JButton Btn = new JButton("Submit Order");
         Btn.setPreferredSize(new Dimension(this.width - 25, 30));
-        Btn.setBackground(Color.green);
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        Btn.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        Btn.setForeground(Color.white);
         Btn.addActionListener(e -> {
             if (!this.key.equals("0")) {
                 modelCart.WriteData();
@@ -265,6 +271,7 @@ public class Cart extends JPanel {
 class InnerCart {
     private String TotalAmount = "0";
     private String TotalPrice = "0.0";
+    private String[] accountData;
 
     // type,ProductName,price,Amount,Total,id,key.Cname,StatusDiscount
     private ArrayList<String[]> dataProduct = new ArrayList<>();
@@ -272,6 +279,14 @@ class InnerCart {
     private DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern(" HH:mm:ss");
     private SalesServices salesServices = new SalesServices();
+
+    public InnerCart(){
+    }
+
+    public InnerCart(String[] acc){
+        this.accountData = acc;
+
+    }
 
     public void addData(String[] newData) {
         this.dataProduct.add(newData);
@@ -345,17 +360,27 @@ class InnerCart {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/InMemoryStore.txt", true))) {
+            
             for (String[] dataWrite : DataFormatted) {
                 writer.write(dataWrite[0] + "," + dataWrite[1] + "," + dataWrite[2] + "," +
                         dataWrite[3] + "," + dataWrite[4] + "," + dataWrite[5] + "," + dataWrite[6]
                         + "," + dataWrite[7] + "\n");
             }
+            try (BufferedWriter writer2 = new BufferedWriter(new FileWriter("./src/backend/data/StoreBillEmp.txt",true))){
+                writer2.write(DataFormatted[0][0] +","+ accountData[1] + "\n");
+                
+                
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Error");
+            }
             salesServices.minusStock(dataProduct.toArray(new String[0][]));
-
+            
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Cart modelCart");
+            JOptionPane.showMessageDialog(null, "Error");
         }
+        
         JOptionPane.showMessageDialog(null, "Success!");
+        new Receipt(DataFormatted).setVisible(true);
         salesServices.NotificationLowProduct(dataProduct.toArray(new String[0][]));
     }
 

@@ -109,11 +109,11 @@ public class SalesServices {
         }
 
         for (int c = 0; c < LowStock.size(); c++) {
-            text +=  "- " + genDataProduct(LowStock.get(c))[1] + " ";
+            text +=  "- " + genDataProduct(LowStock.get(c))[1] + " left : " + genDataProduct(LowStock.get(c))[4] + " ";
         }
 
         display.setText(text);
-        display.setFont(new SetPreferences().getFont(14));
+        display.setFont(new SetPreferences().getFont(18));
         area.add(display);
 
         if (!display.getText().isEmpty()) {

@@ -10,7 +10,7 @@ Permission
 
 Data Structure
     Employee
-        id,name,phone,email,password,permission,role,tackSaleDay(bath),trackSalesTotal(Bath)
+        id,name,phone,email,password,permission,role
     User
         id,name,phone,email,password
     Product

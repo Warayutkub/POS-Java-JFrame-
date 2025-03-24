@@ -16,6 +16,7 @@ public class POSDateTimeFrame extends JLabel{
     public POSDateTimeFrame() {
         setFont(preferences.getFont(12));
         setText(now.format(formatter));
+        setHorizontalAlignment(JLabel.CENTER);
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -24,9 +25,10 @@ public class POSDateTimeFrame extends JLabel{
         });
         timer.start();
     }
-
+    
     private void updateDateTime() {
         LocalDateTime now = LocalDateTime.now();
         setText(now.format(formatter));
+        setHorizontalAlignment(JLabel.CENTER);
     }
 }
