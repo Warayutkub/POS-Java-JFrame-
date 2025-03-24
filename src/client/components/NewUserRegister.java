@@ -8,21 +8,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Register extends JFrame implements ActionListener{
+public class NewUserRegister extends JFrame implements ActionListener{
     User u = new User(getName(), getTitle(), getWarningString(), getName());
     JLabel regis , name , email , password , confirmps , phone;
     JTextField tf1 , tf2 , tf3 , tf4;
-    JButton bt1 , bt2;
+    JButton bt1 ,bt2;
     JPasswordField ps1 ,ps2;
 
 
     
-    public Register(){
+    public NewUserRegister(){
         setSize(500,500);
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Register");
-        regis = new JLabel("Register for User");
+        setTitle("New User");
+        regis = new JLabel("New User");
         regis.setFont(new Font("Senif" , Font.BOLD , 20));
         name = new JLabel("Name : ");
         email = new JLabel("E-Mail : ");
@@ -34,11 +34,9 @@ public class Register extends JFrame implements ActionListener{
         ps1 = new JPasswordField();
         ps2 = new JPasswordField();
         tf3 = new JTextField();
-        bt1 = new JButton("Register");
-        bt2 = new JButton("Back to Login");
+        bt1 = new JButton("Confirm");
         bt1.addActionListener(this);
-        bt2.addActionListener(this);
-        regis.setBounds(150,30,400,30);
+        regis.setBounds(180,30,400,30);
         name.setBounds(80,80,200,30);
         email.setBounds(80, 130, 200, 30);
         phone.setBounds(80, 180, 200, 30);
@@ -49,8 +47,7 @@ public class Register extends JFrame implements ActionListener{
         tf3.setBounds(200, 180, 200, 30);
         ps1.setBounds(200,230, 200, 30);
         ps2.setBounds(200, 280, 200, 30);
-        bt1.setBounds(100, 340, 120, 30);
-        bt2.setBounds(250, 340, 120, 30);
+        bt1.setBounds(180, 340, 120, 30);
         add(regis);
         add(name);
         add(tf1);
@@ -63,7 +60,6 @@ public class Register extends JFrame implements ActionListener{
         add(confirmps);
         add(ps2);
         add(bt1);
-        add(bt2);
         setResizable(false);
         setVisible(true);
 
@@ -74,8 +70,8 @@ public class Register extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == bt1) {
             saveLogin();
-        } else if (e.getSource() == bt2) {
-            goToLogin();
+        } else if (e.getSource() == bt2){
+            goPanel();
         }
     }
 
@@ -96,20 +92,21 @@ public class Register extends JFrame implements ActionListener{
                     FileWriter out = new FileWriter("./src/backend/data/UserData.txt",true);
                     BufferedWriter writer = new BufferedWriter(out);
                     writer.write(dataAll+"\n");
-                    JOptionPane.showMessageDialog(this, "Success");
+                    JOptionPane.showMessageDialog(this, "Save new User.");
                     writer.close();
                     
                 } catch (IOException ex){
                     System.out.println(ex);
                 }
+                setVisible(false);
             }
             else{
-                JOptionPane.showMessageDialog(bt1, "Password Does Not Match");
+                JOptionPane.showMessageDialog(bt1, "Password Does Not Match.");
             }
         }
 
-    public void goToLogin(){
-        new Login().setVisible(true);
+    public void goPanel(){
+        new UserPanels();
         setVisible(false);
     }
 }

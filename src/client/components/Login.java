@@ -1,9 +1,5 @@
-import javax.annotation.processing.Filer;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-
 import backend.services.AuthService;
-import resources.Tools;
 
 import java.io.*;
 import java.util.Map;
@@ -30,7 +26,7 @@ public class Login extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         login = new JLabel("Login");
         login.setFont(new Font("Senif", Font.BOLD, 20));
-        phone = new JLabel("Enter Email : ");
+        phone = new JLabel("Enter Phone Number : ");
         password = new JLabel("Enter Password : ");
         phone1 = new JTextField();
         ps1 = new JPasswordField();
@@ -46,6 +42,7 @@ public class Login extends JFrame implements ActionListener {
         Font plainFont = btn2.getFont();
         Font underlineFont = new Font(plainFont.getName(), plainFont.getStyle(), plainFont.getSize());
         
+        @SuppressWarnings("unchecked")
         Map<TextAttribute, Object> attributes = (Map<TextAttribute, Object>) underlineFont.getAttributes();
         attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
         Font fontWithUnderline = new Font(attributes);
@@ -112,7 +109,9 @@ public class Login extends JFrame implements ActionListener {
         String[] person = null;
         String password;
         String[][] s = new AuthService().getAllUserData("user");
+        String[][] g = new AuthService().getAllUserData("emp");
         Boolean d = new AuthService().CheckDataUser(phone1.getText(),"user");
+        Boolean f = new AuthService().CheckDataUser(phone1.getText(),"emp");
         if (d) {
             for(String[] i : s){
                 for(String a : i){
@@ -125,11 +124,36 @@ public class Login extends JFrame implements ActionListener {
             if (password.equals(new String(ps1.getPassword()))) {
                 try {
                     FileWriter fw = new FileWriter("./src/backend/data/Token.txt");
-                    BufferedWriter wt = new BufferedWriter(fw);
-                    wt.write(person[0]+ "," +person[1]+ "," +person[2]+ "," +person[3]+ "," +person[4]);
+                    try (BufferedWriter wt = new BufferedWriter(fw)) {
+                        wt.write(person[0]+ "," +person[1]+ "," +person[2]+ "," +person[3]+ "," +person[4]);
+                    }
                     JOptionPane.showMessageDialog(this, "Login Complete");
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(this, "Your Password Incorrect", "Error", JOptionPane.ERROR_MESSAGE);
+                    phone1.setText("");
+                    ps1.setText("");
+                }
+            }
+        } else if (f) {
+            for(String[] ii : g){
+                for(String aa : ii){
+                    if (phone1.equals(aa)){
+                        person = ii; break;
+                    }
+                }
+            }
+            password = person[person.length -1];
+            if (password.equals(new String(ps1.getPassword()))) {
+                try {
+                    FileWriter fw = new FileWriter("./src/backend/data/Token.txt");
+                    try(BufferedWriter wt = new BufferedWriter(fw)){
+                        wt.write(person[0] + "," + person[1]+ "," +person[2]+ "," +person[3]+ "," +person[4]);
+                        JOptionPane.showMessageDialog(this,"Login Complete");
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this,"Your Password Incorrect","Error",JOptionPane.ERROR_MESSAGE);
+                    phone1.setText("");
+                    ps1.setText("");
                 }
             }
         }

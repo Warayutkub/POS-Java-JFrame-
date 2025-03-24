@@ -90,7 +90,7 @@ public class Register_Employee extends JFrame implements ActionListener{
     public void saveLogin(){
         String dataAll;
         String getRole = (String)role.getSelectedItem();
-        String id = new Tools().genNewId(new AuthService().getAllUserData("user"));
+        String id = new Tools().genNewId(new AuthService().getAllUserData("emp"));
             String s1 = tf1.getText();
             String s2 = tf2.getText();
             char[] s3 = ps1.getPassword();
@@ -109,7 +109,7 @@ public class Register_Employee extends JFrame implements ActionListener{
                     JOptionPane.showMessageDialog(null, "Success");
                     writer.close();
                     
-                } catch (Exception ex){
+                } catch (IOException ex){
                     System.out.println(ex);
                 }
             }
@@ -119,6 +119,7 @@ public class Register_Employee extends JFrame implements ActionListener{
         }
 
     public void goToLogin(){
-
+        new Login().setVisible(true);
+        setVisible(false);
     }
 }
