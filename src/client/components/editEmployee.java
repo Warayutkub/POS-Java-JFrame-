@@ -1,5 +1,4 @@
 package client.components;
-import javax.swing.BoxLayout;
 import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -15,7 +14,6 @@ import javax.swing.border.LineBorder;
 
 import java.awt.Insets;
 import java.awt.Label;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import java.awt.BorderLayout;
@@ -27,7 +25,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -49,7 +46,7 @@ public class editEmployee extends JPanel implements ActionListener {
     private String updatedName, updatedPhone, updatedEmail;
    
     //Font myFont = new Font("Arial", Font.BOLD, 15);
-    Font myFont2 = new Font("Arial", Font.PLAIN, 12);;
+    Font myFont2 = new Font("Arial", Font.PLAIN, 12);
 
 
     public editEmployee(){
@@ -369,7 +366,7 @@ public class editEmployee extends JPanel implements ActionListener {
         String actionCommand = e.getActionCommand();
         
         if(actionCommand.startsWith("Edit")) {
-            String id = actionCommand.split("-")[1];
+            // String id = actionCommand.split("-")[1];
             edit(e);
         } else if(actionCommand.startsWith("Delete")) {
             String id = actionCommand.split("-")[1];
