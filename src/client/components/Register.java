@@ -2,7 +2,6 @@ package client.components;
 
 import javax.swing.*;
 import backend.models.Users.User;
-import java.io.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -72,14 +71,14 @@ public class Register extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == bt1) {
-            int x = 0;
-            String s1 = tf1.getText();
-            String s2 = tf2.getText();
+            // int x = 0;
+            // String s1 = tf1.getText();
+            // String s2 = tf2.getText();
             char[] s3 = ps1.getPassword();
             char[] s4 = ps2.getPassword();
             String s6 = new String(s3);
             String s7 = new String(s4);
-            String s5 = tf3.getText();
+            // String s5 = tf3.getText();
 
             //เก็บข้อมูลฉันไม่รู้จะเอาไปเก็บไหน
             if (s6.equals(s7)){
