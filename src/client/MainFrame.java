@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import backend.services.LoginServices;
@@ -33,22 +34,22 @@ public class MainFrame extends JFrame {
     private JPanel topBar = TopBar();
     private JPanel sideBar = SideBar();
     private JPanel outerBody = OuterBody();
-    private JPanel dashboard = new Dashboard();
+    private JPanel dashboard = new Dashboard(this);
     private JPanel mainPanel = new JPanel(new CardLayout());
     private JPanel productPanel = new JPanel(new CardLayout());
     private Container container = getContentPane();
 
     // Display Products panel Obj
-    private JPanel All = new DisplayProductPanel().getPanel(cart, "all");
-    private JPanel Electronics = new DisplayProductPanel().getPanel(cart, "1");
-    private JPanel Foods = new DisplayProductPanel().getPanel(cart, "2");
-    private JPanel Fashions = new DisplayProductPanel().getPanel(cart, "3");
-    private JPanel Cosmetics = new DisplayProductPanel().getPanel(cart, "4");
-    private JPanel Households = new DisplayProductPanel().getPanel(cart, "5");
-    private JPanel Tools = new DisplayProductPanel().getPanel(cart, "6");
-    private JPanel Sports = new DisplayProductPanel().getPanel(cart, "7");
-    private JPanel Toys = new DisplayProductPanel().getPanel(cart, "8");
-    private JPanel Search = new DisplayProductPanel().getSearchPanel(cart, "");
+    private JScrollPane All = new DisplayProductPanel().getPanel(cart, "all");
+    private JScrollPane Electronics = new DisplayProductPanel().getPanel(cart, "1");
+    private JScrollPane Foods = new DisplayProductPanel().getPanel(cart, "2");
+    private JScrollPane Fashions = new DisplayProductPanel().getPanel(cart, "3");
+    private JScrollPane Cosmetics = new DisplayProductPanel().getPanel(cart, "4");
+    private JScrollPane Households = new DisplayProductPanel().getPanel(cart, "5");
+    private JScrollPane Tools = new DisplayProductPanel().getPanel(cart, "6");
+    private JScrollPane Sports = new DisplayProductPanel().getPanel(cart, "7");
+    private JScrollPane Toys = new DisplayProductPanel().getPanel(cart, "8");
+    private JScrollPane Search = new DisplayProductPanel().getSearchPanel(cart, "");
 
     public MainFrame() {
         CreateGui();
@@ -228,6 +229,15 @@ public class MainFrame extends JFrame {
         sideBar.add(ButtonToDashBoard());
         sideBar.revalidate();
         sideBar.repaint();
+    }
+
+    public void resetDashboard(){
+        CardLayout cl = (CardLayout) mainPanel.getLayout();
+        mainPanel.remove(dashboard);
+        dashboard = new Dashboard(this);
+        dashboard.setName("Dashboard");
+        mainPanel.add(dashboard,"Dashboard");
+        cl.show(mainPanel,"Dashboard");
     }
 
     private JPanel OuterBody() {
@@ -474,7 +484,7 @@ public class MainFrame extends JFrame {
         Btn.addActionListener(e -> {
             CardLayout cl = (CardLayout) mainPanel.getLayout();
             mainPanel.remove(dashboard);
-            mainPanel.add(new Dashboard(), "Dashboard");
+            mainPanel.add(new Dashboard(this), "Dashboard");
             cl.show(mainPanel, "Dashboard");
             cart.setVisible(true);
         });

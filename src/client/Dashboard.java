@@ -35,13 +35,15 @@ public class Dashboard extends JPanel {
     private String[] columnNames = { "QUEUE ID", "TYPE", "DATE", "TIME", "CUSTOMER", "PRODUCT", "QTY", "TOTAL" };
     private String dateGet;
     private JPanel topCardDayOrder, topCardDayTotal, topCardAllOrder, topCardAllTotal;
+    private MainFrame mainFrame;
     private FindBill fb = new FindBill();
 
     @SuppressWarnings("rawtypes")
     private JComboBox dateSelect;
 
-    public Dashboard() {
+    public Dashboard(MainFrame mainFrame) {
         setPreferredSize(new Dimension(width, height));
+        this.mainFrame = mainFrame;
         CreateGui(14);
     }
 
@@ -56,7 +58,7 @@ public class Dashboard extends JPanel {
         JButton findBillBtn = new JButton("Find Bill");
         findBillBtn.addActionListener(e -> {
             if(fb.isVisible() == false) {
-                fb = new FindBill();
+                fb = new FindBill(mainFrame);
                 fb.setVisible(true);
             }
             else if (!fb.isActive() || fb.getState() == JFrame.ICONIFIED) {
