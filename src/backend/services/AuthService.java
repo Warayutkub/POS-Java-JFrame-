@@ -9,7 +9,7 @@ public class AuthService {
     private String[][] Users = getAllUserData("user");
     private String[][] Emps = getAllUserData("emp");
 
-    public String[][] getAllUserData(String typeUser) {
+    public String[][] getAllUserData(String typeUser) { //เอายูเสอทั้งหมดมา
         if (typeUser.equals("user")) {
             String[][] Users = new String[0][0];
             try (BufferedReader br = new BufferedReader(new FileReader("./src/backend/data/UserData.txt"))) {
