@@ -1,3 +1,5 @@
+package client.components;
+
 import javax.swing.*;
 import backend.services.AuthService;
 
@@ -112,11 +114,12 @@ public class Login extends JFrame implements ActionListener {
         String[][] g = new AuthService().getAllUserData("emp");
         Boolean d = new AuthService().CheckDataUser(phone1.getText(),"user");
         Boolean f = new AuthService().CheckDataUser(phone1.getText(),"emp");
+
         if (d) {
             for(String[] i : s){
                 for(String a : i){
-                    if (phone1.equals(a)) {
-                        person = i; break;
+                    if (phone1.getText().equals(a)) {
+                        person = i;
                     } 
                 }
             }
@@ -158,6 +161,10 @@ public class Login extends JFrame implements ActionListener {
             }
         }
 
+    }
+
+    public static void main(String[] args) {
+        new Login();
     }
 
 }

@@ -1,3 +1,5 @@
+package client.components;
+
 import javax.swing.*;
 import backend.models.Users.User;
 import backend.services.AuthService;
@@ -111,5 +113,9 @@ public class Register extends JFrame implements ActionListener{
     public void goToLogin(){
         new Login().setVisible(true);
         setVisible(false);
+    }
+    
+    public static void main(String[] args) {
+        new Register();
     }
 }
