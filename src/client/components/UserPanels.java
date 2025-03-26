@@ -121,7 +121,7 @@ public class UserPanels extends JFrame {
         private JButton editButton() {
             JButton Button = new JButton("Edit");
             Button.addActionListener(e -> {
-                new editUser(id,n);
+                new editUser(id,);
                 c.revalidate();
                 c.repaint();
             });
