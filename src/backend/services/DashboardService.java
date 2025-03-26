@@ -160,23 +160,12 @@ public class DashboardService {
 
     private void refundBillEmp(String BillID){
         String [][] HistoryEmpBill = new FindBill().pullStoreBillEmp();
-        int count = 0;
-        for (int c = 0; c < HistoryEmpBill.length; c++) {
-            if (!(History[c][0]).equals(BillID)) {
-                count++;
-            }
-        }
-        String[][] newData = new String[count][2];
-        int index = 0;
-        for (int c = 0; c < HistoryEmpBill.length; c++) {
-            if (!this.History[c][0].equals(BillID)) {
-                newData[index++] = HistoryEmpBill[c];
-            }
-        }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/StoreBillEmp.txt"))) {
-            for (String[] recode : newData) {
-                writer.write(recode[0] + "," + recode[1] + "\n");
+            for (String[] recode : HistoryEmpBill) {
+                if(!recode[0].equals(BillID)){
+                    writer.write(recode[0] + "," + recode[1] + "\n");
+                }
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error File");

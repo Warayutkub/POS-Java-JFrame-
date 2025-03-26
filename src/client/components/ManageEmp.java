@@ -1,7 +1,5 @@
 package client.components;
 import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -12,7 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 
-import java.awt.Insets;
+import client.MainFrame;
+import resources.SetPreferences;
+
 import java.awt.Label;
 import javax.swing.JTextField;
 
@@ -20,7 +20,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -32,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class editEmployee extends JPanel implements ActionListener {
+public class ManageEmp extends JPanel implements ActionListener {
 
     private String fileEmployee = "src\\backend\\data\\EmployeeData.txt";
     private JButton btnNewEmployee, edit, delete;
@@ -44,12 +43,13 @@ public class editEmployee extends JPanel implements ActionListener {
     private JTextField tfName, tfPhone, tfEmail, newName, newPhone, newEmail, newPassword, newConfirmPassword;
     private JButton saveButton, newBtnConfirm;
     private String updatedName, updatedPhone, updatedEmail;
+    private MainFrame mainFrame;
    
     //Font myFont = new Font("Arial", Font.BOLD, 15);
-    Font myFont2 = new Font("Arial", Font.PLAIN, 12);
 
 
-    public editEmployee(){
+    public ManageEmp(MainFrame mainFrame){
+        this.mainFrame = mainFrame;
         CreateGui();
     }
 
@@ -68,7 +68,6 @@ public class editEmployee extends JPanel implements ActionListener {
     private void CreateGui() {
         setPreferredSize(new Dimension(860,600));
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
         add(btnNewEmp, BorderLayout.NORTH);
         add(listEmp, BorderLayout.CENTER);
     }
@@ -81,7 +80,7 @@ public class editEmployee extends JPanel implements ActionListener {
         return panel;
     }
     private JDialog createNewEmp(){
-        JDialog diaNewEmp = new JDialog((JFrame) null, "New Employee", true);
+        JDialog diaNewEmp = new JDialog(mainFrame, "New Employee", true);
         diaNewEmp.setLayout(new GridLayout(7, 2));
         diaNewEmp.setSize(500, 400);
         diaNewEmp.add(new Label("Name :"));
@@ -174,31 +173,26 @@ public class editEmployee extends JPanel implements ActionListener {
     }
 
    private JPanel listEmployee(){
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setPreferredSize(new Dimension(700, 500));
-        panel.setBorder(new LineBorder(Color.PINK, 5));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel.setPreferredSize(new Dimension(1050, 700));
 
         JPanel listContainer = new JPanel();
-        GridBagLayout layout = new GridBagLayout();
-        listContainer.setLayout(layout);
-        listContainer.setBackground(Color.WHITE);
-
+        listContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        
         List<JPanel> empPanels = readEmployeePanels(fileEmployee);
-        for (int i = 0; i < empPanels.size(); i++) {
-            JPanel empPanel = empPanels.get(i);
-            empPanel.setFont(myFont2);  
-
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = 0;  
-            gbc.gridy = i;  
-            gbc.insets = new Insets(10, 10, 10, 10);
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-          
-            listContainer.add(empPanel, gbc);  
+        int c = 0;
+        for (JPanel empPanel : empPanels) {
+            empPanel.setFont(new SetPreferences().getFont(12));  
+            listContainer.add(empPanel);  
+            c++;
         }
+        listContainer.setPreferredSize(new Dimension(1050,c*55));
 
         scrollPane = new JScrollPane(listContainer);
-        panel.add(scrollPane, BorderLayout.CENTER);
+        scrollPane.setPreferredSize(new Dimension(1050,700));
+        scrollPane.setBorder(null);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        panel.add(scrollPane);
         return panel;
     }
     private void openEditEmp(String id, String name, String phone, String email) {
@@ -307,12 +301,18 @@ public class editEmployee extends JPanel implements ActionListener {
     
     private JPanel showEmp(String id, String name, String phone, String email, String password, String permission) {
         JPanel panel = new JPanel(new FlowLayout());
-        panel.setBorder(new LineBorder(Color.BLACK));
+        panel.setBorder(new LineBorder(Color.GRAY,1));
+        panel.setBackground(Color.WHITE);
         
         edit = new JButton("Edit");
         delete = new JButton("Delete");
-        edit.setFont(myFont2);
-        delete.setFont(myFont2);
+        edit.setFont(new SetPreferences().getFont(12));
+        delete.setFont(new SetPreferences().getFont(12));
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        edit.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        delete.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        edit.setForeground(Color.WHITE);
+        delete.setForeground(Color.WHITE);
 
         edit.setActionCommand("Edit-" + id);
         delete.setActionCommand("Delete-" + id);
@@ -320,13 +320,32 @@ public class editEmployee extends JPanel implements ActionListener {
         edit.addActionListener(this);
         delete.addActionListener(this);
         
-        JLabel label = new JLabel("ID: " + id + ", Name: " + name + ", Phone: " + phone + ", Email: " + email + ", Permission: " + permission + "                     ");
-        label.setFont(myFont2);
+        JLabel idLabel = new JLabel("ID : " + id);
+        JLabel nameLabel = new JLabel("Name : " + name);
+        JLabel phoneLabel = new JLabel("Phone : " + phone);
+        JLabel emailLabel = new JLabel("Email : " + email);
+        JLabel permissionLabel = new JLabel("Permission : " + permission);
+
+        idLabel.setFont(new SetPreferences().getFont(12));
+        nameLabel.setFont(new SetPreferences().getFont(12));
+        phoneLabel.setFont(new SetPreferences().getFont(12));
+        emailLabel.setFont(new SetPreferences().getFont(12));
+        permissionLabel.setFont(new SetPreferences().getFont(12));
+
+        idLabel.setPreferredSize(new Dimension(50,30));
+        nameLabel.setPreferredSize(new Dimension(180,30));
+        phoneLabel.setPreferredSize(new Dimension(150,30));
+        emailLabel.setPreferredSize(new Dimension(270,30));
+        permissionLabel.setPreferredSize(new Dimension(150,30));
         
-        panel.add(label);
+        panel.add(idLabel);
+        panel.add(nameLabel);
+        panel.add(phoneLabel);
+        panel.add(emailLabel);
+        panel.add(permissionLabel);
         panel.add(edit);
         panel.add(delete);
-        
+        panel.setPreferredSize(new Dimension(1000,40));
         return panel;
     }
     
@@ -349,7 +368,7 @@ public class editEmployee extends JPanel implements ActionListener {
                     // String trackSalesTotal = s[7];
 
                     JPanel empPanel = showEmp(id, name, phone, email, password, permission);
-                    empPanel.setFont(myFont2); 
+                    empPanel.setFont(new SetPreferences().getFont(12)); 
                     empPanels.add(empPanel);
                 }
             }

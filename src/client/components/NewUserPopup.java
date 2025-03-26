@@ -1,5 +1,6 @@
 package client.components;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -8,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +19,7 @@ import javax.swing.JTextField;
 
 import backend.services.AuthService;
 import client.MainFrame;
+
 import resources.Tools;
 
 public class NewUserPopup extends JFrame {
@@ -27,6 +30,13 @@ public class NewUserPopup extends JFrame {
     private String password;
     private MainFrame mainFrame;
     private Cart cart;
+
+    public NewUserPopup(MainFrame mainFrame) {
+        this.id = new Tools().genNewId(new AuthService().getAllUserData("user"));
+        this.mainFrame = mainFrame;
+        CreateGUI();
+        CreateWindow();
+    }
 
     public NewUserPopup(MainFrame mainFrame, Cart cart) {
         this.id = new Tools().genNewId(new AuthService().getAllUserData("user"));
@@ -39,6 +49,8 @@ public class NewUserPopup extends JFrame {
     private void CreateWindow() {
         setTitle("Enter User Data");
         setSize(400, 450);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/backend/data/images/logo.png"));
+        setIconImage(icon.getImage());
         setLocationRelativeTo(mainFrame);
         setResizable(false);
     }
@@ -66,13 +78,13 @@ public class NewUserPopup extends JFrame {
         emailField.setPreferredSize(new Dimension(350, 30));
 
         // Password
-        JLabel labelPassword = new JLabel("Pass word");
+        JLabel labelPassword = new JLabel("Pass word : ");
         JPasswordField passwordField = new JPasswordField();
         labelPassword.setPreferredSize(new Dimension(350, 30));
         passwordField.setPreferredSize(new Dimension(350, 30));
 
         // Password Confirm
-        JLabel labelConfirmPassword = new JLabel("Confirm Password");
+        JLabel labelConfirmPassword = new JLabel("Confirm Password : ");
         JPasswordField confirmPasswordField = new JPasswordField();
         labelConfirmPassword.setPreferredSize(new Dimension(350, 30));
         confirmPasswordField.setPreferredSize(new Dimension(350, 30));
@@ -80,6 +92,9 @@ public class NewUserPopup extends JFrame {
         // Submit Button
         JButton SubmitBTn = new JButton("Register");
         SubmitBTn.setPreferredSize(new Dimension(150, 30));
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        SubmitBTn.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        SubmitBTn.setForeground(Color.WHITE);
         SubmitBTn.addActionListener(e -> {
             if (!nameField.getText().isEmpty() && !phoneFiled.getText().isEmpty() && !emailField.getText().isEmpty()
                     && passwordField.getPassword().length > 0) {
