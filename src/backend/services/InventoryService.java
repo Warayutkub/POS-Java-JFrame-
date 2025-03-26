@@ -12,7 +12,7 @@ public class InventoryService {
         String[][] product = new String[0][0];
         try(BufferedReader bf = new BufferedReader(new FileReader(productPath))){
             String line;
-            product = new String[(int) bf.lines().count()][7];
+            product = new String[(int) bf.lines().count()][6];
             int i = 0;
             BufferedReader bf2 = new BufferedReader(new FileReader(productPath));
             while ((line = bf2.readLine()) != null) {
@@ -38,7 +38,6 @@ public class InventoryService {
             data = new String[(int) bf.lines().count()][7];
             int i = 0;
             while ((line = bf2.readLine()) != null) {
-                System.out.print("Test");
                 data[i] = line.split(",");
                 i++;
             }
@@ -50,4 +49,6 @@ public class InventoryService {
         }
         return data;
     }
+
+
 }

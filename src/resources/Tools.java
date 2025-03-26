@@ -38,10 +38,14 @@ public class Tools {
         for (int i = 0; i < data.length; i++) {
             ids[i] = data[i][0];
         }
-        newId = String.valueOf(Integer.parseInt(ids[ids.length - 1]) + 1);
+
+        if (ids.length == 0) {
+            newId = "1";
+        } else {
+            newId = String.valueOf(Integer.parseInt(ids[ids.length - 1]) + 1);
+        }
         return newId;
     }
-
 
     public void SaveFileCopy(String originalPath, String directionPath) {
         try {
@@ -52,4 +56,5 @@ public class Tools {
             e.printStackTrace();
         }
     }
+
 }

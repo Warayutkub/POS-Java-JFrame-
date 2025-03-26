@@ -59,6 +59,7 @@ public class AuthService {
                 }
             }
             return false;
+
         } else {
             for (int i = 0; i < Emps.length; i++) {
                 if (new Tools().LinearSearch(Emps[i], data)) {
@@ -69,4 +70,27 @@ public class AuthService {
         }
     }
 
+    public String[] getDataUser(String dataFine){
+        String[] data = new String[0];
+
+        for (String[] recode : Users){
+            if (new Tools().LinearSearch(recode, dataFine)) {
+                data = recode;
+            }
+        }
+
+        return data;
+    }
+
+    public String[] getDataEmp(String dataFine){
+        String[] data = new String[0];
+    
+        for (String[] recode : Emps){
+            if (new Tools().LinearSearch(recode, dataFine)) {
+                data = recode;
+            }
+        }
+    
+        return data;
+    }
 }

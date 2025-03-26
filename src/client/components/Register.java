@@ -90,14 +90,11 @@ public class Register extends JFrame implements ActionListener{
             char[] s4 = ps2.getPassword(); 
             String s6 = new String(s3);
             String s7 = new String(s4);
-            String s5 = tf3.getText();
-            dataAll = id +"," + s1 + "," + s5  + "," + s2 + "," +  new String(ps1.getPassword());
 
             if (s6.equals(s7)){
                 try {
                     FileWriter out = new FileWriter("./src/backend/data/UserData.txt",true);
                     BufferedWriter writer = new BufferedWriter(out);
-                    writer.write(dataAll+"\n");
                     JOptionPane.showMessageDialog(this, "Success");
                     writer.close();
                     

@@ -1,10 +1,9 @@
 package client.components;
 
 import javax.swing.*;
+
 import backend.services.AuthService;
 
-import java.io.*;
-import java.util.Map;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +11,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Map;
 
 public class Login extends JFrame implements ActionListener {
     JLabel login, phone, password;
@@ -161,10 +164,6 @@ public class Login extends JFrame implements ActionListener {
             }
         }
 
-    }
-
-    public static void main(String[] args) {
-        new Login();
     }
 
 }
