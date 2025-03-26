@@ -23,16 +23,24 @@ import javax.swing.JTextField;
 import backend.services.AuthService;
 import backend.services.DashboardService;
 import backend.services.InventoryService;
+import client.MainFrame;
 import resources.SetPreferences;
 
 public class FindBill extends JFrame {
     private Container container = getContentPane();
     private int width = 850;
     private int height = 600;
+    private MainFrame mainFrame;
     // private String
 
     public FindBill() {
         super("Find Bill");
+        CreateGui();
+        setupWindow();
+    }
+    public FindBill(MainFrame mainFrame) {
+        super("Find Bill");
+        this.mainFrame = mainFrame;
         CreateGui();
         setupWindow();
     }
@@ -268,7 +276,8 @@ public class FindBill extends JFrame {
         informationPanel.setBorder(null);
         scrollPane.setPreferredSize(new Dimension(270, 200));
         scrollPane.setBorder(null);
-        refundBtn.setBackground(null);
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        refundBtn.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
         area.setPreferredSize(new Dimension(300, this.height));
         area.setBackground(Color.white);
 
@@ -295,6 +304,7 @@ public class FindBill extends JFrame {
             container.removeAll();
             container.add(search(), BorderLayout.NORTH);
             container.add(display(), 1);
+            mainFrame.resetDashboard();
             revalidate();
             repaint();
         });
