@@ -54,6 +54,7 @@ public class DisplayProductPanel {
         area.add(panel);
         scrollPane.setBackground(null);
         scrollPane.setBorder(null);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         return scrollPane;
     }
 
@@ -86,6 +87,7 @@ public class DisplayProductPanel {
         area.add(panel);
         scrollPane.setBackground(null);
         scrollPane.setBorder(null);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         return scrollPane;
     }
 
@@ -120,6 +122,7 @@ public class DisplayProductPanel {
         area.add(panel);
         scrollPane.setBackground(null);
         scrollPane.setBorder(null);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         return scrollPane;
     }
 

@@ -2,9 +2,6 @@ package client.components;
 
 import javax.swing.*;
 
-import backend.models.Users.User;
-import javafx.scene.layout.Pane;
-
 import java.awt.*;
 import java.io.*;
 
@@ -121,7 +118,7 @@ public class UserPanels extends JFrame {
         private JButton editButton() {
             JButton Button = new JButton("Edit");
             Button.addActionListener(e -> {
-                new editUser(id,);
+                new EditUser();
                 c.revalidate();
                 c.repaint();
             });
