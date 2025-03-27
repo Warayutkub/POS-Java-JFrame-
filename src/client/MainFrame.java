@@ -16,15 +16,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import backend.services.LoginServices;
 import client.components.Cart;
 import client.components.DisplayProductPanel;
+import client.components.InformationAccount;
 import client.components.Login;
 import client.components.ManageEmp;
 import client.components.POSDateTimeFrame;
@@ -36,35 +35,67 @@ public class MainFrame extends JFrame {
     private JPanel topBar = TopBar();
     private JPanel sideBar = SideBar();
     private JPanel outerBody = OuterBody();
-    private JPanel dashboard = new Dashboard(this);
-    private JPanel manageEmp = new ManageEmp(this);
+    private JPanel dashboard = new Dashboard(this, 0);
+    private JPanel manageEmp = new ManageEmp(this, 0);
     private JPanel mainPanel = new JPanel(new CardLayout());
     private JPanel productPanel = new JPanel(new CardLayout());
     private Container container = getContentPane();
     private JButton accountName;
-    
-    
+    private int statusAccount = 0;
 
-
+    // = new DisplayProductPanel().getPanel(cart,
+    // "all",(this.getWidth()-sideBar.getWidth()-cart.getWidth()))
     // Display Products panel Obj
-    private JScrollPane All = new DisplayProductPanel().getPanel(cart, "all");
-    private JScrollPane Electronics = new DisplayProductPanel().getPanel(cart, "1");
-    private JScrollPane Foods = new DisplayProductPanel().getPanel(cart, "2");
-    private JScrollPane Fashions = new DisplayProductPanel().getPanel(cart, "3");
-    private JScrollPane Cosmetics = new DisplayProductPanel().getPanel(cart, "4");
-    private JScrollPane Households = new DisplayProductPanel().getPanel(cart, "5");
-    private JScrollPane Tools = new DisplayProductPanel().getPanel(cart, "6");
-    private JScrollPane Sports = new DisplayProductPanel().getPanel(cart, "7");
-    private JScrollPane Toys = new DisplayProductPanel().getPanel(cart, "8");
-    private JScrollPane Search = new DisplayProductPanel().getSearchPanel(cart, "");
+    private JScrollPane All = new DisplayProductPanel().getPanel(cart, "all",
+            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+    private JScrollPane Electronics = new DisplayProductPanel().getPanel(cart, "1",
+            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+    private JScrollPane Foods = new DisplayProductPanel().getPanel(cart, "2",
+            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+    private JScrollPane Fashions = new DisplayProductPanel().getPanel(cart, "3",
+            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+    private JScrollPane Cosmetics = new DisplayProductPanel().getPanel(cart, "4",
+            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+    private JScrollPane Households = new DisplayProductPanel().getPanel(cart, "5",
+            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+    private JScrollPane Tools = new DisplayProductPanel().getPanel(cart, "6",
+            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+    private JScrollPane Sports = new DisplayProductPanel().getPanel(cart, "7",
+            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+    private JScrollPane Toys = new DisplayProductPanel().getPanel(cart, "8",
+            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+    private JScrollPane Search = new DisplayProductPanel().getSearchPanel(cart, "",
+            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
 
     public MainFrame() {
         CreateGui();
         SetupWindow();
 
-        if(accountData.length==0){
+        All = new DisplayProductPanel().getPanel(cart, "all", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Electronics = new DisplayProductPanel().getPanel(cart, "1",
+                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Foods = new DisplayProductPanel().getPanel(cart, "2", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Fashions = new DisplayProductPanel().getPanel(cart, "3",
+                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Cosmetics = new DisplayProductPanel().getPanel(cart, "4",
+                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Households = new DisplayProductPanel().getPanel(cart, "5",
+                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Tools = new DisplayProductPanel().getPanel(cart, "6", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Sports = new DisplayProductPanel().getPanel(cart, "7",
+                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Toys = new DisplayProductPanel().getPanel(cart, "8", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Search = new DisplayProductPanel().getSearchPanel(cart, "",
+                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+
+        if (accountData.length == 0) {
             new Login(this);
+
         }
+    }
+
+    public void setAccountData(String[] acc) {
+        this.accountData = acc;
     }
 
     private void SetupWindow() {
@@ -87,6 +118,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(outerBody, "Body");
         mainPanel.add(manageEmp, "ManageEmp");
         mainPanel.add(dashboard, "Dashboard");
+        container.add(mainPanel, BorderLayout.CENTER);
 
         // Type Btn
         All.setName("All");
@@ -112,20 +144,18 @@ public class MainFrame extends JFrame {
         productPanel.add(Toys, "Toys");
         productPanel.add(Search, "Search");
 
-        container.add(mainPanel, BorderLayout.CENTER);
         container.add(cart, BorderLayout.EAST);
     }
 
     private JPanel TopBar() {
-        JPopupMenu popupProfile = new JPopupMenu();
-        JMenuItem signOutItem = new JMenuItem("SignOut");
         JTextField searchArea = new JTextField();
         JButton searchBtn = new JButton("Search");
         searchBtn.addActionListener(e -> {
             String searchData = searchArea.getText();
             if (!searchData.isEmpty()) {
                 productPanel.remove(Search);
-                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData);
+                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData,
+                        (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
                 this.Search.setName("Search");
                 productPanel.add(Search, "Search");
                 CardLayout pr = (CardLayout) productPanel.getLayout();
@@ -140,7 +170,8 @@ public class MainFrame extends JFrame {
             String searchData = searchArea.getText();
             if (!searchData.isEmpty()) {
                 productPanel.remove(Search);
-                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData);
+                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData,
+                        (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
                 this.Search.setName("Search");
                 productPanel.add(Search, "Search");
                 CardLayout pr = (CardLayout) productPanel.getLayout();
@@ -161,7 +192,7 @@ public class MainFrame extends JFrame {
         JPanel areaInner3 = new JPanel(new GridLayout(1, 1));
         JPanel areaAccount = new JPanel(new GridLayout(1, 1));
         JPanel areaAroundSearch = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        
+
         if (accountData.length != 0) {
             accountName = new JButton(accountData[1]);
         } else {
@@ -170,16 +201,14 @@ public class MainFrame extends JFrame {
         JLabel ApplicationName = new JLabel("  Point of sale  ");
         JLabel time = new POSDateTimeFrame();
 
-        popupProfile.add(signOutItem);
-        signOutItem.setPreferredSize(new Dimension(150, 40));
-        signOutItem.setBackground(null);
         accountName.setFont(new SetPreferences().getFont(24));
         accountName.setBackground(null);
         accountName.setBorder(null);
         accountName.setForeground(Color.white);
         accountName.addActionListener(e -> {
-            if (accountData.length!=0){
-                popupProfile.show(accountName, 0, accountName.getHeight());
+            if (accountData.length != 0) {
+                System.out.println("in two infor");
+                new InformationAccount(this, this.accountData);
             }
         });
 
@@ -210,20 +239,6 @@ public class MainFrame extends JFrame {
         areaAccount.setBackground(null);
         areaAccount.setPreferredSize(new Dimension(150, 40));
 
-        signOutItem.addActionListener(e -> {
-            new LoginServices().signOut(this);
-            accountName = null;
-            accountName = new JButton("No account");
-            areaAccount.removeAll();
-            areaAccount.add(accountName);
-            accountName.addActionListener(event -> {
-                new Login(this).setVisible(true);
-            });
-            areaAccount.revalidate();
-            areaAccount.repaint();
-            resetSideBar();
-        });
-
         area.add(areaInner1);
         area.add(areaInner2);
         area.add(areaInner3);
@@ -234,33 +249,70 @@ public class MainFrame extends JFrame {
         return area;
     }
 
+    public void resetTopBar() {
+        if (this.accountData.length != 0) {
+            this.accountName.setText(accountData[1]);
+        } else {
+            this.accountName.setText("No account");
+        }
+        container.removeAll();
+        container.add(cart, BorderLayout.EAST);
+        container.add(sideBar, BorderLayout.WEST);
+        container.add(mainPanel, BorderLayout.CENTER);
+        this.topBar = TopBar();
+        container.add(topBar,BorderLayout.NORTH);
+        topBar.revalidate();
+        topBar.repaint();
+        container.revalidate();
+        container.repaint();
+    }
 
     private JPanel SideBar() {
         int width = 150;
         int height = 500;
         JPanel area = new JPanel(new FlowLayout());
         area.setPreferredSize(new Dimension(width, height));
-        area.add(LogoArea(width, height));
         area.setBackground(Color.WHITE);
 
+        area.add(LogoArea(width, height));
         area.add(ButtonToHome());
-        area.add(ButtonToManageProduct());
-        area.add(ButtonToManageUser());
-        area.add(ButtonToManageEmp());
+        if (accountData.length !=0 &&accountData[5].equals("Manager")) {
+            area.add(ButtonToManageProduct());
+            area.add(ButtonToManageUser());
+            area.add(ButtonToManageEmp());
+        }
         area.add(ButtonToDashBoard());
         area.add(ButtonToLogin());
         return area;
     }
 
-    private void resetSideBar() {
+    public void resetSideBar() {
         int width = 150;
         int height = 500;
         this.accountData = new LoginServices().getDataToken();
+
+        JButton manageEmpReset = ButtonToManageEmp();
+        JButton manageUserReset = ButtonToManageUser();
+        JButton manageProductReset = ButtonToManageProduct();
+        manageEmpReset.addActionListener(e -> {
+            System.out.println("Test emp");
+            CardLayout cl = (CardLayout) mainPanel.getLayout();
+            mainPanel.remove(manageEmp);
+            mainPanel.add(new ManageEmp(this, this.getWidth() - cart.getWidth() - sideBar.getWidth()), "ManageEmp");
+            cl.show(mainPanel, "ManageEmp");
+            cart.setVisible(false);
+        });
+
         sideBar.removeAll();
         sideBar.add(LogoArea(width, height));
         sideBar.add(ButtonToHome());
-        sideBar.add(ButtonToManageProduct());
-        sideBar.add(ButtonToManageUser());
+        if (accountData.length != 0) {
+            if (accountData[5].equals("Manager")) {
+                sideBar.add(manageProductReset);
+                sideBar.add(manageUserReset);
+                sideBar.add(manageEmpReset);
+            }
+        }
         sideBar.add(ButtonToDashBoard());
         sideBar.add(ButtonToLogin());
         sideBar.revalidate();
@@ -270,7 +322,7 @@ public class MainFrame extends JFrame {
     public void resetDashboard() {
         CardLayout cl = (CardLayout) mainPanel.getLayout();
         mainPanel.remove(dashboard);
-        dashboard = new Dashboard(this);
+        dashboard = new Dashboard(this, this.getWidth() - cart.getWidth() - sideBar.getWidth() - 50);
         dashboard.setName("Dashboard");
         mainPanel.add(dashboard, "Dashboard");
         cl.show(mainPanel, "Dashboard");
@@ -389,15 +441,20 @@ public class MainFrame extends JFrame {
             }
         }
 
-        All = new DisplayProductPanel().getPanel(cart, "all");
-        Electronics = new DisplayProductPanel().getPanel(cart, "1");
-        Foods = new DisplayProductPanel().getPanel(cart, "2");
-        Fashions = new DisplayProductPanel().getPanel(cart, "3");
-        Cosmetics = new DisplayProductPanel().getPanel(cart, "4");
-        Households = new DisplayProductPanel().getPanel(cart, "5");
-        Tools = new DisplayProductPanel().getPanel(cart, "6");
-        Sports = new DisplayProductPanel().getPanel(cart, "7");
-        Toys = new DisplayProductPanel().getPanel(cart, "8");
+        All = new DisplayProductPanel().getPanel(cart, "all", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Electronics = new DisplayProductPanel().getPanel(cart, "1",
+                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Foods = new DisplayProductPanel().getPanel(cart, "2", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Fashions = new DisplayProductPanel().getPanel(cart, "3",
+                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Cosmetics = new DisplayProductPanel().getPanel(cart, "4",
+                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Households = new DisplayProductPanel().getPanel(cart, "5",
+                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Tools = new DisplayProductPanel().getPanel(cart, "6", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Sports = new DisplayProductPanel().getPanel(cart, "7",
+                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+        Toys = new DisplayProductPanel().getPanel(cart, "8", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
 
         All.setName("All");
         Electronics.setName("Electronics");
@@ -437,21 +494,24 @@ public class MainFrame extends JFrame {
             CardLayout pr = (CardLayout) productPanel.getLayout();
             cl.show(mainPanel, "Body");
             pr.show(productPanel, "All");
+            cart.setVisible(true);
         });
 
         Home.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 Home.setText("<html><u>Home</u></html>");
+                Home.setFont(new SetPreferences().getFont(14));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 Home.setText("Home");
+                Home.setFont(new SetPreferences().getFont(14));
             }
         });
 
-        if (accountData.length!=0) {
+        if (accountData.length != 0) {
             if (!accountData[5].equals("Manager") && !accountData[5].equals("Employee")) {
                 Home.setVisible(false);
             }
@@ -481,13 +541,6 @@ public class MainFrame extends JFrame {
                 Btn.setText("Manage Product");
             }
         });
-        if (accountData.length!=0) {
-            if (!accountData[5].equals("Manager")) {
-                Btn.setVisible(false);
-            }
-        } else {
-            Btn.setVisible(false);
-        }
         return Btn;
     }
 
@@ -512,13 +565,6 @@ public class MainFrame extends JFrame {
                 Btn.setText("Manage User");
             }
         });
-        if (accountData.length!=0) {
-            if (!accountData[5].equals("Manager")) {
-                Btn.setVisible(false);
-            }
-        } else {
-            Btn.setVisible(false);
-        }
         return Btn;
     }
 
@@ -530,11 +576,12 @@ public class MainFrame extends JFrame {
         Btn.setBorder(null);
 
         Btn.addActionListener(e -> {
+            System.out.println("Test emp");
             CardLayout cl = (CardLayout) mainPanel.getLayout();
-            mainPanel.remove(dashboard);
-            mainPanel.add(new ManageEmp(this), "ManageEmp");
+            mainPanel.remove(manageEmp);
+            mainPanel.add(new ManageEmp(this, this.getWidth() - cart.getWidth() - sideBar.getWidth()), "ManageEmp");
             cl.show(mainPanel, "ManageEmp");
-            cart.setVisible(true);
+            cart.setVisible(false);
         });
 
         Btn.addMouseListener(new MouseAdapter() {
@@ -548,13 +595,6 @@ public class MainFrame extends JFrame {
                 Btn.setText("Manage Emp");
             }
         });
-        if (accountData.length!=0) {
-            if (!accountData[5].equals("Manager")) {
-                Btn.setVisible(false);
-            }
-        } else {
-            Btn.setVisible(false);
-        }
         return Btn;
     }
 
@@ -568,9 +608,11 @@ public class MainFrame extends JFrame {
         Btn.addActionListener(e -> {
             CardLayout cl = (CardLayout) mainPanel.getLayout();
             mainPanel.remove(dashboard);
-            mainPanel.add(new Dashboard(this), "Dashboard");
+            System.out.println(this.getWidth() - cart.getWidth() - sideBar.getWidth() - 50);
+            mainPanel.add(new Dashboard(this, this.getWidth() - cart.getWidth() - sideBar.getWidth() - 50),
+                    "Dashboard");
             cl.show(mainPanel, "Dashboard");
-            cart.setVisible(true);
+            cart.setVisible(false);
         });
 
         Btn.addMouseListener(new MouseAdapter() {
@@ -584,7 +626,7 @@ public class MainFrame extends JFrame {
                 Btn.setText("History");
             }
         });
-        if (accountData.length!=0) {
+        if (accountData.length != 0) {
             if (!accountData[5].equals("Manager") && !accountData[5].equals("Employee")) {
                 Btn.setVisible(false);
             }
@@ -602,7 +644,7 @@ public class MainFrame extends JFrame {
         Btn.setBorder(null);
 
         Btn.addActionListener(e -> {
-            new Login(this).setVisible(true);;
+            new Login(this);
         });
 
         Btn.addMouseListener(new MouseAdapter() {
@@ -616,9 +658,9 @@ public class MainFrame extends JFrame {
                 Btn.setText("Login");
             }
         });
-        if (accountData.length==0) {
+        if (accountData.length == 0) {
             Btn.setVisible(true);
-        }else{
+        } else {
             Btn.setVisible(false);
         }
         return Btn;

@@ -31,6 +31,9 @@ public class LoginServices {
     public void signOut(MainFrame mainFrame){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))){
             writer.write("");
+            JOptionPane.showMessageDialog(mainFrame, "Sign out successfully!");
+            mainFrame.resetTopBar();
+            mainFrame.setAccountData(new String[0]);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(mainFrame, "Error can't sing out!");
         }
