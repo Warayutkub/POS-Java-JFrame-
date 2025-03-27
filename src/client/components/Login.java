@@ -13,7 +13,6 @@ import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class Login extends JDialog {
     Container c = getContentPane();
@@ -51,15 +50,15 @@ public class Login extends JDialog {
         SubmitBtn.setFont(font);
 
         // UnderLine Font
-        SubmitBtn.addMouseListener((MouseListener) new MouseAdapter() {
+        SubmitBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                SubmitBtn.setFont(font);
+                SubmitBtn.setText("<html><u>Login ?</u></html>");
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                SubmitBtn.setFont(font);
+                SubmitBtn.setText("Login");
             }
         });
 

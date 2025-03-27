@@ -1,5 +1,7 @@
 package client.components;
 import java.awt.GridLayout;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -20,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -42,7 +45,7 @@ public class ManageEmp extends JPanel implements ActionListener {
     private JDialog diaEditEmp;
     private JComboBox<String> newPermission;
     private JTextField tfName, tfPhone, tfEmail, newName, newPhone, newEmail, newPassword, newConfirmPassword;
-    JTextField tfSearch;
+    private JTextField tfSearch;
     private JButton saveButton, newBtnConfirm;
     private String updatedName, updatedPhone, updatedEmail;
     private MainFrame mainFrame;
@@ -64,7 +67,6 @@ public class ManageEmp extends JPanel implements ActionListener {
 
         add(btnNewEmp, BorderLayout.NORTH);
         add(listEmp, BorderLayout.CENTER); 
-        add(chooseEmpNMana, BorderLayout.SOUTH);
         
 
         revalidate();  
@@ -75,13 +77,20 @@ public class ManageEmp extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
         add(btnNewEmp, BorderLayout.NORTH);
         add(listEmp, BorderLayout.CENTER);
-        add(chooseEmpNMana, BorderLayout.SOUTH);
     }
 
     private JPanel newEmployee(){
+        this.chooseEmpNMana =chooseMandE();
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel.setPreferredSize(new Dimension(this.width,105));
         btnNewEmployee = new JButton("New Employee");
         btnNewEmployee.addActionListener(this);
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        btnNewEmployee.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        btnNewEmployee.setForeground(Color.WHITE);
         tfSearch = new JTextField(10);
         tfSearch.setFont(new SetPreferences().getFont(20));
         JButton btnSearch = new JButton("Search");
@@ -89,15 +98,24 @@ public class ManageEmp extends JPanel implements ActionListener {
         btnSearch.setFont(new SetPreferences().getFont(10));
         btnSearch.addActionListener(this);
         
-        panel.add(tfSearch);
-        panel.add(btnSearch);
-        panel.add(btnNewEmployee);
+        
+        btnPanel.add(btnNewEmployee);
+        btnPanel.setPreferredSize(new Dimension(300,40));
+
+        searchPanel.add(tfSearch);
+        searchPanel.add(btnSearch);
+        searchPanel.setPreferredSize(new Dimension(550,40));
+
+        filterPanel.add(this.chooseEmpNMana);
+        filterPanel.setPreferredSize(new Dimension(1500,100));
+
+        panel.add(searchPanel);
+        panel.add(btnPanel);
+        panel.add(filterPanel);
         return panel;
     }
     private JPanel chooseMandE(){
         JPanel panel = new JPanel(new FlowLayout());
-        //panel.setPreferredSize(new Dimension(500, 50));
-        panel.setBorder(new LineBorder(Color.BLUE));
         JButton btnAll = new JButton("All");
         btnAll.setBackground(Color.WHITE);
         btnAll.setPreferredSize(new Dimension(200, 35));
@@ -135,62 +153,122 @@ public class ManageEmp extends JPanel implements ActionListener {
     }  
     
       private JDialog createNewEmp(){
+        Font labelFont = new SetPreferences().getFont(14);
         JDialog diaNewEmp = new JDialog(mainFrame, "New Employee", true);
-        diaNewEmp.setLayout(new GridLayout(7, 2));
-        diaNewEmp.setSize(500, 400);
-        diaNewEmp.add(new Label("Name :"));
+        diaNewEmp.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        diaNewEmp.setSize(350, 550);
+        diaNewEmp.setResizable(false);
+        diaNewEmp.setLocationRelativeTo(null);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/backend/data/images/logo.png"));
+        diaNewEmp.setIconImage(icon.getImage());
+        
+        JPanel nameArea = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel nameLabel = new JLabel("Name :");
+        nameLabel.setFont(labelFont);
+        nameLabel.setPreferredSize(new Dimension(300,30));
+        nameLabel.setHorizontalAlignment(JLabel.LEFT);
         newName = new JTextField();
-        diaNewEmp.add(newName);
+        newName.setPreferredSize(new Dimension(300,25));
+        nameArea.add(nameLabel);
+        nameArea.add(newName);
+        nameArea.setPreferredSize(new Dimension(330,65));
         
-        diaNewEmp.add(new Label("Phone :"));
+        JPanel phoneArea = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel phoneLabel = new JLabel("Phone :");
+        phoneLabel.setFont(labelFont);
+        phoneLabel.setPreferredSize(new Dimension(300, 30));
+        phoneLabel.setHorizontalAlignment(JLabel.LEFT);
         newPhone = new JTextField();
-        diaNewEmp.add(newPhone);
-        
-        diaNewEmp.add(new Label("Email :"));
-        newEmail = new JTextField();
-        diaNewEmp.add(newEmail);
+        newPhone.setPreferredSize(new Dimension(300, 25));
+        phoneArea.add(phoneLabel);
+        phoneArea.add(newPhone);
+        phoneArea.setPreferredSize(new Dimension(330, 65));
 
-        diaNewEmp.add(new Label("Permission :"));
-        newPermission = new JComboBox<String>();
+        JPanel emailArea = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel emailLabel = new JLabel("Email :");
+        emailLabel.setFont(labelFont);
+        emailLabel.setPreferredSize(new Dimension(300, 30));
+        emailLabel.setHorizontalAlignment(JLabel.LEFT);
+        newEmail = new JTextField();
+        newEmail.setPreferredSize(new Dimension(300, 25));
+        emailArea.add(emailLabel);
+        emailArea.add(newEmail);
+        emailArea.setPreferredSize(new Dimension(330, 65));
+
+        JPanel permissionArea = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel permissionLabel = new JLabel("Permission :");
+        permissionLabel.setFont(labelFont);
+        permissionLabel.setPreferredSize(new Dimension(300, 30));
+        permissionLabel.setHorizontalAlignment(JLabel.LEFT);
+        newPermission = new JComboBox<>();
         newPermission.addItem("Employee");
         newPermission.addItem("Manager");
-        diaNewEmp.add(newPermission);
+        newPermission.setPreferredSize(new Dimension(300, 25));
+        permissionArea.add(permissionLabel);
+        permissionArea.add(newPermission);
+        permissionArea.setPreferredSize(new Dimension(330, 65));
 
-        diaNewEmp.add(new Label("Password :"));
+        JPanel passwordArea = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel passLabel = new JLabel("Password :");
+        passLabel.setFont(labelFont);
+        passLabel.setPreferredSize(new Dimension(300, 30));
+        passLabel.setHorizontalAlignment(JLabel.LEFT);
         newPassword = new JTextField();
-        diaNewEmp.add(newPassword);
+        newPassword.setPreferredSize(new Dimension(300, 25));
+        passwordArea.add(passLabel);
+        passwordArea.add(newPassword);
+        passwordArea.setPreferredSize(new Dimension(330, 70));
 
-        diaNewEmp.add(new Label("Confirm Password :"));
+        JPanel confirmPasswordArea = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel confirmPassLabel = new JLabel("Confirm Password :");
+        confirmPassLabel.setFont(labelFont);
+        confirmPassLabel.setPreferredSize(new Dimension(300, 30));
+        confirmPassLabel.setHorizontalAlignment(JLabel.LEFT);
         newConfirmPassword = new JTextField();
-        diaNewEmp.add(newConfirmPassword);
+        newConfirmPassword.setPreferredSize(new Dimension(300, 25));
+        confirmPasswordArea.add(confirmPassLabel);
+        confirmPasswordArea.add(newConfirmPassword);
+        confirmPasswordArea.setPreferredSize(new Dimension(330, 70));
 
-        diaNewEmp.add(new Label());
+        JPanel BtnArea = new JPanel();
         newBtnConfirm = new JButton("Confirm");
+        newBtnConfirm.setFont(labelFont);
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        newBtnConfirm.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        BtnArea.add(newBtnConfirm);
+        newBtnConfirm.setForeground(Color.WHITE);
         newBtnConfirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!newName.getText().isEmpty() 
-                    && !newPhone.getText().isEmpty() 
-                    && !newEmail.getText().isEmpty() 
-                    && !newPassword.getText().isEmpty()) {
-                    if (newPassword.getText().equals(newConfirmPassword.getText())) {
-                        String name = newName.getText();
-                        String phone = newPhone.getText();
-                        String email = newEmail.getText();
-                        String permission = (String) newPermission.getSelectedItem();
-                        String password = newPassword.getText();
+            if(!newName.getText().isEmpty() 
+                && !newPhone.getText().isEmpty() 
+                && !newEmail.getText().isEmpty() 
+                && !newPassword.getText().isEmpty()) {
+                if (newPassword.getText().equals(newConfirmPassword.getText())) {
+                String name = newName.getText();
+                String phone = newPhone.getText();
+                String email = newEmail.getText();
+                String permission = (String) newPermission.getSelectedItem();
+                String password = newPassword.getText();
             
-                        saveNewEmployee(name, phone, email, permission, password);
+                saveNewEmployee(name, phone, email, permission, password);
             
-                        diaNewEmp.dispose();
-                        refreshEmployeeList();
-                    } else {
-                        JOptionPane.showMessageDialog(diaNewEmp, "Passwords do not match.", "Error", JOptionPane.WARNING_MESSAGE);
-                }} else{
-                    JOptionPane.showMessageDialog(diaNewEmp, "Please fill it in completely.", "Error", JOptionPane.WARNING_MESSAGE);
-                }
+                diaNewEmp.dispose();
+                refreshEmployeeList();
+                } else {
+                JOptionPane.showMessageDialog(diaNewEmp, "Passwords do not match.", "Error", JOptionPane.WARNING_MESSAGE);
+            }} else{
+                JOptionPane.showMessageDialog(diaNewEmp, "Please fill it in completely.", "Error", JOptionPane.WARNING_MESSAGE);
+            }
             }
         });
+
+        diaNewEmp.add(nameArea);
+        diaNewEmp.add(phoneArea);
+        diaNewEmp.add(emailArea);
+        diaNewEmp.add(permissionArea);
+        diaNewEmp.add(passwordArea);
+        diaNewEmp.add(confirmPasswordArea);
         diaNewEmp.add(newBtnConfirm);
         diaNewEmp.setLocation(700, 200);
         diaNewEmp.setVisible(true);
@@ -228,82 +306,137 @@ public class ManageEmp extends JPanel implements ActionListener {
     }
 
   
-    private void openEditEmp(String id, String name, String phone, String email) {
-       
-        diaEditEmp = new JDialog((JFrame) null, "Edit Employee", true);
-        diaEditEmp.setLayout(new GridLayout(5, 2)); 
-        diaEditEmp.setSize(400, 250);
+    private void openEditEmp(String id, String name, String phone, String email, String permission) {
+        diaEditEmp = new JDialog(mainFrame, "Edit Employee", true);
+        diaEditEmp.setLayout(new FlowLayout(FlowLayout.CENTER));
+        diaEditEmp.setSize(400, 450);
+        diaEditEmp.setResizable(false);
+        diaEditEmp.setLocationRelativeTo(null);
 
-        diaEditEmp.add(new JLabel("Name :"));
+        JPanel nameArea = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        nameArea.setPreferredSize(new Dimension(360, 70));
+        JLabel nameLabel = new JLabel("Name:");
+        nameLabel.setPreferredSize(new Dimension(360, 30));
+        nameLabel.setHorizontalAlignment(JLabel.LEFT);
         tfName = new JTextField(name);
-        diaEditEmp.add(tfName);
+        tfName.setPreferredSize(new Dimension(360, 30));
+        nameArea.add(nameLabel);
+        nameArea.add(tfName);
 
-        diaEditEmp.add(new JLabel("Phone :"));
+        JPanel phoneArea = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        phoneArea.setPreferredSize(new Dimension(360, 70));
+        JLabel phoneLabel = new JLabel("Phone:");
+        phoneLabel.setPreferredSize(new Dimension(360, 30));
+        phoneLabel.setHorizontalAlignment(JLabel.LEFT);
         tfPhone = new JTextField(phone);
-        diaEditEmp.add(tfPhone);
+        tfPhone.setPreferredSize(new Dimension(360, 30));
+        phoneArea.add(phoneLabel);
+        phoneArea.add(tfPhone);
 
-        diaEditEmp.add(new JLabel("Email :"));
+        JPanel emailArea = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        emailArea.setPreferredSize(new Dimension(360, 70));
+        JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setPreferredSize(new Dimension(360, 30));
+        emailLabel.setHorizontalAlignment(JLabel.LEFT);
         tfEmail = new JTextField(email);
-        diaEditEmp.add(tfEmail);
+        tfEmail.setPreferredSize(new Dimension(360, 30));
+        emailArea.add(emailLabel);
+        emailArea.add(tfEmail);
 
+        JPanel permissionArea = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        permissionArea.setPreferredSize(new Dimension(360, 70));
+        JLabel permissionLabel = new JLabel("Permission:");
+        permissionLabel.setPreferredSize(new Dimension(360, 30));
+        permissionLabel.setHorizontalAlignment(JLabel.LEFT);
+        JComboBox<String> permissionComboBox = new JComboBox<>();
+        permissionComboBox.addItem("Employee");
+        permissionComboBox.addItem("Manager");
+        permissionComboBox.setSelectedItem(permission); 
+        permissionComboBox.setPreferredSize(new Dimension(360, 30));
+        permissionArea.add(permissionLabel);
+        permissionArea.add(permissionComboBox);
+
+        JPanel BtnArea = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20));
         saveButton = new JButton("Save");
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updatedName = tfName.getText();
-                updatedPhone = tfPhone.getText();
-                updatedEmail = tfEmail.getText();
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        saveButton.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        saveButton.setForeground(Color.WHITE);
+        saveButton.setPreferredSize(new Dimension(100, 30));
+        BtnArea.setPreferredSize(new Dimension(360, 100));
 
-                updateEmployeeData(id, updatedName, updatedPhone, updatedEmail);
-                diaEditEmp.dispose();
-              
-                refreshEmployeeList();
+        saveButton.addActionListener(e -> {
+            updatedName = tfName.getText().trim();
+            updatedPhone = tfPhone.getText().trim();
+            updatedEmail = tfEmail.getText().trim();
+            String updatedPermission = (String) permissionComboBox.getSelectedItem();
+
+            if (updatedName.isEmpty() || updatedPhone.isEmpty() || updatedEmail.isEmpty()) {
+                JOptionPane.showMessageDialog(diaEditEmp, "All fields are required.", "Error", JOptionPane.WARNING_MESSAGE);
+                return;
             }
+
+            // Update the employee data
+            updateEmployeeData(id, updatedName, updatedPhone, updatedEmail, updatedPermission);
+            diaEditEmp.dispose();
+            refreshEmployeeList();
         });
-        diaEditEmp.add(saveButton);
-        diaEditEmp.setLocation(850, 300);
-        diaEditEmp.setVisible(true); 
-    
-        JOptionPane.showMessageDialog(this, "Edit Employee\nID: " + id + "\nName: " + updatedName + "\nPhone: " + updatedPhone + "\nEmail: " + updatedEmail);
+        BtnArea.add(saveButton);
+
+        // Add all components to the dialog
+        diaEditEmp.add(nameArea);
+        diaEditEmp.add(phoneArea);
+        diaEditEmp.add(emailArea);
+        diaEditEmp.add(permissionArea);
+        diaEditEmp.add(BtnArea);
+
+        diaEditEmp.setVisible(true);
     }
-    private void updateEmployeeData(String id, String name, String phone, String email) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileEmployee));
+
+    private void updateEmployeeData(String id, String name, String phone, String email, String permission) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileEmployee))) {
             StringBuilder newFileContent = new StringBuilder();
             String line;
 
             while ((line = reader.readLine()) != null) {
-                String[] s = line.split(",");
-                if (s[0].equals(id)) {
-                    line = id + "," + name + "," + phone + "," + email + "," + s[4] + "," + s[5];
+                String[] data = line.split(",");
+                if (data[0].equals(id)) {
+                    // Update the employee data
+                    line = id + "," + name + "," + phone + "," + email + "," + data[4] + "," + permission;
                 }
                 newFileContent.append(line).append("\n");
             }
-            reader.close();
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileEmployee));
-            writer.write(newFileContent.toString());
-            writer.close();
+            // Write the updated content back to the file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileEmployee))) {
+                writer.write(newFileContent.toString());
+            }
+
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error updating file", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error updating employee data", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void edit(ActionEvent e) {
         String actionCommand = e.getActionCommand();
-        
-        if(actionCommand.startsWith("Edit")) {
-            // Id, Name, Phone, Email
-            JPanel parentPanel = (JPanel) ((JButton) e.getSource()).getParent(); 
-            String labelText = ((JLabel) parentPanel.getComponent(0)).getText(); 
-            String[] details = labelText.split(","); 
-            
-            String id = details[0].split(":")[1].trim(); 
-            String name = details[1].split(":")[1].trim(); 
-            String phone = details[2].split(":")[1].trim(); 
-            String email = details[3].split(":")[1].trim(); 
-        
-            openEditEmp(id, name, phone, email);
+
+        if (actionCommand.startsWith("Edit")) {
+            // Extract the employee ID from the action command
+            String id = actionCommand.split("-")[1];
+
+            // Find the employee data by ID
+            try (BufferedReader reader = new BufferedReader(new FileReader(fileEmployee))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] data = line.split(",");
+                    if (data[0].equals(id)) {
+                        // Open the edit dialog with the employee's current data
+                        openEditEmp(data[0], data[1], data[2], data[3], data[5]);
+                        break;
+                    }
+                }
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error reading employee data", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     
@@ -459,6 +592,7 @@ public class ManageEmp extends JPanel implements ActionListener {
             searchEmployee(searchText);
         }
     }
+
     private void searchEmployee(String searchText) {
         if (searchText.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter a name or ID", "Error", JOptionPane.ERROR_MESSAGE);

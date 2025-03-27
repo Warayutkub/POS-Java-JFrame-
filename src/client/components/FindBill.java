@@ -278,6 +278,7 @@ public class FindBill extends JFrame {
         scrollPane.setBorder(null);
         float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
         refundBtn.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        refundBtn.setForeground(Color.WHITE);
         area.setPreferredSize(new Dimension(300, this.height));
         area.setBackground(Color.white);
 

@@ -41,7 +41,6 @@ public class MainFrame extends JFrame {
     private JPanel productPanel = new JPanel(new CardLayout());
     private Container container = getContentPane();
     private JButton accountName;
-    private int statusAccount = 0;
 
     // = new DisplayProductPanel().getPanel(cart,
     // "all",(this.getWidth()-sideBar.getWidth()-cart.getWidth()))
@@ -207,7 +206,6 @@ public class MainFrame extends JFrame {
         accountName.setForeground(Color.white);
         accountName.addActionListener(e -> {
             if (accountData.length != 0) {
-                System.out.println("in two infor");
                 new InformationAccount(this, this.accountData);
             }
         });
