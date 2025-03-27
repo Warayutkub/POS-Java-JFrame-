@@ -50,6 +50,34 @@ public class UserPanels extends JPanel {
             JButton button = new JButton("Edit");
             button.addActionListener(e -> new editUser(id, parent));
             return button;
+            JButton Button = new JButton("Edit");
+            Button.addActionListener(e -> {
+                new EditUser();
+                c.revalidate();
+                c.repaint();
+            });
+            return Button;
+        }
+        
+        private JPanel editPanel() {
+            JPanel Panel = new JPanel();
+            Panel.add(editButton());
+            Panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+            return Panel;
+        }
+        
+        private JButton delButton() {
+            JButton Button = new JButton("Delete");
+            Button.addActionListener(e -> {
+                DeleteData(this.id);
+                c.removeAll();
+                for (String[] recode : pullData()) {
+                    c.add(new UserPanel(recode[0], recode[1], recode[2], recode[3],n));
+                }
+                c.revalidate();
+                c.repaint();
+            });
+            return Button;
         }
 
         private JButton deleteButton() {

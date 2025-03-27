@@ -13,39 +13,20 @@ public class DisplayProductPanel {
     private String[][] Products = new InventoryService().getAllProductData();
 
     
-    public JPanel getPanel(Cart cart, String type) {
+    public JScrollPane getPanel(Cart cart, String type) {
         switch (type) {
-            case "all":
-            return AllPanel(cart);
-            case "1":
-            return simplePanel(cart, type);
-            case "2":
-            return simplePanel(cart, type);
-            case "3":
-            return simplePanel(cart, type);
-            case "4":
-            return simplePanel(cart, type);
-            case "5":
-            return simplePanel(cart, type);
-            case "6":
-            return simplePanel(cart, type);
-            case "7":
-            return simplePanel(cart, type);
-            case "8":
-            return simplePanel(cart, type);
+            case "all" -> {return AllPanel(cart);}
+            case "1","2","3","4","5","6","7","8" -> {return simplePanel(cart, type);}
         }
-        return null;
+        return null; 
     }
     
-    public JPanel getSearchPanel(Cart cart,String name){
+    public JScrollPane getSearchPanel(Cart cart,String name){
         ArrayList<String> soldOut = new ArrayList<>();
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JScrollPane scrollPane = new JScrollPane(area);
         area.setLayout(new FlowLayout(FlowLayout.CENTER));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JScrollPane scroller = new JScrollPane(panel);
-
-        scroller.setBorder(null);
-
         int c = 0;
         for (String[] recode : Products) {
             String nameLowerInventory = recode[1].toLowerCase();
@@ -67,22 +48,22 @@ public class DisplayProductPanel {
 
         int column = 5;
         int row = (int) Math.ceil((double) c / column);
-        panel.setPreferredSize(new Dimension(500, 250 * row));
-        scroller.setPreferredSize(new Dimension(1200, 1000));
-        area.add(scroller);
-
-        return area;
+        panel.setPreferredSize(new Dimension((column*215)+10, (255 * row)+10));
+        scrollPane.setPreferredSize(new Dimension((column*172)+5,255*row));
+        area.setPreferredSize(new Dimension((column*215)+10,255*row));
+        area.add(panel);
+        scrollPane.setBackground(null);
+        scrollPane.setBorder(null);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        return scrollPane;
     }
 
-    private JPanel AllPanel(Cart cart) {
+    private JScrollPane AllPanel(Cart cart) {
         ArrayList<String> soldOut = new ArrayList<>();
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        area.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JScrollPane scrollPane = new JScrollPane(area);
+        area.setBackground(null);
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JScrollPane scroller = new JScrollPane(panel);
-
-        scroller.setBorder(null);
-
         int c = 0;
         for (String[] recode : Products) {
             if (recode[4].equals("0")) {
@@ -100,22 +81,22 @@ public class DisplayProductPanel {
 
         int column = 5;
         int row = (int) Math.ceil((double) c / column);
-        panel.setPreferredSize(new Dimension(500, 250 * row));
-        scroller.setPreferredSize(new Dimension(1200, 1000));
-        area.add(scroller);
-
-        return area;
+        panel.setPreferredSize(new Dimension((column*215)+10, (255 * row)+10));
+        scrollPane.setPreferredSize(new Dimension((column*172)+5,255*row));
+        area.setPreferredSize(new Dimension((column*215)+10,255*row));
+        area.add(panel);
+        scrollPane.setBackground(null);
+        scrollPane.setBorder(null);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        return scrollPane;
     }
 
-    private JPanel simplePanel(Cart cart, String type) {
+    private JScrollPane simplePanel(Cart cart, String type) {
         ArrayList<String> soldOut = new ArrayList<>();
         JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JScrollPane scrollPane = new JScrollPane(area);
         area.setLayout(new FlowLayout(FlowLayout.CENTER));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JScrollPane scroller = new JScrollPane(panel);
-
-        scroller.setBorder(null);
-
         int c = 0;
         for (String[] recode : Products) {
             if (recode[5].equals(type)) {
@@ -135,11 +116,14 @@ public class DisplayProductPanel {
 
         int column = 5;
         int row = (int) Math.ceil((double) c / column);
-        panel.setPreferredSize(new Dimension(500, 250 * row));
-        scroller.setPreferredSize(new Dimension(1200, 1000));
-        area.add(scroller);
-
-        return area;
+        panel.setPreferredSize(new Dimension((column*215)+10, (255 * row)+10));
+        scrollPane.setPreferredSize(new Dimension((column*172)+5,255*row));
+        area.setPreferredSize(new Dimension((column*215)+10,255*row));
+        area.add(panel);
+        scrollPane.setBackground(null);
+        scrollPane.setBorder(null);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        return scrollPane;
     }
 
 }

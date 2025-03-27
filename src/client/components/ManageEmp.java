@@ -1,7 +1,5 @@
 package client.components;
 import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -12,7 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 
-import java.awt.Insets;
+import client.MainFrame;
+import resources.SetPreferences;
+
 import java.awt.Label;
 import javax.swing.JTextField;
 
@@ -20,7 +20,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -32,56 +31,109 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class editEmployee extends JPanel implements ActionListener {
+public class ManageEmp extends JPanel implements ActionListener {
 
     private String fileEmployee = "src\\backend\\data\\EmployeeData.txt";
     private JButton btnNewEmployee, edit, delete;
     private JPanel btnNewEmp = newEmployee();
-    private JPanel listEmp = listEmployee();
+    private JPanel listEmp; 
+    private JPanel chooseEmpNMana = chooseMandE();
     private JScrollPane scrollPane;
     private JDialog diaEditEmp;
     private JComboBox<String> newPermission;
     private JTextField tfName, tfPhone, tfEmail, newName, newPhone, newEmail, newPassword, newConfirmPassword;
+    JTextField tfSearch;
     private JButton saveButton, newBtnConfirm;
     private String updatedName, updatedPhone, updatedEmail;
+    private MainFrame mainFrame;
    
     //Font myFont = new Font("Arial", Font.BOLD, 15);
-    Font myFont2 = new Font("Arial", Font.PLAIN, 12);
 
 
-    public editEmployee(){
+    public ManageEmp(MainFrame mainFrame){
+        this.mainFrame = mainFrame;
+        listEmp = listEmployee("All");  
         CreateGui();
     }
 
     private void refreshEmployeeList() {
-        remove(listEmp);
+        remove(listEmp); 
         remove(btnNewEmp);
-        listEmp = listEmployee(); 
-        btnNewEmp = newEmployee();
 
         add(btnNewEmp, BorderLayout.NORTH);
-        add(listEmp, BorderLayout.CENTER);
+        add(listEmp, BorderLayout.CENTER); 
+        add(chooseEmpNMana, BorderLayout.SOUTH);
         
-        revalidate();
-        repaint();
+
+        revalidate();  
+        repaint();  
     }
     private void CreateGui() {
         setPreferredSize(new Dimension(860,600));
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
         add(btnNewEmp, BorderLayout.NORTH);
         add(listEmp, BorderLayout.CENTER);
+        add(chooseEmpNMana, BorderLayout.SOUTH);
     }
 
     private JPanel newEmployee(){
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnNewEmployee = new JButton("New Employee");
         btnNewEmployee.addActionListener(this);
+        tfSearch = new JTextField(10);
+        tfSearch.setFont(new SetPreferences().getFont(20));
+        JButton btnSearch = new JButton("Search");
+        btnSearch.setBackground(Color.WHITE);
+        btnSearch.setFont(new SetPreferences().getFont(10));
+        btnSearch.addActionListener(this);
+        
+        panel.add(tfSearch);
+        panel.add(btnSearch);
         panel.add(btnNewEmployee);
         return panel;
     }
-    private JDialog createNewEmp(){
-        JDialog diaNewEmp = new JDialog((JFrame) null, "New Employee", true);
+    private JPanel chooseMandE(){
+        JPanel panel = new JPanel(new FlowLayout());
+        //panel.setPreferredSize(new Dimension(500, 50));
+        panel.setBorder(new LineBorder(Color.BLUE));
+        JButton btnAll = new JButton("All");
+        btnAll.setBackground(Color.WHITE);
+        btnAll.setPreferredSize(new Dimension(200, 35));
+        btnAll.setFont(new SetPreferences().getFont(15));
+        JButton btnManager = new JButton("Manager");
+        btnManager.setBackground(Color.WHITE);
+        btnManager.setPreferredSize(new Dimension(200, 35));
+        btnManager.setFont(new SetPreferences().getFont(15));
+        JButton btnEmployee = new JButton("Employee");
+        btnEmployee.setBackground(Color.WHITE);
+        btnEmployee.setPreferredSize(new Dimension(200, 35));
+        btnEmployee.setFont(new SetPreferences().getFont(15));
+        
+        btnAll.addActionListener(e -> {
+            remove(listEmp); 
+            listEmp = listEmployee("All");
+            refreshEmployeeList();
+        });
+        btnManager.addActionListener(e -> {
+            remove(listEmp); 
+            listEmp = listEmployee("Manager"); 
+            refreshEmployeeList(); 
+        });
+    
+        btnEmployee.addActionListener(e -> {
+            remove(listEmp); 
+            listEmp = listEmployee("Employee");
+            refreshEmployeeList();
+        });
+        panel.add(btnAll);
+        panel.add(btnManager);
+        panel.add(btnEmployee);   
+        
+        return panel;
+    }  
+    
+      private JDialog createNewEmp(){
+        JDialog diaNewEmp = new JDialog(mainFrame, "New Employee", true);
         diaNewEmp.setLayout(new GridLayout(7, 2));
         diaNewEmp.setSize(500, 400);
         diaNewEmp.add(new Label("Name :"));
@@ -173,34 +225,7 @@ public class editEmployee extends JPanel implements ActionListener {
         return String.valueOf(newId);
     }
 
-   private JPanel listEmployee(){
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setPreferredSize(new Dimension(700, 500));
-        panel.setBorder(new LineBorder(Color.PINK, 5));
-
-        JPanel listContainer = new JPanel();
-        GridBagLayout layout = new GridBagLayout();
-        listContainer.setLayout(layout);
-        listContainer.setBackground(Color.WHITE);
-
-        List<JPanel> empPanels = readEmployeePanels(fileEmployee);
-        for (int i = 0; i < empPanels.size(); i++) {
-            JPanel empPanel = empPanels.get(i);
-            empPanel.setFont(myFont2);  
-
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = 0;  
-            gbc.gridy = i;  
-            gbc.insets = new Insets(10, 10, 10, 10);
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-          
-            listContainer.add(empPanel, gbc);  
-        }
-
-        scrollPane = new JScrollPane(listContainer);
-        panel.add(scrollPane, BorderLayout.CENTER);
-        return panel;
-    }
+  
     private void openEditEmp(String id, String name, String phone, String email) {
        
         diaEditEmp = new JDialog((JFrame) null, "Edit Employee", true);
@@ -304,15 +329,45 @@ public class editEmployee extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(this, "Error deleting employee", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    private JPanel listEmployee(String type){
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel.setPreferredSize(new Dimension(1050, 700));
+
+        JPanel listContainer = new JPanel();
+        listContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        
+        List<JPanel> empPanels = readEmployeePanels(fileEmployee, type);
+        int c = 0;
+        for (JPanel empPanel : empPanels) {
+            empPanel.setFont(new SetPreferences().getFont(12));  
+            listContainer.add(empPanel);  
+            c++;
+        }
+        listContainer.setPreferredSize(new Dimension(1050,c*55));
+
+        scrollPane = new JScrollPane(listContainer);
+        scrollPane.setPreferredSize(new Dimension(1050,700));
+        scrollPane.setBorder(null);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        panel.add(scrollPane);
+
+        return panel;
+    }
     
     private JPanel showEmp(String id, String name, String phone, String email, String password, String permission) {
         JPanel panel = new JPanel(new FlowLayout());
-        panel.setBorder(new LineBorder(Color.BLACK));
+        panel.setBorder(new LineBorder(Color.GRAY,1));
+        panel.setBackground(Color.WHITE);
         
         edit = new JButton("Edit");
         delete = new JButton("Delete");
-        edit.setFont(myFont2);
-        delete.setFont(myFont2);
+        edit.setFont(new SetPreferences().getFont(12));
+        delete.setFont(new SetPreferences().getFont(12));
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        edit.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        delete.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        edit.setForeground(Color.WHITE);
+        delete.setForeground(Color.WHITE);
 
         edit.setActionCommand("Edit-" + id);
         delete.setActionCommand("Delete-" + id);
@@ -320,47 +375,71 @@ public class editEmployee extends JPanel implements ActionListener {
         edit.addActionListener(this);
         delete.addActionListener(this);
         
-        JLabel label = new JLabel("ID: " + id + ", Name: " + name + ", Phone: " + phone + ", Email: " + email + ", Permission: " + permission + "                     ");
-        label.setFont(myFont2);
+        JLabel idLabel = new JLabel("ID : " + id);
+        JLabel nameLabel = new JLabel("Name : " + name);
+        JLabel phoneLabel = new JLabel("Phone : " + phone);
+        JLabel emailLabel = new JLabel("Email : " + email);
+        JLabel permissionLabel = new JLabel("Permission : " + permission);
+
+        idLabel.setFont(new SetPreferences().getFont(12));
+        nameLabel.setFont(new SetPreferences().getFont(12));
+        phoneLabel.setFont(new SetPreferences().getFont(12));
+        emailLabel.setFont(new SetPreferences().getFont(12));
+        permissionLabel.setFont(new SetPreferences().getFont(12));
+
+        idLabel.setPreferredSize(new Dimension(50,30));
+        nameLabel.setPreferredSize(new Dimension(180,30));
+        phoneLabel.setPreferredSize(new Dimension(150,30));
+        emailLabel.setPreferredSize(new Dimension(270,30));
+        permissionLabel.setPreferredSize(new Dimension(150,30));
         
-        panel.add(label);
+        panel.add(idLabel);
+        panel.add(nameLabel);
+        panel.add(phoneLabel);
+        panel.add(emailLabel);
+        panel.add(permissionLabel);
         panel.add(edit);
         panel.add(delete);
-        
+        panel.setPreferredSize(new Dimension(1000,40));
         return panel;
     }
     
-    private List<JPanel> readEmployeePanels(String fileEmployee) {
+    private List<JPanel> readEmployeePanels(String fileEmployee, String type) {
         List<JPanel> empPanels = new ArrayList<>();
+    
         try {
-            FileReader in = new FileReader(fileEmployee);
-            BufferedReader reader = new BufferedReader(in);
-            String s1;
-            while ((s1 = reader.readLine()) != null) {
-                String[] s = s1.split(",");
-                if (s.length >= 6) {
-                    String id = s[0];
-                    String name = s[1];
-                    String phone = s[2];
-                    String email = s[3];
-                    String password = s[4];
-                    String permission = s[5];
-                    // String tackSaleDay = s[6];
-                    // String trackSalesTotal = s[7];
-
-                    JPanel empPanel = showEmp(id, name, phone, email, password, permission);
-                    empPanel.setFont(myFont2); 
-                    empPanels.add(empPanel);
+            BufferedReader reader = new BufferedReader(new FileReader(fileEmployee));
+            String line;
+    
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length >= 6) {
+                    String id = data[0];
+                    String name = data[1];
+                    String phone = data[2];
+                    String email = data[3];
+                    String password = data[4];
+                    String permission = data[5];  
+    
+                    if (type.equals("All")) {
+                        JPanel empPanel = showEmp(id, name, phone, email, password, permission); 
+                        empPanels.add(empPanel);
+                    } else if (permission.equalsIgnoreCase(type)) {
+                        JPanel empPanel = showEmp(id, name, phone, email, password, permission);  
+                        empPanels.add(empPanel); 
+                    } else if (id.contains(type) ||  name.toLowerCase().contains(type.toLowerCase())) {
+                        JPanel empPanel = showEmp(id, name, phone, email, password, permission); 
+                        empPanels.add(empPanel);
+                    } 
                 }
             }
             reader.close();
-            in.close();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Cannot read file", "Error Message", JOptionPane.ERROR_MESSAGE);
         }
         return empPanels;
-
     }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         String actionCommand = e.getActionCommand();
@@ -373,6 +452,29 @@ public class editEmployee extends JPanel implements ActionListener {
             deleteEmployee(id);
         } else if(actionCommand.equals("New Employee")){
             createNewEmp();
+        }else if(actionCommand.equals("Search")){
+            String searchText = tfSearch.getText().trim();
+            searchEmployee(searchText);
         }
     }
+    private void searchEmployee(String searchText) {
+        if (searchText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a name or ID", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        remove(listEmp);
+        
+        List<JPanel> empPanels = readEmployeePanels( fileEmployee, searchText);
+        if (empPanels.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No results found", "Search Result", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            listEmp = new JPanel();
+            for (JPanel panel : empPanels) {
+                listEmp.add(panel);
+            }
+        }
+        refreshEmployeeList();
+    }
+    
+ 
 }

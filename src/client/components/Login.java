@@ -3,6 +3,8 @@ package client.components;
 import javax.swing.*;
 
 import backend.services.AuthService;
+import client.MainFrame;
+import resources.SetPreferences;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,21 +18,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 
-public class Login extends JFrame implements ActionListener {
+public class Login extends JDialog implements ActionListener {
     JLabel login, phone, password;
     JTextField phone1;
-    JButton btn1, btn2, btn3;
+    JButton btn1, btn2;
     JPasswordField ps1;
     Container c = getContentPane();
 
-    public Login() {
+    public Login(MainFrame mainFrame) {
+        super(mainFrame,"Login",true);
         c.setBackground(Color.WHITE);
         setSize(500, 500);
         setTitle("Login");
-        setLayout(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
         login = new JLabel("Login");
-        login.setFont(new Font("Senif", Font.BOLD, 20));
+        login.setFont(new SetPreferences().getFont(20));
         phone = new JLabel("Enter Phone Number : ");
         password = new JLabel("Enter Password : ");
         phone1 = new JTextField();
@@ -41,7 +43,7 @@ public class Login extends JFrame implements ActionListener {
         btn2.setBackground(Color.WHITE);
         btn2.setBorder(null);
         btn2.addActionListener(ev -> {
-            new Register().setVisible(true);
+            new NewUserPopup(mainFrame);
             setVisible(false);
         });
         Font plainFont = btn2.getFont();
@@ -64,24 +66,6 @@ public class Login extends JFrame implements ActionListener {
             }
         });
         
-        btn3 = new JButton("Register For Employee");
-        btn3.setBackground(Color.WHITE);
-        btn3.setBorder(null);
-        btn3.addActionListener(ev ->{
-            new Register_Employee().setVisible(true);
-            setVisible(false);
-        });
-        btn3.addMouseListener((MouseListener) new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                btn3.setFont(fontWithUnderline);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                btn3.setFont(plainFont);
-            }
-        });
         login.setBounds(195, 50, 400, 30);
         phone.setBounds(80, 150, 200, 30);
         password.setBounds(80, 200, 200, 30);
@@ -89,7 +73,6 @@ public class Login extends JFrame implements ActionListener {
         ps1.setBounds(200, 200, 200, 30);
         btn1.setBounds(190, 300, 100, 30);
         btn2.setBounds(60, 370, 170, 30);
-        btn3.setBounds(250, 370, 170, 30);
         add(login);
         add(phone);
         add(phone1);
@@ -97,7 +80,6 @@ public class Login extends JFrame implements ActionListener {
         add(ps1);
         add(btn1);
         add(btn2);
-        add(btn3);
         btn1.addActionListener(this);
         setResizable(false);
         setVisible(true);

@@ -19,11 +19,14 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import backend.services.LoginServices;
 import client.components.Cart;
 import client.components.DisplayProductPanel;
+import client.components.Login;
+import client.components.ManageEmp;
 import client.components.POSDateTimeFrame;
 import resources.SetPreferences;
 
@@ -33,26 +36,35 @@ public class MainFrame extends JFrame {
     private JPanel topBar = TopBar();
     private JPanel sideBar = SideBar();
     private JPanel outerBody = OuterBody();
-    private JPanel dashboard = new Dashboard();
+    private JPanel dashboard = new Dashboard(this);
+    private JPanel manageEmp = new ManageEmp(this);
     private JPanel mainPanel = new JPanel(new CardLayout());
     private JPanel productPanel = new JPanel(new CardLayout());
     private Container container = getContentPane();
+    private JButton accountName;
+    
+    
+
 
     // Display Products panel Obj
-    private JPanel All = new DisplayProductPanel().getPanel(cart, "all");
-    private JPanel Electronics = new DisplayProductPanel().getPanel(cart, "1");
-    private JPanel Foods = new DisplayProductPanel().getPanel(cart, "2");
-    private JPanel Fashions = new DisplayProductPanel().getPanel(cart, "3");
-    private JPanel Cosmetics = new DisplayProductPanel().getPanel(cart, "4");
-    private JPanel Households = new DisplayProductPanel().getPanel(cart, "5");
-    private JPanel Tools = new DisplayProductPanel().getPanel(cart, "6");
-    private JPanel Sports = new DisplayProductPanel().getPanel(cart, "7");
-    private JPanel Toys = new DisplayProductPanel().getPanel(cart, "8");
-    private JPanel Search = new DisplayProductPanel().getSearchPanel(cart, "");
+    private JScrollPane All = new DisplayProductPanel().getPanel(cart, "all");
+    private JScrollPane Electronics = new DisplayProductPanel().getPanel(cart, "1");
+    private JScrollPane Foods = new DisplayProductPanel().getPanel(cart, "2");
+    private JScrollPane Fashions = new DisplayProductPanel().getPanel(cart, "3");
+    private JScrollPane Cosmetics = new DisplayProductPanel().getPanel(cart, "4");
+    private JScrollPane Households = new DisplayProductPanel().getPanel(cart, "5");
+    private JScrollPane Tools = new DisplayProductPanel().getPanel(cart, "6");
+    private JScrollPane Sports = new DisplayProductPanel().getPanel(cart, "7");
+    private JScrollPane Toys = new DisplayProductPanel().getPanel(cart, "8");
+    private JScrollPane Search = new DisplayProductPanel().getSearchPanel(cart, "");
 
     public MainFrame() {
         CreateGui();
         SetupWindow();
+
+        if(accountData.length==0){
+            new Login(this);
+        }
     }
 
     private void SetupWindow() {
@@ -73,6 +85,7 @@ public class MainFrame extends JFrame {
 
         // SideBar button
         mainPanel.add(outerBody, "Body");
+        mainPanel.add(manageEmp, "ManageEmp");
         mainPanel.add(dashboard, "Dashboard");
 
         // Type Btn
@@ -139,16 +152,21 @@ public class MainFrame extends JFrame {
         });
 
         searchBtn.setBackground(Color.white);
-        searchBtn.setPreferredSize(new Dimension(80,25));
+        searchBtn.setPreferredSize(new Dimension(80, 25));
         searchArea.setBorder(null);
 
         JPanel area = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel areaInner1 = new JPanel(new GridLayout(1, 1));
         JPanel areaInner2 = new JPanel(new GridLayout(1, 2));
         JPanel areaInner3 = new JPanel(new GridLayout(1, 1));
-        JPanel areaInner4 = new JPanel(new GridLayout(1, 1));
+        JPanel areaAccount = new JPanel(new GridLayout(1, 1));
         JPanel areaAroundSearch = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton accountName = new JButton(accountData[1]);
+        
+        if (accountData.length != 0) {
+            accountName = new JButton(accountData[1]);
+        } else {
+            accountName = new JButton("No account");
+        }
         JLabel ApplicationName = new JLabel("  Point of sale  ");
         JLabel time = new POSDateTimeFrame();
 
@@ -160,7 +178,9 @@ public class MainFrame extends JFrame {
         accountName.setBorder(null);
         accountName.setForeground(Color.white);
         accountName.addActionListener(e -> {
-            popupProfile.show(accountName, 0, accountName.getHeight());
+            if (accountData.length!=0){
+                popupProfile.show(accountName, 0, accountName.getHeight());
+            }
         });
 
         ApplicationName.setFont(new SetPreferences().getFont(36));
@@ -186,19 +206,34 @@ public class MainFrame extends JFrame {
         areaInner3.setBackground(null);
         areaInner3.setPreferredSize(new Dimension(200, 40));
 
-        areaInner4.add(accountName);
-        areaInner4.setBackground(null);
-        areaInner4.setPreferredSize(new Dimension(150, 40));
+        areaAccount.add(accountName);
+        areaAccount.setBackground(null);
+        areaAccount.setPreferredSize(new Dimension(150, 40));
+
+        signOutItem.addActionListener(e -> {
+            new LoginServices().signOut(this);
+            accountName = null;
+            accountName = new JButton("No account");
+            areaAccount.removeAll();
+            areaAccount.add(accountName);
+            accountName.addActionListener(event -> {
+                new Login(this).setVisible(true);
+            });
+            areaAccount.revalidate();
+            areaAccount.repaint();
+            resetSideBar();
+        });
 
         area.add(areaInner1);
         area.add(areaInner2);
         area.add(areaInner3);
-        area.add(areaInner4);
+        area.add(areaAccount);
         area.setPreferredSize(new Dimension(1000, 50));
         float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
         area.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
         return area;
     }
+
 
     private JPanel SideBar() {
         int width = 150;
@@ -211,7 +246,9 @@ public class MainFrame extends JFrame {
         area.add(ButtonToHome());
         area.add(ButtonToManageProduct());
         area.add(ButtonToManageUser());
+        area.add(ButtonToManageEmp());
         area.add(ButtonToDashBoard());
+        area.add(ButtonToLogin());
         return area;
     }
 
@@ -219,15 +256,24 @@ public class MainFrame extends JFrame {
         int width = 150;
         int height = 500;
         this.accountData = new LoginServices().getDataToken();
-        System.out.println("In reset : " + accountData[5]);
         sideBar.removeAll();
         sideBar.add(LogoArea(width, height));
         sideBar.add(ButtonToHome());
         sideBar.add(ButtonToManageProduct());
         sideBar.add(ButtonToManageUser());
         sideBar.add(ButtonToDashBoard());
+        sideBar.add(ButtonToLogin());
         sideBar.revalidate();
         sideBar.repaint();
+    }
+
+    public void resetDashboard() {
+        CardLayout cl = (CardLayout) mainPanel.getLayout();
+        mainPanel.remove(dashboard);
+        dashboard = new Dashboard(this);
+        dashboard.setName("Dashboard");
+        mainPanel.add(dashboard, "Dashboard");
+        cl.show(mainPanel, "Dashboard");
     }
 
     private JPanel OuterBody() {
@@ -405,7 +451,11 @@ public class MainFrame extends JFrame {
             }
         });
 
-        if (!accountData[5].equals("Manager") && !accountData[5].equals("Employee")) {
+        if (accountData.length!=0) {
+            if (!accountData[5].equals("Manager") && !accountData[5].equals("Employee")) {
+                Home.setVisible(false);
+            }
+        } else {
             Home.setVisible(false);
         }
         return Home;
@@ -431,7 +481,11 @@ public class MainFrame extends JFrame {
                 Btn.setText("Manage Product");
             }
         });
-        if (!accountData[5].equals("Manager")) {
+        if (accountData.length!=0) {
+            if (!accountData[5].equals("Manager")) {
+                Btn.setVisible(false);
+            }
+        } else {
             Btn.setVisible(false);
         }
         return Btn;
@@ -458,7 +512,47 @@ public class MainFrame extends JFrame {
                 Btn.setText("Manage User");
             }
         });
-        if (!accountData[5].equals("Manager")) {
+        if (accountData.length!=0) {
+            if (!accountData[5].equals("Manager")) {
+                Btn.setVisible(false);
+            }
+        } else {
+            Btn.setVisible(false);
+        }
+        return Btn;
+    }
+
+    private JButton ButtonToManageEmp() {
+        JButton Btn = new JButton("Manage Emp");
+        Btn.setPreferredSize(new Dimension(120, 30));
+        Btn.setFont(new SetPreferences().getFont(14));
+        Btn.setBackground(null);
+        Btn.setBorder(null);
+
+        Btn.addActionListener(e -> {
+            CardLayout cl = (CardLayout) mainPanel.getLayout();
+            mainPanel.remove(dashboard);
+            mainPanel.add(new ManageEmp(this), "ManageEmp");
+            cl.show(mainPanel, "ManageEmp");
+            cart.setVisible(true);
+        });
+
+        Btn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                Btn.setText("<html><u>Manage Emp</u></html>");
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                Btn.setText("Manage Emp");
+            }
+        });
+        if (accountData.length!=0) {
+            if (!accountData[5].equals("Manager")) {
+                Btn.setVisible(false);
+            }
+        } else {
             Btn.setVisible(false);
         }
         return Btn;
@@ -474,7 +568,7 @@ public class MainFrame extends JFrame {
         Btn.addActionListener(e -> {
             CardLayout cl = (CardLayout) mainPanel.getLayout();
             mainPanel.remove(dashboard);
-            mainPanel.add(new Dashboard(), "Dashboard");
+            mainPanel.add(new Dashboard(this), "Dashboard");
             cl.show(mainPanel, "Dashboard");
             cart.setVisible(true);
         });
@@ -490,11 +584,44 @@ public class MainFrame extends JFrame {
                 Btn.setText("History");
             }
         });
-        if (!accountData[5].equals("Manager") && !accountData[5].equals("Employee")) {
+        if (accountData.length!=0) {
+            if (!accountData[5].equals("Manager") && !accountData[5].equals("Employee")) {
+                Btn.setVisible(false);
+            }
+        } else {
             Btn.setVisible(false);
         }
         return Btn;
     }
 
+    private JButton ButtonToLogin() {
+        JButton Btn = new JButton("Login");
+        Btn.setPreferredSize(new Dimension(120, 30));
+        Btn.setFont(new SetPreferences().getFont(14));
+        Btn.setBackground(null);
+        Btn.setBorder(null);
+
+        Btn.addActionListener(e -> {
+            new Login(this).setVisible(true);;
+        });
+
+        Btn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                Btn.setText("<html><u>Login?</u></html>");
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                Btn.setText("Login");
+            }
+        });
+        if (accountData.length==0) {
+            Btn.setVisible(true);
+        }else{
+            Btn.setVisible(false);
+        }
+        return Btn;
+    }
 
 }

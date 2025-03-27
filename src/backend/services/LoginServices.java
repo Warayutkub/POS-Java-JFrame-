@@ -1,10 +1,13 @@
 package backend.services;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-
 import javax.swing.JOptionPane;
+
+import client.MainFrame;
 
 public class LoginServices {
     private String path = "./src/backend/data/Token.txt";
@@ -23,6 +26,14 @@ public class LoginServices {
         }
 
         return data;
+    }
+
+    public void signOut(MainFrame mainFrame){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))){
+            writer.write("");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(mainFrame, "Error can't sing out!");
+        }
     }
 
    
