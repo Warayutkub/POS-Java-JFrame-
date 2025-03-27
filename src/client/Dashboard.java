@@ -41,9 +41,10 @@ public class Dashboard extends JPanel {
     @SuppressWarnings("rawtypes")
     private JComboBox dateSelect;
 
-    public Dashboard(MainFrame mainFrame) {
+    public Dashboard(MainFrame mainFrame,int width) {
         setPreferredSize(new Dimension(width, height));
         this.mainFrame = mainFrame;
+        this.width = width;
         CreateGui(14);
     }
 
@@ -82,7 +83,7 @@ public class Dashboard extends JPanel {
         topPanel.add(topCardDayTotal);
 
         topBody = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 5));
-        topBody.setPreferredSize(new Dimension(width + 100, 35));
+        topBody.setPreferredSize(new Dimension(width, 35));
         topBody.add(dateSelect);
         topBody.add(findBillBtn);
 
@@ -91,49 +92,49 @@ public class Dashboard extends JPanel {
 
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         JTable table = new JTable(model);
-        table.setPreferredScrollableViewportSize(new Dimension(1000, 550));
         table.setFillsViewportHeight(true);
         table.setRowHeight(30);
         table.setEnabled(false);
         table.getTableHeader().setReorderingAllowed(false);
-
+        
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-
+        
         for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-
+        
         bodyPanel.add(topBody);
         bodyPanel.add(new JScrollPane(table));
-
+        
         dateSelect.addItemListener(event -> {
             String dateString = "";
             if (event.getStateChange() == ItemEvent.SELECTED) {
                 dateString = (String) event.getItem();
                 data = new DashboardService().getTable(dateString);
                 model.setRowCount(0);
-
+                
                 for (String[] row : data) {
                     model.addRow(row);
                 }
                 topPanel.remove(topCardDayOrder);
                 topPanel.remove(topCardDayTotal);
                 topCardDayOrder = TopCard(new DashboardService().getDataTopDashboard("order", dateString), "Order",
-                        "Daily Total Order");
+                "Daily Total Order");
                 topCardDayTotal = TopCard(new DashboardService().getDataTopDashboard("total", dateString), "Bath",
-                        "Daily Total Income");
+                "Daily Total Income");
                 topPanel.add(topCardDayOrder);
                 topPanel.add(topCardDayTotal);
                 topPanel.revalidate();
                 topPanel.repaint();
             }
         });
-
+        
         add(topPanel, BorderLayout.NORTH);
         add(bodyPanel, BorderLayout.CENTER);
+        table.setPreferredScrollableViewportSize(new Dimension(width, 550));
     }
-
+    
     private JPanel TopCard(double amount, String type, String title) {
         JPanel container = new JPanel(new GridLayout(2, 1));
         JTextField top = new JTextField();

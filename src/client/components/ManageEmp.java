@@ -46,12 +46,14 @@ public class ManageEmp extends JPanel implements ActionListener {
     private JButton saveButton, newBtnConfirm;
     private String updatedName, updatedPhone, updatedEmail;
     private MainFrame mainFrame;
+    private int width = 0;
    
     //Font myFont = new Font("Arial", Font.BOLD, 15);
 
 
-    public ManageEmp(MainFrame mainFrame){
+    public ManageEmp(MainFrame mainFrame,int width){
         this.mainFrame = mainFrame;
+        this.width = width;
         listEmp = listEmployee("All");  
         CreateGui();
     }
@@ -69,7 +71,7 @@ public class ManageEmp extends JPanel implements ActionListener {
         repaint();  
     }
     private void CreateGui() {
-        setPreferredSize(new Dimension(860,600));
+        setPreferredSize(new Dimension(width,600));
         setLayout(new BorderLayout());
         add(btnNewEmp, BorderLayout.NORTH);
         add(listEmp, BorderLayout.CENTER);
