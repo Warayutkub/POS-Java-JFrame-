@@ -1,11 +1,8 @@
 package client.components;
-import java.awt.GridLayout;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -15,7 +12,6 @@ import javax.swing.border.LineBorder;
 import client.MainFrame;
 import resources.SetPreferences;
 
-import java.awt.Label;
 import javax.swing.JTextField;
 
 import java.awt.BorderLayout;
@@ -36,7 +32,8 @@ import java.util.List;
 
 public class ManageEmp extends JPanel implements ActionListener {
 
-    private String fileEmployee = "src\\backend\\data\\EmployeeData.txt";
+    private String fileEmployee = "./src/backend/data/NowEmployee.txt";
+    private String fileAllEmployee = "./src/backend/data/EmployeeData.txt";
     private JButton btnNewEmployee, edit, delete;
     private JPanel btnNewEmp = newEmployee();
     private JPanel listEmp; 
@@ -282,7 +279,11 @@ public class ManageEmp extends JPanel implements ActionListener {
             String newEmployeeData = generateNewEmployeeId() + "," + name + "," + phone + "," + email + "," + password + "," + permission;
             writer.append(newEmployeeData);
             writer.newLine();
+            BufferedWriter writer2 = new BufferedWriter(new FileWriter(fileAllEmployee, true));
+            writer2.append(newEmployeeData);
+            writer.newLine();
             writer.close();
+            writer2.close();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error saving new employee", "Error", JOptionPane.ERROR_MESSAGE);
         }

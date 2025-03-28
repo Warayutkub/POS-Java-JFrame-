@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -55,6 +56,7 @@ public class Cart extends JPanel {
     }
 
     private void CreateGui() {
+        System.out.println( "In createGui"+Arrays.toString(accountData));
         scroller.setBorder(null);
         setPreferredSize(new Dimension(width, height));
         setLayout(new BorderLayout());
@@ -62,6 +64,11 @@ public class Cart extends JPanel {
         add(scroller, BorderLayout.CENTER);
         add(footer, BorderLayout.SOUTH);
         modelCart = new InnerCart(accountData);
+        System.out.println(Arrays.toString(accountData));
+    }
+
+    public void resetAccInner(String[] acc){
+        modelCart = new InnerCart(acc);
     }
 
     private JPanel Body() {
@@ -348,10 +355,13 @@ class InnerCart {
     // Write Data To File History(InMemoryStore.txt)
     // BillId,typeProduct,date,time,costumerName,productName,QTY,total(Bath)
     public void WriteData() {
+        double Cash = 0.0;
         LocalDateTime now = LocalDateTime.now();
         String time = String.valueOf(now.format(formatterTime));
         String date = String.valueOf(now.format(formatterDate));
         String[][] DataFormatted = new String[dataProduct.size()][8];
+
+        Cash = Double.parseDouble(JOptionPane.showInputDialog("Enter Cash"));
 
         for (int index = 0; index < DataFormatted.length; index++) {
             DataFormatted[index] = new String[] { BillId, dataProduct.get(index)[0], date,
@@ -380,7 +390,7 @@ class InnerCart {
         }
         
         JOptionPane.showMessageDialog(null, "Success!");
-        new Receipt(DataFormatted).setVisible(true);
+        new Receipt(DataFormatted,Cash).setVisible(true);
         salesServices.NotificationLowProduct(dataProduct.toArray(new String[0][]));
     }
 

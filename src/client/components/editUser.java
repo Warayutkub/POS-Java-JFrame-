@@ -107,7 +107,7 @@ public class EditUser extends JFrame implements ActionListener{
         }
 
     public void goPanel(){
-        new UserPanels();
+        new ManageUser();
         setVisible(false);
     }
 }

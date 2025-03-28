@@ -108,7 +108,7 @@ public class NewUserRegister extends JFrame implements ActionListener{
         }
 
     public void goPanel(){
-        new UserPanels();
+        new ManageUser();
         setVisible(false);
     }
 }

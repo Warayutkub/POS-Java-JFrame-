@@ -53,12 +53,12 @@ public class Login extends JDialog {
         SubmitBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                SubmitBtn.setText("<html><u>Login ?</u></html>");
+                SubmitBtn.setText("<html><u>Submit</u></html>");
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                SubmitBtn.setText("Login");
+                SubmitBtn.setText("Submit");
             }
         });
 
@@ -118,6 +118,7 @@ public class Login extends JDialog {
                                     dispose();
                                     mainFrame.setAccountData(person);
                                     mainFrame.resetTopBar();
+                                    mainFrame.resetAccCart(person);
                                     check = true;
                                     break;
                             

@@ -13,11 +13,13 @@ import java.text.DecimalFormat;
 public class Receipt extends JFrame {
     private DecimalFormat format = new DecimalFormat("#,###.##");
     private Container c;
+    private double cash = 0.0;
     private String[][] dataInCart;
 
-    public Receipt(String[][] dataInCart) {
+    public Receipt(String[][] dataInCart,double Cash) {
         super("Receipt");
         this.dataInCart = dataInCart;
+        this.cash = Cash;
         receiptGUI();
         ImageIcon icon = new ImageIcon(getClass().getResource("/backend/data/images/logo.png"));
         setIconImage(icon.getImage());
@@ -64,7 +66,6 @@ public class Receipt extends JFrame {
 
         // CALCULATOR TOTAL
         double totalPrice = calculateTotalPrice(dataUse);
-        double cash = 1500.00;
         double change = cash >= totalPrice ? cash - totalPrice : 0;
 
         String currentDate = dataUse[0][1];

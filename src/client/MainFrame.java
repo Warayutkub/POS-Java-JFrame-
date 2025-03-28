@@ -26,6 +26,7 @@ import client.components.DisplayProductPanel;
 import client.components.InformationAccount;
 import client.components.Login;
 import client.components.ManageEmp;
+import client.components.ManageUser;
 import client.components.POSDateTimeFrame;
 import resources.SetPreferences;
 
@@ -37,6 +38,7 @@ public class MainFrame extends JFrame {
     private JPanel outerBody = OuterBody();
     private JPanel dashboard = new Dashboard(this, 0);
     private JPanel manageEmp = new ManageEmp(this, 0);
+    private JPanel manageUser = new ManageUser(this, 0);
     private JPanel mainPanel = new JPanel(new CardLayout());
     private JPanel productPanel = new JPanel(new CardLayout());
     private Container container = getContentPane();
@@ -116,6 +118,7 @@ public class MainFrame extends JFrame {
         // SideBar button
         mainPanel.add(outerBody, "Body");
         mainPanel.add(manageEmp, "ManageEmp");
+        mainPanel.add(manageUser, "ManageUser");
         mainPanel.add(dashboard, "Dashboard");
         container.add(mainPanel, BorderLayout.CENTER);
 
@@ -265,6 +268,10 @@ public class MainFrame extends JFrame {
         container.repaint();
     }
 
+    public void resetAccCart(String[] acc){
+        this.cart.resetAccInner(acc);
+    }
+
     private JPanel SideBar() {
         int width = 150;
         int height = 500;
@@ -298,6 +305,14 @@ public class MainFrame extends JFrame {
             mainPanel.remove(manageEmp);
             mainPanel.add(new ManageEmp(this, this.getWidth() - cart.getWidth() - sideBar.getWidth()), "ManageEmp");
             cl.show(mainPanel, "ManageEmp");
+            cart.setVisible(false);
+        });
+
+        manageUserReset.addActionListener(e -> {
+            CardLayout cl = (CardLayout) mainPanel.getLayout();
+            mainPanel.remove(manageUser);
+            mainPanel.add(new ManageUser(this, this.getWidth() - cart.getWidth() - sideBar.getWidth()), "ManageUser");
+            cl.show(mainPanel, "ManageUser");
             cart.setVisible(false);
         });
 
@@ -550,6 +565,12 @@ public class MainFrame extends JFrame {
         Btn.setBorder(null);
 
         Btn.addActionListener(e -> {
+            System.out.println("Test emp");
+            CardLayout cl = (CardLayout) mainPanel.getLayout();
+            mainPanel.remove(manageUser);
+            mainPanel.add(new ManageUser(this, this.getWidth() - cart.getWidth() - sideBar.getWidth()), "ManageUser");
+            cl.show(mainPanel, "ManageUser");
+            cart.setVisible(false);
         });
 
         Btn.addMouseListener(new MouseAdapter() {
@@ -606,11 +627,11 @@ public class MainFrame extends JFrame {
         Btn.addActionListener(e -> {
             CardLayout cl = (CardLayout) mainPanel.getLayout();
             mainPanel.remove(dashboard);
-            System.out.println(this.getWidth() - cart.getWidth() - sideBar.getWidth() - 50);
+            System.out.println("Wiidth dash " + (this.getWidth() - cart.getWidth() - sideBar.getWidth() - 50));
             mainPanel.add(new Dashboard(this, this.getWidth() - cart.getWidth() - sideBar.getWidth() - 50),
                     "Dashboard");
             cl.show(mainPanel, "Dashboard");
-            cart.setVisible(false);
+            this.cart.setVisible(false);
         });
 
         Btn.addMouseListener(new MouseAdapter() {
