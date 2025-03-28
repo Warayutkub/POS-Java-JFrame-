@@ -23,6 +23,7 @@ import javax.swing.border.LineBorder;
 
 import backend.services.LoginServices;
 import client.components.Cart;
+import client.components.Dashboard;
 import client.components.DisplayProductPanel;
 import client.components.InformationAccount;
 import client.components.Login;
