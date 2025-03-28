@@ -59,11 +59,10 @@ public class ManageEmp extends JPanel implements ActionListener {
     }
 
     private void refreshEmployeeList() {
-        remove(listEmp); 
-        remove(btnNewEmp);
+        removeAll();
 
         add(btnNewEmp, BorderLayout.NORTH);
-        add(listEmp, BorderLayout.CENTER); 
+        add(listEmployee("All"), BorderLayout.CENTER); 
         
 
         revalidate();  
@@ -467,7 +466,7 @@ public class ManageEmp extends JPanel implements ActionListener {
     }
     private JPanel listEmployee(String type){
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.setPreferredSize(new Dimension(1050, 700));
+        panel.setPreferredSize(new Dimension(width, 700));
 
         JPanel listContainer = new JPanel();
         listContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
@@ -479,10 +478,10 @@ public class ManageEmp extends JPanel implements ActionListener {
             listContainer.add(empPanel);  
             c++;
         }
-        listContainer.setPreferredSize(new Dimension(1050,c*55));
+        listContainer.setPreferredSize(new Dimension(width-20,c*55));
 
         scrollPane = new JScrollPane(listContainer);
-        scrollPane.setPreferredSize(new Dimension(1050,700));
+        scrollPane.setPreferredSize(new Dimension(width,700));
         scrollPane.setBorder(null);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panel.add(scrollPane);
@@ -585,7 +584,15 @@ public class ManageEmp extends JPanel implements ActionListener {
             edit(e);
         } else if(actionCommand.startsWith("Delete")) {
             String id = actionCommand.split("-")[1];
-            deleteEmployee(id);
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to delete this user?",
+                    "Confirm Delete",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                deleteEmployee(id);
+                refreshEmployeeList();
+            }
         } else if(actionCommand.equals("New Employee")){
             createNewEmp();
         }else if(actionCommand.equals("Search")){

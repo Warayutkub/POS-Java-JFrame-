@@ -35,7 +35,7 @@ public class ProductCard extends JPanel {
     }
 
     private void createGui() {
-        setLayout(new FlowLayout(FlowLayout.CENTER, cardWidth/28, cardHeight/40));
+        setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         setPreferredSize(new Dimension(this.cardWidth,this.cardHeight));
         setBackground(Color.white);
         add(IMGShow());
