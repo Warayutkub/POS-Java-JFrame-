@@ -5,21 +5,22 @@ public class User {
     private String name;
     private String phone;
     private String email;
-    @SuppressWarnings("unused")
     private String password;
 
-    public User(String name,String phone,String email,String password) {
-        this.id = CreateID();
+    public User(){}
+
+    public User(String id,String name,String phone,String email,String password) {
+        this.id = id;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.password = password;
     }
 
-    private String CreateID(){
-        return "";
+    
+    public void setId(String id){
+        this.id = id;
     }
-
 
     public void setName(String name){
         this.name = name;
@@ -43,6 +44,9 @@ public class User {
     }
     public String getEmail(){
         return this.email;
+    }
+    public String getPassword(){
+        return this.password;
     }
     public String getID(){
         return this.id;

@@ -15,7 +15,7 @@ public class InsertImage extends JPanel {
     private String originalPath;
 
     private int width = 300;
-    private int height = this.width + 25;
+    private int height = 300;
     private JLabel areaImage = AreaImage(defaultPathImage);
 
     public InsertImage() {

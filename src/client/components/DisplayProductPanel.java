@@ -10,7 +10,6 @@ import javax.swing.JScrollPane;
 import backend.services.InventoryService;
 
 public class DisplayProductPanel {
-    private String[][] Products = new InventoryService().getAllProductData();
 
     
     public JScrollPane getPanel(Cart cart, String type,int width) {
@@ -28,7 +27,7 @@ public class DisplayProductPanel {
         area.setLayout(new FlowLayout(FlowLayout.CENTER));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         int c = 0;
-        for (String[] recode : Products) {
+        for (String[] recode : new InventoryService().getAllProductData()) {
             String nameLowerInventory = recode[1].toLowerCase();
             name = name.toLowerCase();
             if (nameLowerInventory.contains(name)) {
@@ -64,7 +63,7 @@ public class DisplayProductPanel {
         JScrollPane scrollPane = new JScrollPane(area);
         area.setBackground(null);
         int c = 0;
-        for (String[] recode : Products) {
+        for (String[] recode : new InventoryService().getAllProductData()) {
             if (recode[4].equals("0")) {
                 soldOut.add(recode[0]);
                 c++;
@@ -95,7 +94,7 @@ public class DisplayProductPanel {
         JScrollPane scrollPane = new JScrollPane(area);
         area.setLayout(new FlowLayout(FlowLayout.CENTER));
         int c = 0;
-        for (String[] recode : Products) {
+        for (String[] recode : new InventoryService().getAllProductData()) {
             if (recode[5].equals(type)) {
                 if (recode[4].equals("0")) {
                     soldOut.add(recode[0]);

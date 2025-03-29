@@ -1,4 +1,4 @@
-1,My team,0631673569,s6706021612038@email.kmutnb.ac.th,Warayut2548,Manager
+1,My teams,0631673569,s6706021612038@email.kmutnb.ac.th,Warayut2548,Manager
 2,IOA,0631673569,s6706021612038@email.kmutnb.ac.th,Warayut2548,Manager
 3,Ramati,085666666,Ramati@email.kmutnb.ac.th,Warayut2548,Manager
 4,Cholthicha,0955555555,cholthicha@gmail.com,cholthicha1,Employee
@@ -6,12 +6,10 @@
 6,rara,0988888888,rara@gmail.com,rara11,Employee
 13,rara,0988888888,rara@gmail.com,rara11,Employee
 16,rara,0988888888,rara@gmail.com,rara11,Employee
-17,rara,0988888888,rara@gmail.com,rara11,Employee
 18,rara,0988888888,rara@gmail.com,rara11,Employee
 19,rara,0988888888,rara@gmail.com,rara11,Employee
 22,Wara,adwad,dwadawdwda,Wara,Employee
-<<<<<<< HEAD
-=======
 23,Warat,wew,wewe,we,Employee
->>>>>>> e8b929d7fa37c6975aed5fc7566bf41a4928d8aa
 24,TR,063,ewaeed,063,Employee
+
+

@@ -3,6 +3,7 @@ package client.components;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+import backend.models.Users.User;
 import backend.services.AuthService;
 import client.MainFrame;
 import resources.SetPreferences;
@@ -33,7 +34,7 @@ public class ManageUser extends JPanel {
             if (!searchField.getText().isEmpty()) {
                 removeAll();
                 add(Top(), BorderLayout.NORTH);
-                add(loadUserPanelsSearch(searchField.getText()), BorderLayout.CENTER);
+                add(loadUserPanelsSearch(searchField.getText().toLowerCase()), BorderLayout.CENTER);
                 revalidate();
                 repaint();
             } else {
@@ -98,7 +99,7 @@ public class ManageUser extends JPanel {
 
         int row = 0;
         for (String[] record : new card().pullData()) {
-            if (record[0].contains(searchKey) || record[1].contains(searchKey)) {
+            if (record[0].toLowerCase().contains(searchKey) || record[1].toLowerCase().contains(searchKey)) {
                 innerArea.add(new card(record[0], record[1], record[2], record[3], this, width - 10, mainFrame));
                 row++;
             }
@@ -269,18 +270,18 @@ public class ManageUser extends JPanel {
 }
 
 class card extends JPanel {
-    private String id, name, phone, email;
     private ManageUser manageUser;
     private MainFrame mainFrame;
+    private User user = new User("", "", "", "", "");
 
     public card() {
     }
 
     public card(String id, String name, String phone, String email, ManageUser parent, int width, MainFrame mainFrame) {
-        this.id = id;
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
+        this.user.setId(id);
+        this.user.setName(name);
+        this.user.setPhone(phone);
+        this.user.setEmail(email);
         this.manageUser = parent;
         this.mainFrame = mainFrame;
 
@@ -298,7 +299,7 @@ class card extends JPanel {
     }
 
     private JLabel idPanel() {
-        JLabel idLabel = new JLabel("ID : " + this.id);
+        JLabel idLabel = new JLabel("ID : " + this.user.getID());
         idLabel.setHorizontalAlignment(JLabel.LEFT);
         idLabel.setPreferredSize(new Dimension(50, 30));
 
@@ -306,7 +307,7 @@ class card extends JPanel {
     }
 
     private JLabel namePanel() {
-        JLabel nameLabel = new JLabel("Name : " + this.name);
+        JLabel nameLabel = new JLabel("Name : " + this.user.getName());
         nameLabel.setHorizontalAlignment(JLabel.LEFT);
         nameLabel.setPreferredSize(new Dimension(230, 30));
 
@@ -314,7 +315,7 @@ class card extends JPanel {
     }
 
     private JLabel phonePanel() {
-        JLabel phoneLabel = new JLabel("Phone : " + this.phone);
+        JLabel phoneLabel = new JLabel("Phone : " + this.user.getPhone());
         phoneLabel.setHorizontalAlignment(JLabel.LEFT);
         phoneLabel.setPreferredSize(new Dimension(175, 30));
 
@@ -322,7 +323,7 @@ class card extends JPanel {
     }
 
     private JLabel emailPanel() {
-        JLabel emailLabel = new JLabel("Email : " + this.email);
+        JLabel emailLabel = new JLabel("Email : " + this.user.getEmail());
         emailLabel.setHorizontalAlignment(JLabel.LEFT);
         emailLabel.setPreferredSize(new Dimension(375, 30));
 
@@ -360,7 +361,7 @@ class card extends JPanel {
                     "Confirm Delete",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                deleteUser(this.id);
+                deleteUser();
                 manageUser.resetPage();
             }
         });
@@ -371,14 +372,14 @@ class card extends JPanel {
         return area;
     }
 
-    private void Edit(String[] newData) {
+    private void Edit() {
         String[][] data = pullData();
         String[][] dataAll = new AuthService().getAllUserData("user");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/NowUser.txt"))) {
             for (String[] recode : data) {
-                if (recode[0].equals(newData[0])) {
-                    writer.write(newData[0] + "," + newData[1] + "," + newData[2] + "," + newData[3] + "," + newData[4]
+                if (recode[0].equals(this.user.getID())) {
+                    writer.write(this.user.getID() + "," + this.user.getName() + "," + this.user.getPhone() + "," + this.user.getEmail() + "," + this.user.getPassword()
                             + "\n");
                 } else {
                     writer.write(
@@ -392,8 +393,8 @@ class card extends JPanel {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/UserData.txt"))) {
             for (String[] recode : dataAll) {
-                if (recode[0].equals(newData[0])) {
-                    writer.write(newData[0] + "," + newData[1] + "," + newData[2] + "," + newData[3] + "," + newData[4]
+                if (recode[0].equals(this.user.getID())) {
+                    writer.write(this.user.getID() + "," + this.user.getName() + "," + this.user.getPhone() + "," + this.user.getEmail() + "," + this.user.getPassword()
                             + "\n");
                 } else {
                     writer.write(
@@ -407,8 +408,6 @@ class card extends JPanel {
     }
 
     private JDialog editDialog() {
-        String[] User = new AuthService().getDataUser(this.id);
-
         JDialog area = new JDialog(mainFrame, "Edit", true);
         area.setLayout(new FlowLayout(FlowLayout.CENTER));
 
@@ -416,17 +415,17 @@ class card extends JPanel {
         JLabel nameLabel = new JLabel("Name : ");
         nameLabel.setPreferredSize(new Dimension(300, 30));
         nameLabel.setHorizontalAlignment(JLabel.LEFT);
-        JTextField nameField = new JTextField(this.name);
+        JTextField nameField = new JTextField(this.user.getName());
         nameField.setPreferredSize(new Dimension(300, 30));
         JLabel phoneLabel = new JLabel("Phone : ");
         phoneLabel.setPreferredSize(new Dimension(300, 30));
         phoneLabel.setHorizontalAlignment(JLabel.LEFT);
-        JTextField phoneField = new JTextField(this.phone);
+        JTextField phoneField = new JTextField(this.user.getPhone());
         phoneField.setPreferredSize(new Dimension(300, 30));
         JLabel emailLabel = new JLabel("Email : ");
         emailLabel.setPreferredSize(new Dimension(300, 30));
         emailLabel.setHorizontalAlignment(JLabel.LEFT);
-        JTextField emailField = new JTextField(this.email);
+        JTextField emailField = new JTextField(this.user.getEmail());
         emailField.setPreferredSize(new Dimension(300, 30));
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20));
@@ -437,14 +436,10 @@ class card extends JPanel {
         btn.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
         btn.setForeground(Color.WHITE);
         btn.addActionListener(e -> {
-            String name = nameField.getText();
-            String phone = phoneField.getText();
-            String email = emailField.getText();
-            System.out.println("Name : " + name + " phone : " + phone + " email : " + email);
-            User[1] = name;
-            User[2] = phone;
-            User[3] = email;
-            Edit(User);
+            this.user.setName(nameField.getText());
+            this.user.setPhone(phoneField.getText());
+            this.user.setEmail(emailField.getText());
+            Edit();
             area.dispose();
             manageUser.resetPage();
         });
@@ -466,11 +461,11 @@ class card extends JPanel {
         return area;
     }
 
-    private void deleteUser(String id) {
+    private void deleteUser() {
         String[][] data = pullData();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/NowUser.txt"))) {
             for (String[] recode : data) {
-                if (!recode[0].equals(id)) {
+                if (!recode[0].equals(this.user.getID())) {
                     writer.write(
                             recode[0] + "," + recode[1] + "," + recode[2] + "," + recode[3] + "," + recode[4] + "\n");
                 }
