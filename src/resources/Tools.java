@@ -2,6 +2,7 @@ package resources;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -54,6 +55,19 @@ public class Tools {
             Files.copy(original, direction, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void removeFile(String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            File parentDir = file.getParentFile();
+            if (parentDir != null && parentDir.isDirectory()) {
+                File[] files = parentDir.listFiles();
+                if (files != null && files.length > 1) {
+                    file.delete();
+                }
+            }
         }
     }
 

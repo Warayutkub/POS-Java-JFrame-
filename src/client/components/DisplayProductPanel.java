@@ -9,6 +9,7 @@ import javax.swing.JScrollPane;
 
 import backend.services.InventoryService;
 
+
 public class DisplayProductPanel {
 
     
@@ -27,7 +28,7 @@ public class DisplayProductPanel {
         area.setLayout(new FlowLayout(FlowLayout.CENTER));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         int c = 0;
-        for (String[] recode : new InventoryService().getAllProductData()) {
+        for (String[] recode : new InventoryService().getProductDataNow()) {
             String nameLowerInventory = recode[1].toLowerCase();
             name = name.toLowerCase();
             if (nameLowerInventory.contains(name)) {
@@ -63,7 +64,7 @@ public class DisplayProductPanel {
         JScrollPane scrollPane = new JScrollPane(area);
         area.setBackground(null);
         int c = 0;
-        for (String[] recode : new InventoryService().getAllProductData()) {
+        for (String[] recode : new InventoryService().getProductDataNow()) {
             if (recode[4].equals("0")) {
                 soldOut.add(recode[0]);
                 c++;
@@ -94,7 +95,7 @@ public class DisplayProductPanel {
         JScrollPane scrollPane = new JScrollPane(area);
         area.setLayout(new FlowLayout(FlowLayout.CENTER));
         int c = 0;
-        for (String[] recode : new InventoryService().getAllProductData()) {
+        for (String[] recode : new InventoryService().getProductDataNow()) {
             if (recode[5].equals(type)) {
                 if (recode[4].equals("0")) {
                     soldOut.add(recode[0]);
@@ -120,4 +121,5 @@ public class DisplayProductPanel {
         return scrollPane;
     }
 
+    
 }

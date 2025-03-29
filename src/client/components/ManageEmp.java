@@ -524,6 +524,12 @@ public class ManageEmp extends JPanel{
         }
 
     private void deleteEmployee(Employee employeeThis) {
+        int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to delete this user?",
+                    "Confirm Delete",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileEmployee));
             StringBuilder newFileContent = new StringBuilder();
@@ -544,7 +550,8 @@ public class ManageEmp extends JPanel{
 
             JOptionPane.showMessageDialog(this, "Employee deleted successfully.");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error deleting employee", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error deleting employee", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

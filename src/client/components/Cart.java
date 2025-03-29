@@ -11,8 +11,6 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -56,7 +54,6 @@ public class Cart extends JPanel {
     }
 
     private void CreateGui() {
-        System.out.println( "In createGui"+Arrays.toString(accountData));
         scroller.setBorder(null);
         setPreferredSize(new Dimension(width, height));
         setLayout(new BorderLayout());
@@ -64,7 +61,6 @@ public class Cart extends JPanel {
         add(scroller, BorderLayout.CENTER);
         add(footer, BorderLayout.SOUTH);
         modelCart = new InnerCart(accountData);
-        System.out.println(Arrays.toString(accountData));
     }
 
     public void resetAccInner(String[] acc){

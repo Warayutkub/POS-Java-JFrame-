@@ -30,7 +30,6 @@ import client.components.InformationAccount;
 import client.components.Login;
 import client.components.ManageEmp;
 import client.components.ManageProduct;
-import client.components.ManageUser;
 import client.components.POSDateTimeFrame;
 import resources.SetPreferences;
 
@@ -261,7 +260,6 @@ public class MainFrame extends JFrame {
         JButton manageUserReset = ButtonToManageUser();
         JButton manageProductReset = ButtonToManageProduct();
         manageEmpReset.addActionListener(e -> {
-            System.out.println("Test emp");
             CardLayout cl = (CardLayout) mainPanel.getLayout();
             mainPanel.remove(manageEmp);
             mainPanel.add(new ManageEmp(this, this.getWidth() - cart.getWidth() - sideBar.getWidth()), "ManageEmp");

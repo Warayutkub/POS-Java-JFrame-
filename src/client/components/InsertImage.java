@@ -31,7 +31,6 @@ public class InsertImage extends JPanel {
         setPreferredSize(new Dimension(width, height));
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         add(areaImage);
-        System.out.println("Debug");
         add(AddButton());
     }
 
@@ -77,9 +76,6 @@ public class InsertImage extends JPanel {
             pathSelect = String.valueOf(selectedFile.toPath());
             originalPath = pathSelect;
 
-            System.out.println("Path Use : " + pathSelect);
-            System.out.println("Path to save : " + pathFinal);
-            System.out.println("Path original : " + originalPath);
         }
 
     }
