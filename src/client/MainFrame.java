@@ -640,7 +640,6 @@ public class MainFrame extends JFrame {
         Btn.addActionListener(e -> {
             CardLayout cl = (CardLayout) mainPanel.getLayout();
             mainPanel.remove(dashboard);
-            System.out.println("Wiidth dash " + (this.getWidth() - cart.getWidth() - sideBar.getWidth() - 50));
             mainPanel.add(new Dashboard(this, this.getWidth() - cart.getWidth() - sideBar.getWidth() - 50),
                     "Dashboard");
             cl.show(mainPanel, "Dashboard");
