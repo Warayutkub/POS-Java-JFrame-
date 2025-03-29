@@ -71,11 +71,11 @@ public class ManageEmp extends JPanel implements ActionListener {
         repaint();  
     }
 
-    private void refreshEmployeeList(JPanel listemps) {
+    private void refreshEmployeeList(JPanel listEmps) {
         removeAll();
         
         add(btnNewEmp, BorderLayout.NORTH);
-        add(listemps, BorderLayout.CENTER); 
+        add(listEmps, BorderLayout.CENTER); 
         
 
         revalidate();  
