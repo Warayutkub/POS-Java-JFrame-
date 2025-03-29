@@ -2,7 +2,6 @@ package client.components;
 
 import java.awt.*;
 import java.io.File;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -29,7 +28,6 @@ public class InsertImage extends JPanel {
     }
 
     private void createGui() {
-        setBorder(new LineBorder(Color.RED));
         setPreferredSize(new Dimension(width, height));
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         add(areaImage);
