@@ -70,6 +70,17 @@ public class ManageEmp extends JPanel implements ActionListener {
         revalidate();  
         repaint();  
     }
+
+    private void refreshEmployeeList(JPanel listemps) {
+        removeAll();
+        
+        add(btnNewEmp, BorderLayout.NORTH);
+        add(listemps, BorderLayout.CENTER); 
+        
+
+        revalidate();  
+        repaint();  
+    }
     private void CreateGui() {
         setPreferredSize(new Dimension(width,600));
         setLayout(new BorderLayout());
@@ -625,7 +636,7 @@ public class ManageEmp extends JPanel implements ActionListener {
                 listEmp.add(panel);
             }
         }
-        refreshEmployeeList();
+        refreshEmployeeList(listEmp);
     }
     
  
