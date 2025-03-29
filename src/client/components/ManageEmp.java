@@ -101,7 +101,7 @@ public class ManageEmp extends JPanel implements ActionListener {
         btnNewEmployee.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
         btnNewEmployee.setForeground(Color.WHITE);
         tfSearch = new JTextField(10);
-        tfSearch.setFont(new SetPreferences().getFont(20));
+        tfSearch.setFont(new SetPreferences().getFont(14));
         JButton btnSearch = new JButton("Search");
         btnSearch.setBackground(Color.WHITE);
         btnSearch.setFont(new SetPreferences().getFont(10));
@@ -412,6 +412,7 @@ public class ManageEmp extends JPanel implements ActionListener {
     }
 
     private void updateEmployeeData(String id, String name, String phone, String email, String permission) {
+        // Update fileEmployee
         try (BufferedReader reader = new BufferedReader(new FileReader(fileEmployee))) {
             StringBuilder newFileContent = new StringBuilder();
             String line;
@@ -431,7 +432,62 @@ public class ManageEmp extends JPanel implements ActionListener {
             }
 
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error updating employee data", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error updating employee data in NowEmployee.txt", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Update fileAllEmployee if employee exists there
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileAllEmployee))) {
+            StringBuilder newFileContent = new StringBuilder();
+            String line;
+            boolean found = false;
+
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data[0].equals(id)) {
+                    // Update the employee data
+                    line = id + "," + name + "," + phone + "," + email + "," + data[4]+ "," + permission;
+                    found = true;
+                }
+                newFileContent.append(line).append("\n");
+            }
+
+            // Only write if employee was found
+            if (found) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileAllEmployee))) {
+                    writer.write(newFileContent.toString());
+                }
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error updating employee data in EmployeeData.txt", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Update fileAllEmployee if employee exists there
+        try (BufferedReader reader = new BufferedReader(new FileReader("./src/backend/data/Token.txt"))) {
+            StringBuilder newFileContent = new StringBuilder();
+            String line;
+            boolean found = false;
+
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data[0].equals(id)) {
+                    // Update the employee data
+                    line = id + "," + name + "," + phone + "," + email + "," + data[4]+ "," + permission;
+                    found = true;
+                }
+                newFileContent.append(line).append("\n");
+            }
+
+            // Only write if employee was found
+            if (found) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/Token.txt"))) {
+                    writer.write(newFileContent.toString());
+                }
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error updating employee data in EmployeeData.txt", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

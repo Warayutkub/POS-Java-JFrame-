@@ -136,20 +136,23 @@ public class Cart extends JPanel {
         });
 
         newUser.addActionListener(e -> {
-
-            newUserPopup = new NewUserPopup(mainFrame, this);
-            newUserPopup.setVisible(true);
-            newUserPopup.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                    if (statusNewUser) {
-                        userData = new AuthService().getDataUser(newUserPopup.getName());
-                        display.setText(userData[1]);
-                        display.setFont(new SetPreferences().getFont(14));
-                        modelCart.setCNameProductModel(userData[1]);
+            if (newUserPopup != null && newUserPopup.isDisplayable()) {
+                newUserPopup.requestFocus();
+            } else {
+                newUserPopup = new NewUserPopup(mainFrame, this);
+                newUserPopup.setVisible(true);
+                newUserPopup.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                        if (statusNewUser) {
+                            userData = new AuthService().getDataUser(newUserPopup.getName());
+                            display.setText(userData[1]);
+                            display.setFont(new SetPreferences().getFont(14));
+                            modelCart.setCNameProductModel(userData[1]);
+                        }
                     }
-                }
-            });
+                });
+            }
         });
 
         return area;
@@ -271,7 +274,6 @@ public class Cart extends JPanel {
     public void SendStatusOfRegister(Boolean status) {
         this.statusNewUser = status;
     }
-
 
 }
 

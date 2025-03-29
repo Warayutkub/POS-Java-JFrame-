@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
+
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -363,7 +364,6 @@ public class FindBill extends JFrame {
             }
         }
         products = new String[count][2];
-        System.out.println(count);
         count = 0;
         for (int c = 0; c < history.length; c++) {
             if (history[c][0].equals(BillID)) {

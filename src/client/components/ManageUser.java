@@ -373,6 +373,7 @@ class card extends JPanel {
 
     private void Edit(String[] newData) {
         String[][] data = pullData();
+        String[][] dataAll = new AuthService().getAllUserData("user");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/NowUser.txt"))) {
             for (String[] recode : data) {
@@ -385,6 +386,20 @@ class card extends JPanel {
                 }
             }
             JOptionPane.showMessageDialog(mainFrame, "Successfully!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error can't edit");
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/UserData.txt"))) {
+            for (String[] recode : dataAll) {
+                if (recode[0].equals(newData[0])) {
+                    writer.write(newData[0] + "," + newData[1] + "," + newData[2] + "," + newData[3] + "," + newData[4]
+                            + "\n");
+                } else {
+                    writer.write(
+                            recode[0] + "," + recode[1] + "," + recode[2] + "," + recode[3] + "," + recode[4] + "\n");
+                }
+            }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error can't edit");
         }
@@ -418,6 +433,9 @@ class card extends JPanel {
         btnPanel.setPreferredSize(new Dimension(300, 120));
         JButton btn = new JButton("Submit");
         btn.setPreferredSize(new Dimension(100, 40));
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        btn.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        btn.setForeground(Color.WHITE);
         btn.addActionListener(e -> {
             String name = nameField.getText();
             String phone = phoneField.getText();
