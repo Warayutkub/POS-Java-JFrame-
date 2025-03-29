@@ -59,11 +59,23 @@ public class ManageEmp extends JPanel implements ActionListener {
     }
 
     private void refreshEmployeeList() {
-        remove(listEmp); 
-        remove(btnNewEmp);
+        removeAll();
+        
+        listEmp = listEmployee("All");
 
         add(btnNewEmp, BorderLayout.NORTH);
         add(listEmp, BorderLayout.CENTER); 
+        
+
+        revalidate();  
+        repaint();  
+    }
+
+    private void refreshEmployeeList(JPanel listEmps) {
+        removeAll();
+        
+        add(btnNewEmp, BorderLayout.NORTH);
+        add(listEmps, BorderLayout.CENTER); 
         
 
         revalidate();  
@@ -89,7 +101,7 @@ public class ManageEmp extends JPanel implements ActionListener {
         btnNewEmployee.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
         btnNewEmployee.setForeground(Color.WHITE);
         tfSearch = new JTextField(10);
-        tfSearch.setFont(new SetPreferences().getFont(20));
+        tfSearch.setFont(new SetPreferences().getFont(14));
         JButton btnSearch = new JButton("Search");
         btnSearch.setBackground(Color.WHITE);
         btnSearch.setFont(new SetPreferences().getFont(10));
@@ -129,18 +141,24 @@ public class ManageEmp extends JPanel implements ActionListener {
         btnAll.addActionListener(e -> {
             remove(listEmp); 
             listEmp = listEmployee("All");
-            refreshEmployeeList();
+            add(listEmp, BorderLayout.CENTER);
+            revalidate();
+            repaint();
         });
         btnManager.addActionListener(e -> {
             remove(listEmp); 
             listEmp = listEmployee("Manager"); 
-            refreshEmployeeList(); 
+            add(listEmp, BorderLayout.CENTER);
+            revalidate();
+            repaint();
         });
     
         btnEmployee.addActionListener(e -> {
             remove(listEmp); 
             listEmp = listEmployee("Employee");
-            refreshEmployeeList();
+            add(listEmp, BorderLayout.CENTER);
+            revalidate();
+            repaint();
         });
         panel.add(btnAll);
         panel.add(btnManager);
@@ -248,7 +266,7 @@ public class ManageEmp extends JPanel implements ActionListener {
                 String permission = (String) newPermission.getSelectedItem();
                 String password = newPassword.getText();
             
-                saveNewEmployee(name, phone, email, permission, password);
+                saveNewEmployee(name, phone, email, permission, password,diaNewEmp);
             
                 diaNewEmp.dispose();
                 refreshEmployeeList();
@@ -273,7 +291,7 @@ public class ManageEmp extends JPanel implements ActionListener {
         return diaNewEmp;
     }
 
-    private void saveNewEmployee(String name, String phone, String email, String permission, String password) {
+    private void saveNewEmployee(String name, String phone, String email, String permission, String password, JDialog area) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileEmployee, true));
             String newEmployeeData = generateNewEmployeeId() + "," + name + "," + phone + "," + email + "," + password + "," + permission;
@@ -285,7 +303,7 @@ public class ManageEmp extends JPanel implements ActionListener {
             writer.close();
             writer2.close();
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error saving new employee", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(area, "Error saving new employee", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -394,6 +412,7 @@ public class ManageEmp extends JPanel implements ActionListener {
     }
 
     private void updateEmployeeData(String id, String name, String phone, String email, String permission) {
+        // Update fileEmployee
         try (BufferedReader reader = new BufferedReader(new FileReader(fileEmployee))) {
             StringBuilder newFileContent = new StringBuilder();
             String line;
@@ -413,7 +432,62 @@ public class ManageEmp extends JPanel implements ActionListener {
             }
 
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error updating employee data", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error updating employee data in NowEmployee.txt", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Update fileAllEmployee if employee exists there
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileAllEmployee))) {
+            StringBuilder newFileContent = new StringBuilder();
+            String line;
+            boolean found = false;
+
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data[0].equals(id)) {
+                    // Update the employee data
+                    line = id + "," + name + "," + phone + "," + email + "," + data[4]+ "," + permission;
+                    found = true;
+                }
+                newFileContent.append(line).append("\n");
+            }
+
+            // Only write if employee was found
+            if (found) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileAllEmployee))) {
+                    writer.write(newFileContent.toString());
+                }
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error updating employee data in EmployeeData.txt", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Update fileAllEmployee if employee exists there
+        try (BufferedReader reader = new BufferedReader(new FileReader("./src/backend/data/Token.txt"))) {
+            StringBuilder newFileContent = new StringBuilder();
+            String line;
+            boolean found = false;
+
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data[0].equals(id)) {
+                    // Update the employee data
+                    line = id + "," + name + "," + phone + "," + email + "," + data[4]+ "," + permission;
+                    found = true;
+                }
+                newFileContent.append(line).append("\n");
+            }
+
+            // Only write if employee was found
+            if (found) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/Token.txt"))) {
+                    writer.write(newFileContent.toString());
+                }
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error updating employee data in EmployeeData.txt", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -467,10 +541,10 @@ public class ManageEmp extends JPanel implements ActionListener {
     }
     private JPanel listEmployee(String type){
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.setPreferredSize(new Dimension(1050, 700));
+        panel.setPreferredSize(new Dimension(width, 700));
 
         JPanel listContainer = new JPanel();
-        listContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        listContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
         List<JPanel> empPanels = readEmployeePanels(fileEmployee, type);
         int c = 0;
@@ -479,10 +553,10 @@ public class ManageEmp extends JPanel implements ActionListener {
             listContainer.add(empPanel);  
             c++;
         }
-        listContainer.setPreferredSize(new Dimension(1050,c*55));
+        listContainer.setPreferredSize(new Dimension(width-20,c*55));
 
         scrollPane = new JScrollPane(listContainer);
-        scrollPane.setPreferredSize(new Dimension(1050,700));
+        scrollPane.setPreferredSize(new Dimension(width,700));
         scrollPane.setBorder(null);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panel.add(scrollPane);
@@ -585,7 +659,15 @@ public class ManageEmp extends JPanel implements ActionListener {
             edit(e);
         } else if(actionCommand.startsWith("Delete")) {
             String id = actionCommand.split("-")[1];
-            deleteEmployee(id);
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to delete this user?",
+                    "Confirm Delete",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                deleteEmployee(id);
+                refreshEmployeeList();
+            }
         } else if(actionCommand.equals("New Employee")){
             createNewEmp();
         }else if(actionCommand.equals("Search")){
@@ -610,7 +692,7 @@ public class ManageEmp extends JPanel implements ActionListener {
                 listEmp.add(panel);
             }
         }
-        refreshEmployeeList();
+        refreshEmployeeList(listEmp);
     }
     
  

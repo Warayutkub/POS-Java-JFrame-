@@ -1,4 +1,4 @@
-package client;
+package client.components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import backend.services.DashboardService;
-import client.components.FindBill;
+import client.MainFrame;
 import resources.SetPreferences;
 
 public class Dashboard extends JPanel {

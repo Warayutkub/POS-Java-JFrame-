@@ -19,9 +19,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 import backend.services.LoginServices;
 import client.components.Cart;
+import client.components.Dashboard;
 import client.components.DisplayProductPanel;
 import client.components.InformationAccount;
 import client.components.Login;
@@ -150,50 +152,11 @@ public class MainFrame extends JFrame {
     }
 
     private JPanel TopBar() {
-        JTextField searchArea = new JTextField();
-        JButton searchBtn = new JButton("Search");
-        searchBtn.addActionListener(e -> {
-            String searchData = searchArea.getText();
-            if (!searchData.isEmpty()) {
-                productPanel.remove(Search);
-                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData,
-                        (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-                this.Search.setName("Search");
-                productPanel.add(Search, "Search");
-                CardLayout pr = (CardLayout) productPanel.getLayout();
-                productPanel.revalidate();
-                productPanel.repaint();
-                pr.show(productPanel, "Search");
-                searchArea.setText("");
-            }
-        });
-
-        searchArea.addActionListener(e -> {
-            String searchData = searchArea.getText();
-            if (!searchData.isEmpty()) {
-                productPanel.remove(Search);
-                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData,
-                        (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-                this.Search.setName("Search");
-                productPanel.add(Search, "Search");
-                CardLayout pr = (CardLayout) productPanel.getLayout();
-                productPanel.revalidate();
-                productPanel.repaint();
-                pr.show(productPanel, "Search");
-                searchArea.setText("");
-            }
-        });
-
-        searchBtn.setBackground(Color.white);
-        searchBtn.setPreferredSize(new Dimension(80, 25));
-        searchArea.setBorder(null);
-
         JPanel area = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel areaInner1 = new JPanel(new GridLayout(1, 1));
-        JPanel areaInner2 = new JPanel(new GridLayout(1, 2));
         JPanel areaInner3 = new JPanel(new GridLayout(1, 1));
+        JPanel areaInner4 = new JPanel(new GridLayout(1, 1));
         JPanel areaAccount = new JPanel(new GridLayout(1, 1));
-        JPanel areaAroundSearch = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         if (accountData.length != 0) {
             accountName = new JButton(accountData[1]);
@@ -224,14 +187,6 @@ public class MainFrame extends JFrame {
         areaInner1.setBackground(null);
         areaInner1.setPreferredSize(new Dimension(300, 45));
 
-        searchArea.setPreferredSize(new Dimension(200, 30));
-        areaAroundSearch.add(searchArea);
-        areaAroundSearch.add(searchBtn);
-        areaInner2.add(areaAroundSearch);
-        areaAroundSearch.setBackground(null);
-        areaInner2.setPreferredSize(new Dimension(850, 45));
-        areaInner2.setBackground(null);
-
         areaInner3.add(time);
         areaInner3.setBackground(null);
         areaInner3.setPreferredSize(new Dimension(200, 40));
@@ -240,8 +195,10 @@ public class MainFrame extends JFrame {
         areaAccount.setBackground(null);
         areaAccount.setPreferredSize(new Dimension(150, 40));
 
+        areaInner4.setPreferredSize(new Dimension(850,35));
+        areaInner4.setBackground(null);
         area.add(areaInner1);
-        area.add(areaInner2);
+        area.add(areaInner4);
         area.add(areaInner3);
         area.add(areaAccount);
         area.setPreferredSize(new Dimension(1000, 50));
@@ -348,8 +305,63 @@ public class MainFrame extends JFrame {
     }
 
     private JPanel typeProductBtn() {
-        JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 15));
+        JPanel area = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 0));
+        JPanel areaBtn = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 15));
         area.setPreferredSize(new Dimension(1100, 150));
+        areaBtn.setPreferredSize(new Dimension(1100, 100));
+
+        // Search Area
+        JTextField searchArea = new JTextField();
+        JButton searchBtn = new JButton("Search");
+
+        searchBtn.addActionListener(e -> {
+            String searchData = searchArea.getText();
+            if (!searchData.isEmpty()) {
+                productPanel.remove(Search);
+                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData,
+                        (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+                this.Search.setName("Search");
+                productPanel.add(Search, "Search");
+                CardLayout pr = (CardLayout) productPanel.getLayout();
+                productPanel.revalidate();
+                productPanel.repaint();
+                pr.show(productPanel, "Search");
+                searchArea.setText("");
+            }
+        });
+
+        searchArea.addActionListener(e -> {
+            String searchData = searchArea.getText();
+            if (!searchData.isEmpty()) {
+                productPanel.remove(Search);
+                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData,
+                        (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+                this.Search.setName("Search");
+                productPanel.add(Search, "Search");
+                CardLayout pr = (CardLayout) productPanel.getLayout();
+                productPanel.revalidate();
+                productPanel.repaint();
+                pr.show(productPanel, "Search");
+                searchArea.setText("");
+            }
+        });
+
+        searchBtn.setBackground(Color.white);
+        searchBtn.setPreferredSize(new Dimension(80, 25));
+        searchArea.setPreferredSize(new Dimension(200, 30));
+        searchArea.setBorder(new LineBorder(Color.BLACK));
+
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,15,0));
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        searchPanel.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        searchPanel.setPreferredSize(new Dimension(1100,35));
+        searchPanel.add(searchArea);
+        searchPanel.add(searchBtn);
+
+        // Add search components to the area
+        area.add(searchPanel);
+
+        // Product Type Buttons
         JButton ElectronicsBtn = new JButton("Electronics");
         JButton FoodsBtn = new JButton("Food");
         JButton FashionsBtn = new JButton("Fashion");
@@ -363,8 +375,7 @@ public class MainFrame extends JFrame {
                 ToysBtn };
         for (JButton button : buttons) {
             button.setBackground(Color.WHITE);
-            button.setPreferredSize(new Dimension(200, 50));
-            button.setPreferredSize(new Dimension(200, 50));
+            button.setPreferredSize(new Dimension(200, 35));
             button.setFont(new SetPreferences().getFont(20));
 
             button.addMouseListener(new MouseAdapter() {
@@ -379,6 +390,7 @@ public class MainFrame extends JFrame {
                 }
             });
 
+            // Add action listeners for each button
             FoodsBtn.addActionListener(e -> {
                 CardLayout cl = (CardLayout) productPanel.getLayout();
                 productPanel.revalidate();
@@ -428,8 +440,9 @@ public class MainFrame extends JFrame {
                 cl.show(productPanel, "Toys");
             });
 
-            area.add(button);
+            areaBtn.add(button);
         }
+        area.add(areaBtn);
 
         return area;
     }
@@ -598,7 +611,7 @@ public class MainFrame extends JFrame {
             System.out.println("Test emp");
             CardLayout cl = (CardLayout) mainPanel.getLayout();
             mainPanel.remove(manageEmp);
-            mainPanel.add(new ManageEmp(this, this.getWidth() - cart.getWidth() - sideBar.getWidth()), "ManageEmp");
+            mainPanel.add(new ManageEmp(this, this.getWidth() - sideBar.getWidth()), "ManageEmp");
             cl.show(mainPanel, "ManageEmp");
             cart.setVisible(false);
         });
@@ -627,7 +640,6 @@ public class MainFrame extends JFrame {
         Btn.addActionListener(e -> {
             CardLayout cl = (CardLayout) mainPanel.getLayout();
             mainPanel.remove(dashboard);
-            System.out.println("Wiidth dash " + (this.getWidth() - cart.getWidth() - sideBar.getWidth() - 50));
             mainPanel.add(new Dashboard(this, this.getWidth() - cart.getWidth() - sideBar.getWidth() - 50),
                     "Dashboard");
             cl.show(mainPanel, "Dashboard");

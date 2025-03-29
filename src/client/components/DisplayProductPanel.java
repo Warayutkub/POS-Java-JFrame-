@@ -48,8 +48,8 @@ public class DisplayProductPanel {
 
         int column = 5;
         int row = (int) Math.ceil((double) c / column);
-        scrollPane.setPreferredSize(new Dimension(width,255*row));
         panel.setPreferredSize(new Dimension(width, (255 * row)+10));
+        scrollPane.setPreferredSize(new Dimension(width,255*row));
         area.setPreferredSize(new Dimension(width,255*row));
         area.add(panel);
         scrollPane.setBackground(null);
@@ -73,11 +73,11 @@ public class DisplayProductPanel {
                 c++;
             }
         }
-
+        
         for (int i = 0; i < soldOut.size(); i++) {
             area.add(new ProductCard(soldOut.get(i), cart));
         }
-
+        
         int column = 5;
         int row = (int) Math.ceil((double) c / column);
         scrollPane.setPreferredSize(new Dimension((width),255*row));
