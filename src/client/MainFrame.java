@@ -611,7 +611,7 @@ public class MainFrame extends JFrame {
             System.out.println("Test emp");
             CardLayout cl = (CardLayout) mainPanel.getLayout();
             mainPanel.remove(manageEmp);
-            mainPanel.add(new ManageEmp(this, this.getWidth() - cart.getWidth() - sideBar.getWidth()), "ManageEmp");
+            mainPanel.add(new ManageEmp(this, this.getWidth() - sideBar.getWidth()), "ManageEmp");
             cl.show(mainPanel, "ManageEmp");
             cart.setVisible(false);
         });

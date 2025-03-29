@@ -469,7 +469,7 @@ public class ManageEmp extends JPanel implements ActionListener {
         panel.setPreferredSize(new Dimension(width, 700));
 
         JPanel listContainer = new JPanel();
-        listContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        listContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
         List<JPanel> empPanels = readEmployeePanels(fileEmployee, type);
         int c = 0;
