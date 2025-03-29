@@ -62,4 +62,3 @@
 69,Warayut
 70,Warayut
 71,Warayut
-72,Warayut

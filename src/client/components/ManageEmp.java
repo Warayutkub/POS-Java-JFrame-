@@ -60,9 +60,11 @@ public class ManageEmp extends JPanel implements ActionListener {
 
     private void refreshEmployeeList() {
         removeAll();
+        
+        listEmp = listEmployee("All");
 
         add(btnNewEmp, BorderLayout.NORTH);
-        add(listEmployee("All"), BorderLayout.CENTER); 
+        add(listEmp, BorderLayout.CENTER); 
         
 
         revalidate();  
@@ -128,18 +130,24 @@ public class ManageEmp extends JPanel implements ActionListener {
         btnAll.addActionListener(e -> {
             remove(listEmp); 
             listEmp = listEmployee("All");
-            refreshEmployeeList();
+            add(listEmp, BorderLayout.CENTER);
+            revalidate();
+            repaint();
         });
         btnManager.addActionListener(e -> {
             remove(listEmp); 
             listEmp = listEmployee("Manager"); 
-            refreshEmployeeList(); 
+            add(listEmp, BorderLayout.CENTER);
+            revalidate();
+            repaint();
         });
     
         btnEmployee.addActionListener(e -> {
             remove(listEmp); 
             listEmp = listEmployee("Employee");
-            refreshEmployeeList();
+            add(listEmp, BorderLayout.CENTER);
+            revalidate();
+            repaint();
         });
         panel.add(btnAll);
         panel.add(btnManager);
@@ -247,7 +255,7 @@ public class ManageEmp extends JPanel implements ActionListener {
                 String permission = (String) newPermission.getSelectedItem();
                 String password = newPassword.getText();
             
-                saveNewEmployee(name, phone, email, permission, password);
+                saveNewEmployee(name, phone, email, permission, password,diaNewEmp);
             
                 diaNewEmp.dispose();
                 refreshEmployeeList();
@@ -272,7 +280,7 @@ public class ManageEmp extends JPanel implements ActionListener {
         return diaNewEmp;
     }
 
-    private void saveNewEmployee(String name, String phone, String email, String permission, String password) {
+    private void saveNewEmployee(String name, String phone, String email, String permission, String password, JDialog area) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileEmployee, true));
             String newEmployeeData = generateNewEmployeeId() + "," + name + "," + phone + "," + email + "," + password + "," + permission;
@@ -284,7 +292,7 @@ public class ManageEmp extends JPanel implements ActionListener {
             writer.close();
             writer2.close();
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error saving new employee", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(area, "Error saving new employee", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
