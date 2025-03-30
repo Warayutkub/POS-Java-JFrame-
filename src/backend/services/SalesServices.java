@@ -20,46 +20,58 @@ import resources.SetPreferences;
 
 public class SalesServices {
 
-    private String[][] Products = new InventoryService().getAllProductData();
     private final String pathFileProduct = "./src/backend/data/ProductData.txt";
+    private final String pathFileProductNow = "./src/backend/data/NowProduct.txt";
 
     public void minusStock(String[][] productInCart) {
 
-        String[][] productMinus = Products.clone();
-        String[] ids = new String[productInCart.length];
-        String[] amounts = new String[productInCart.length];
-
-        for (int c = 0; c < productInCart.length; c++) {
-            ids[c] = productInCart[c][5];
-            amounts[c] = productInCart[c][3];
-        }
-
-        for (int c = 0; c < ids.length; c++) {
-            for (int i = 0; i < productMinus.length; i++) {
-                if (productMinus[i][0].equals(ids[c])) {
-                    int currentStock = Integer.parseInt(productMinus[i][4]);
-                    int amountToSubtract = Integer.parseInt(amounts[c]);
-                    productMinus[i][4] = String.valueOf(currentStock - amountToSubtract);
-                    break;
-                }
-            }
-        }
-
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(pathFileProduct));
-            for (String[] record : productMinus) {
-                if (record != null && record.length > 0) {
-                    writer.write(String.join(",", record) + "\n");
+            String[][] productMinus = new InventoryService().getAllProductData();
+            String[][] productMinusNow = new InventoryService().getProductDataNow();
+
+            for (String[] cartItem : productInCart) {
+                String productId = cartItem[5];
+                int amountSold = Integer.parseInt(cartItem[3]);
+                
+                for (String[] product : productMinus) {
+                    if (product[0].equals(productId)) {
+                        int currentStock = Integer.parseInt(product[4]);
+                        product[4] = String.valueOf(currentStock - amountSold);
+                        break;
+                    }
+                }
+                for (String[] product : productMinusNow) {
+                    if (product[0].equals(productId)) {
+                        int currentStock = Integer.parseInt(product[4]);
+                        product[4] = String.valueOf(currentStock - amountSold);
+                        break;
+                    }
                 }
             }
-            writer.close();
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(pathFileProduct))) {
+                for (String[] product : productMinus) {
+                    if (product != null && product.length > 0) {
+                        writer.write(String.join(",", product) + "\n");
+                    }
+                }
+            }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(pathFileProductNow))) {
+                for (String[] product : productMinusNow) {
+                    if (product != null && product.length > 0) {
+                        writer.write(String.join(",", product) + "\n"); 
+                    }
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public String[] genDataProduct(String id) {
-        for (String[] recode : Products) {
+        for (String[] recode : new InventoryService().getAllProductData()) {
             if (recode[0].equals(id)) {
                 return recode;
             }
@@ -99,10 +111,10 @@ public class SalesServices {
         display.setBorder(null);
 
         for (int c = 0; c < dataInCart.length; c++) {
-            for (int i = 0; i < Products.length;i++){
-                if (dataInCart[c][5].equals(Products[i][0])) {
-                    if (Integer.parseInt(Products[i][4]) <= 10) {
-                        LowStock.add(Products[i][0]);
+            for (int i = 0; i < new InventoryService().getAllProductData().length;i++){
+                if (dataInCart[c][5].equals(new InventoryService().getAllProductData()[i][0])) {
+                    if (Integer.parseInt(new InventoryService().getAllProductData()[i][4]) <= 10) {
+                        LowStock.add(new InventoryService().getAllProductData()[i][0]);
                     }
                 }
             }

@@ -266,11 +266,11 @@ public class ManageEmp extends JPanel{
                         && !newEmail.getText().isEmpty()
                         && !newPassword.getText().isEmpty()) {
                     if (newPassword.getText().equals(newConfirmPassword.getText())) {
-                        employee.setName(newName.getText());
-                        employee.setPhone(newPhone.getText());
-                        employee.setEmail(newEmail.getText());
+                        employee.setName(newName.getText().trim());
+                        employee.setPhone(newPhone.getText().trim());
+                        employee.setEmail(newEmail.getText().trim());
                         employee.setPermission((String) newPermission.getSelectedItem());
-                        employee.setPassword(newPassword.getText());
+                        employee.setPassword(newPassword.getText().trim());
                         saveNewEmployee();
                         diaNewEmp.dispose();
 
@@ -304,14 +304,15 @@ public class ManageEmp extends JPanel{
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileEmployee, true));
             String newEmployeeData = employee.getID() + "," + employee.getName() + "," + employee.getPhone() + ","
-                    + employee.getEmail() + "," + employee.getPassword() + "," + employee.getPermission();
+                    + employee.getEmail() + "," + employee.getPassword() + "," + employee.getPermission() + "\n";
             writer.append(newEmployeeData);
             writer.newLine();
             BufferedWriter writer2 = new BufferedWriter(new FileWriter(fileAllEmployee, true));
             writer2.append(newEmployeeData);
-            writer.newLine();
+            writer2.newLine();
             writer.close();
             writer2.close();
+            JOptionPane.showMessageDialog(mainFrame, "Employee added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(mainFrame, "Error saving new employee", "Error", JOptionPane.ERROR_MESSAGE);
         }

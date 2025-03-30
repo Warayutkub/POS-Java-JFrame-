@@ -1,2 +1,4 @@
-1,Warayut ,0631673569,s6706021612038@email.kmutnb.ac.th,Warayut2548
-2,Wara,0631673570,s6706021612038@email.kmutnb.ac.th,Warayut2548
+1,Meya,0950563549,Meya@gmail.com,Meya095
+2,Steve,0956321482,Steve@gmail.com,Steve095
+3,Alex,0999999999,Alex@gmail.com,Alex099
+4,Man,0888888888,Man@gmail.com,Man088

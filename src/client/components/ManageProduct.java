@@ -9,6 +9,8 @@ import java.awt.event.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
@@ -115,10 +117,9 @@ public class ManageProduct extends JPanel implements ActionListener {
     }
 
     private JPanel body() {
-        JPanel bodyPanel = new JPanel();
+        JPanel bodyPanel = new JPanel(new BorderLayout());
         JPanel innerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JScrollPane scrollPane = new JScrollPane(innerPanel);
-        bodyPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         bodyPanel.setPreferredSize(new Dimension(width, mainFrame.getHeight() - 100));
 
         int row = 0;
@@ -127,11 +128,11 @@ public class ManageProduct extends JPanel implements ActionListener {
             row++;
         }
 
-        innerPanel.setPreferredSize(new Dimension(width, row*42));
-        bodyPanel.add(scrollPane);
+        innerPanel.setPreferredSize(new Dimension(width, (row*40)+(6*row)));
         scrollPane.setPreferredSize(new Dimension(width, mainFrame.getHeight() - 100));
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(null);
+        bodyPanel.add(scrollPane, BorderLayout.CENTER);
 
         return bodyPanel;
     }
@@ -200,9 +201,9 @@ public class ManageProduct extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 product.setId(new Tools().genNewId(new InventoryService().getAllProductData()));
-                product.setName(name);
-                product.setPrice(price);
-                product.setStock(stock);
+                product.setName(name.trim());
+                product.setPrice(price.trim());
+                product.setStock(stock.trim());
                 switch (type) {
                     case "Electronic" -> product.setType("1");
                     case "Food" -> product.setType("2");
@@ -217,6 +218,7 @@ public class ManageProduct extends JPanel implements ActionListener {
                 saveProduct();
                 newProductDialog.dispose();
                 refreshPage();
+                JOptionPane.showMessageDialog(mainFrame, "Product added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
@@ -252,6 +254,7 @@ public class ManageProduct extends JPanel implements ActionListener {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error saving product", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        mainFrame.resetPage();
     }
 
     public void refreshPage() {
@@ -307,7 +310,7 @@ public class ManageProduct extends JPanel implements ActionListener {
 }
 
 class Card extends JPanel {
-    private Product product;
+    private Product productThis;
     private JButton editBtn = new JButton("Edit");
     private JButton deleteBtn = new JButton("Delete");
     private JButton plusStockBtn = new JButton("+");
@@ -317,9 +320,10 @@ class Card extends JPanel {
     private int width;
     private JDialog infoProductDialog;
     private InsertImage insertImage = new InsertImage();
+    private DecimalFormat format = new DecimalFormat("#,###.##");
 
     public Card(String[] recode, MainFrame mainFrame, int width, ManageProduct manageProduct) {
-        this.product = new Product(recode[0], recode[1], recode[2], recode[3], recode[4], recode[5], recode[6]);
+        this.productThis = new Product(recode[0], recode[1], recode[2], recode[3], recode[4], recode[5], recode[6]);
         this.editBtn = new JButton("Edit Product");
         this.deleteBtn = new JButton("Delete Product");
         this.plusStockBtn = new JButton("Plus Stock");
@@ -337,15 +341,15 @@ class Card extends JPanel {
         setBackground(Color.WHITE);
         setBorder(new LineBorder(Color.BLACK, 1));
 
-        JLabel idLabel = new JLabel("ID: " + product.getID());
+        JLabel idLabel = new JLabel("ID: " + productThis.getID());
         idLabel.setPreferredSize(new Dimension(width / 12, 30));
-        JLabel nameLabel = new JLabel("Name: " + product.getName());
+        JLabel nameLabel = new JLabel("Name: " + productThis.getName());
         nameLabel.setPreferredSize(new Dimension(width / 3, 30));
-        JLabel priceLabel = new JLabel("Price: " + product.getPrice());
+        JLabel priceLabel = new JLabel("Price: " + format.format(Double.parseDouble(productThis.getPrice())));
         priceLabel.setPreferredSize(new Dimension(width / 6, 30));
-        JLabel stockLabel = new JLabel("Stock: " + product.getStock());
+        JLabel stockLabel = new JLabel("Stock: " + productThis.getStock());
         stockLabel.setPreferredSize(new Dimension(width / 8, 30));
-        JLabel typeLabel = new JLabel("Type: " + manageProduct.transformType(product.getType(), "word"));
+        JLabel typeLabel = new JLabel("Type: " + manageProduct.transformType(productThis.getType(), "word"));
         typeLabel.setPreferredSize(new Dimension(width / 8, 30));
 
         JButton infoBtn = new JButton("more");
@@ -372,26 +376,26 @@ class Card extends JPanel {
         infoProductDialog.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         JLabel picLabel = new JLabel();
-        ImageIcon imageIcon = new ImageIcon(product.getImage());
+        ImageIcon imageIcon = new ImageIcon(productThis.getImage());
         Image image = imageIcon.getImage();
         Image scaledImage = image.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
         picLabel.setIcon(new ImageIcon(scaledImage));
         picLabel.setPreferredSize(new Dimension(300, 300));
 
-        JLabel nameLabel = new JLabel("Name  :   " + product.getName());
+        JLabel nameLabel = new JLabel("Name  :   " + productThis.getName());
         nameLabel.setPreferredSize(new Dimension(300, 30));
         nameLabel.setHorizontalAlignment(JLabel.LEFT);
         nameLabel.setFont(new SetPreferences().getFont(16));
-        JLabel priceLabel = new JLabel("Price  :   " + product.getPrice());
+        JLabel priceLabel = new JLabel("Price  :   " + productThis.getPrice());
         priceLabel.setPreferredSize(new Dimension(300, 30));
         priceLabel.setHorizontalAlignment(JLabel.LEFT);
         priceLabel.setFont(new SetPreferences().getFont(16));
-        JLabel stockLabel = new JLabel("Stock  :   " + product.getStock());
+        JLabel stockLabel = new JLabel("Stock  :   " + productThis.getStock());
         stockLabel.setPreferredSize(new Dimension(300, 30));
         stockLabel.setHorizontalAlignment(JLabel.LEFT);
         stockLabel.setFont(new SetPreferences().getFont(16));
 
-        String type = manageProduct.transformType(product.getType(), "word");
+        String type = manageProduct.transformType(productThis.getType(), "word");
         JLabel typeLabel = new JLabel("Type  :   " + type);
         typeLabel.setPreferredSize(new Dimension(300, 30));
         typeLabel.setHorizontalAlignment(JLabel.LEFT);
@@ -419,28 +423,33 @@ class Card extends JPanel {
 
         plusStockBtn.addActionListener(e -> {
             int stock = Integer.parseInt(JOptionPane.showInputDialog("Enter the stock to add"));
-            product.setStock(String.valueOf(Integer.parseInt(product.getStock()) + stock));
+            productThis.setStock(String.valueOf(Integer.parseInt(productThis.getStock()) + stock));
             saveEditProduct();
             refreshPageInfoProductDialog();
             manageProduct.refreshPage();
+            mainFrame.resetPage();
         });
 
         minusStockBtn.addActionListener(e -> {
             int stock = Integer.parseInt(JOptionPane.showInputDialog("Enter the stock to minus"));
-            product.setStock(String.valueOf(Integer.parseInt(product.getStock()) - stock));
+            productThis.setStock(String.valueOf(Integer.parseInt(productThis.getStock()) - stock));
             saveEditProduct();
             refreshPageInfoProductDialog();
             manageProduct.refreshPage();
+            mainFrame.resetPage();
         });
 
         editBtn.addActionListener(e -> {
             editProductDialog();
+            mainFrame.resetPage();
         });
 
         deleteBtn.addActionListener(e -> {
             deleteProduct();
             infoProductDialog.dispose();
             manageProduct.refreshPage();
+            mainFrame.resetPage();
+            JOptionPane.showMessageDialog(mainFrame, "Product deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
         });
 
         okBtn.addActionListener(e -> {
@@ -474,7 +483,7 @@ class Card extends JPanel {
         nameLabel.setHorizontalAlignment(JLabel.LEFT);
         nameLabel.setFont(new SetPreferences().getFont(16));
 
-        JTextField nameField = new JTextField(product.getName());
+        JTextField nameField = new JTextField(productThis.getName());
         nameField.setPreferredSize(new Dimension(300, 30));
 
         JLabel priceLabel = new JLabel("Price: ");
@@ -482,7 +491,7 @@ class Card extends JPanel {
         priceLabel.setHorizontalAlignment(JLabel.LEFT);
         priceLabel.setFont(new SetPreferences().getFont(16));
 
-        JTextField priceField = new JTextField(product.getPrice());
+        JTextField priceField = new JTextField(productThis.getPrice());
         priceField.setPreferredSize(new Dimension(300, 30));
 
         JLabel typeLabel = new JLabel("Type: ");
@@ -493,19 +502,21 @@ class Card extends JPanel {
         JComboBox typeComboBox = new JComboBox<String>(
                 new String[] { "Electronic", "Food", "Fashion", "Cosmetic", "Household", "Tool", "Sport", "Toy" });
         typeComboBox.setPreferredSize(new Dimension(300, 30));
-        String type = manageProduct.transformType(product.getType(), "word");
+        String type = manageProduct.transformType(productThis.getType(), "word");
         typeComboBox.setSelectedItem(type);
 
         JButton saveBtn = new JButton("Save");
 
         saveBtn.addActionListener(e -> {
-            product.setName(nameField.getText());
-            product.setPrice(priceField.getText());
-            product.setType(manageProduct.transformType(typeComboBox.getSelectedItem().toString(), "number"));
+            productThis.setName(nameField.getText().trim());
+            productThis.setPrice(priceField.getText().trim());
+            productThis.setType(manageProduct.transformType(typeComboBox.getSelectedItem().toString(), "number"));
             saveEditProduct();
             editProductDialog.dispose();
             refreshPageInfoProductDialog();
             manageProduct.refreshPage();
+            mainFrame.resetPage();
+            JOptionPane.showMessageDialog(mainFrame, "Product updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
         });
 
         editProductDialog.add(insertImage);
@@ -535,41 +546,49 @@ class Card extends JPanel {
     private void saveEditProduct() {
         String[][] productData = new InventoryService().getAllProductData();
         String[][] productDataNow = new InventoryService().getProductDataNow();
+        String imagePath = "";
+        if (insertImage.getPath() != null) {
+            imagePath = insertImage.getPath();
+            new Tools().SaveFileCopy(insertImage.getOriginalPath(), insertImage.getPath());
+        } else {
+            imagePath = productThis.getImage();
+        }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/ProductData.txt"))) {
             for (String[] recode : productData) {
-                if (recode[0].equals(product.getID())) {
-                    writer.write(product.getID() + "," + product.getName() + "," + product.getPrice() + ","
-                            + product.getDiscount()
-                            + "," + product.getStock() + "," + product.getType() + "," + insertImage.getPath() + "\n");
+                if (recode[0].equals(productThis.getID())) {
+                    writer.write(productThis.getID() + "," + productThis.getName() + "," + productThis.getPrice() + ","
+                            + productThis.getDiscount() + "," + productThis.getStock() + "," + productThis.getType() + "," 
+                            + imagePath + "\n");
                 } else {
                     writer.write(recode[0] + "," + recode[1] + "," + recode[2] + "," + recode[3] + "," + recode[4] + ","
                             + recode[5] + "," + recode[6] + "\n");
                 }
-                new Tools().removeFile(product.getImage());
-                product.setImage(insertImage.getPath());
             }
-            new Tools().SaveFileCopy(insertImage.getOriginalPath(), insertImage.getPath());
         } catch (IOException e) {
             JOptionPane.showMessageDialog(mainFrame, "Error saving product", "Error", JOptionPane.ERROR_MESSAGE);
         }
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/NowProduct.txt"))) {
             for (String[] recode : productDataNow) {
-                if (recode[0].equals(product.getID())) {
-                    writer.write(product.getID() + "," + product.getName() + "," + product.getPrice() + ","
-                            + product.getDiscount()
-                            + "," + product.getStock() + "," + product.getType() + "," + insertImage.getPath() + "\n");
+                if (recode[0].equals(productThis.getID())) {
+                    writer.write(productThis.getID() + "," + productThis.getName() + "," + productThis.getPrice() + ","
+                            + productThis.getDiscount() + "," + productThis.getStock() + "," + productThis.getType() + ","
+                            + imagePath + "\n");
                 } else {
                     writer.write(recode[0] + "," + recode[1] + "," + recode[2] + "," + recode[3] + "," + recode[4] + ","
                             + recode[5] + "," + recode[6] + "\n");
                 }
-                new Tools().removeFile(product.getImage());
-                product.setImage(insertImage.getPath());
             }
-            new Tools().SaveFileCopy(insertImage.getOriginalPath(), insertImage.getPath());
         } catch (IOException e) {
             JOptionPane.showMessageDialog(mainFrame, "Error saving product", "Error", JOptionPane.ERROR_MESSAGE);
         }
+
+        if (productThis.getImage() != null && !productThis.getImage().equals(imagePath)) {
+            new Tools().removeFile(productThis.getImage());
+        }
+        productThis.setImage(imagePath);
+        mainFrame.resetPage();
     }
 
     private void deleteProduct() {
@@ -582,19 +601,7 @@ class Card extends JPanel {
             if (confirm == JOptionPane.YES_OPTION) {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/NowProduct.txt"))) {
                     for (String[] recode : productData) {
-                        if (!recode[0].equals(product.getID())) {
-                            writer.write(
-                                    recode[0] + "," + recode[1] + "," + recode[2] + "," + recode[3] + "," + recode[4] + ","
-                                            + recode[5] + "," + recode[6] + "\n");
-                        }
-                    }
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(mainFrame, "Error deleting product", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-    
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/ProductData.txt"))) {
-                    for (String[] recode : productData) {
-                        if (!recode[0].equals(product.getID())) {
+                        if (!recode[0].equals(productThis.getID())) {
                             writer.write(
                                     recode[0] + "," + recode[1] + "," + recode[2] + "," + recode[3] + "," + recode[4] + ","
                                             + recode[5] + "," + recode[6] + "\n");
@@ -604,6 +611,9 @@ class Card extends JPanel {
                     JOptionPane.showMessageDialog(mainFrame, "Error deleting product", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
+            
+            manageProduct.refreshPage();
+            mainFrame.resetPage();
     }
 
 }
