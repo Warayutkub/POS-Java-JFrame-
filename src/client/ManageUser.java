@@ -246,9 +246,9 @@ public class ManageUser extends JPanel {
     private void saveNewUser(String name,String phone,String email,String password,JDialog area) {
         String id = new Tools().genNewId(new AuthService().getAllUserData("user"));
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/backend/data/NowUser.txt",true))){
-            writer.write(id + "," + name + "," + phone + "," + email + "," + password + "\n");
+            writer.write(id + "," + name.trim() + "," + phone.trim() + "," + email.trim() + "," + password.trim() + "\n");
             try(BufferedWriter writer2 = new BufferedWriter(new FileWriter("./src/backend/data/UserData.txt",true))) {
-                writer2.write(id + "," + name + "," + phone + "," + email + "," + password + "\n");
+                writer2.write(id + "," + name.trim() + "," + phone.trim() + "," + email.trim() + "," + password.trim() + "\n");
                 
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(area, "Error can't save new user");
@@ -437,9 +437,9 @@ class card extends JPanel {
         btn.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
         btn.setForeground(Color.WHITE);
         btn.addActionListener(e -> {
-            this.user.setName(nameField.getText());
-            this.user.setPhone(phoneField.getText());
-            this.user.setEmail(emailField.getText());
+            this.user.setName(nameField.getText().trim());
+            this.user.setPhone(phoneField.getText().trim());
+            this.user.setEmail(emailField.getText().trim());
             Edit();
             area.dispose();
             manageUser.resetPage();

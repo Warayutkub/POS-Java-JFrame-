@@ -310,6 +310,7 @@ class InnerCart {
     }
 
     public void resetData() {
+        System.out.println("Reset Data");
         dataProduct.removeAll(dataProduct);
         this.TotalAmount = "0";
         this.TotalPrice = "0.0";

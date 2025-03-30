@@ -3,7 +3,6 @@ package client;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -19,9 +18,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingWorker;
 import javax.swing.border.LineBorder;
 
+import backend.services.InventoryService;
 import backend.services.LoginServices;
 import client.components.Cart;
 import client.components.Dashboard;
@@ -44,54 +43,22 @@ public class MainFrame extends JFrame {
     private JPanel manageUser = new ManageUser(this, 0);
     private JPanel manageProduct = new ManageProduct(this, 0);
     private JPanel mainPanel = new JPanel(new CardLayout());
-    private JPanel productPanel = new JPanel(new CardLayout());
     private Container container = getContentPane();
     private JButton accountName;
-
-    // = new DisplayProductPanel().getPanel(cart,
-    // "all",(this.getWidth()-sideBar.getWidth()-cart.getWidth()))
-    // Display Products panel Obj
-    private JScrollPane All = new DisplayProductPanel().getPanel(cart, "all",
-            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-    private JScrollPane Electronics = new DisplayProductPanel().getPanel(cart, "1",
-            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-    private JScrollPane Foods = new DisplayProductPanel().getPanel(cart, "2",
-            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-    private JScrollPane Fashions = new DisplayProductPanel().getPanel(cart, "3",
-            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-    private JScrollPane Cosmetics = new DisplayProductPanel().getPanel(cart, "4",
-            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-    private JScrollPane Households = new DisplayProductPanel().getPanel(cart, "5",
-            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-    private JScrollPane Tools = new DisplayProductPanel().getPanel(cart, "6",
-            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-    private JScrollPane Sports = new DisplayProductPanel().getPanel(cart, "7",
-            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-    private JScrollPane Toys = new DisplayProductPanel().getPanel(cart, "8",
-            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-    private JScrollPane Search = new DisplayProductPanel().getSearchPanel(cart, "",
-            (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
+    private JScrollPane allProductPanel;
+    private JScrollPane productFoodPanel;
+    private JScrollPane productElectronicsPanel;
+    private JScrollPane productFashionPanel;
+    private JScrollPane productCosmeticsPanel;
+    private JScrollPane productHouseholdPanel;
+    private JScrollPane productToolsPanel;
+    private JScrollPane productSportPanel;
+    private JScrollPane productToyPanel;
+    private int amountProductFirst = new InventoryService().getProductDataNow().length;
 
     public MainFrame() {
         CreateGui();
         SetupWindow();
-
-        All = new DisplayProductPanel().getPanel(cart, "all", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Electronics = new DisplayProductPanel().getPanel(cart, "1",
-                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Foods = new DisplayProductPanel().getPanel(cart, "2", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Fashions = new DisplayProductPanel().getPanel(cart, "3",
-                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Cosmetics = new DisplayProductPanel().getPanel(cart, "4",
-                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Households = new DisplayProductPanel().getPanel(cart, "5",
-                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Tools = new DisplayProductPanel().getPanel(cart, "6", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Sports = new DisplayProductPanel().getPanel(cart, "7",
-                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Toys = new DisplayProductPanel().getPanel(cart, "8", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Search = new DisplayProductPanel().getSearchPanel(cart, "",
-                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
 
         if (accountData.length == 0) {
             new Login(this);
@@ -127,29 +94,20 @@ public class MainFrame extends JFrame {
         mainPanel.add(dashboard, "Dashboard");
         container.add(mainPanel, BorderLayout.CENTER);
 
-        // Type Btn
-        All.setName("All");
-        Electronics.setName("Electronics");
-        Foods.setName("Foods");
-        Fashions.setName("Fashions");
-        Cosmetics.setName("Cosmetics");
-        Households.setName("Households");
-        Tools.setName("Tools");
-        Sports.setName("Sports");
-        Toys.setName("Toys");
-        Search.setName("Search");
+        DisplayProductPanel displayPanel = new DisplayProductPanel();
+        int panelWidth = this.getWidth() - sideBar.getWidth() - cart.getWidth();
 
-        outerBody.add(productPanel, BorderLayout.CENTER);
-        productPanel.add(All, "All");
-        productPanel.add(Electronics, "Electronics");
-        productPanel.add(Foods, "Foods");
-        productPanel.add(Fashions, "Fashions");
-        productPanel.add(Cosmetics, "Cosmetics");
-        productPanel.add(Households, "Households");
-        productPanel.add(Tools, "Tools");
-        productPanel.add(Sports, "Sports");
-        productPanel.add(Toys, "Toys");
-        productPanel.add(Search, "Search");
+        allProductPanel = displayPanel.getPanel(cart, "all", panelWidth);
+        productFoodPanel = displayPanel.getPanel(cart, "2", panelWidth);
+        productElectronicsPanel = displayPanel.getPanel(cart, "1", panelWidth);
+        productFashionPanel = displayPanel.getPanel(cart, "3", panelWidth);
+        productCosmeticsPanel = displayPanel.getPanel(cart, "4", panelWidth);
+        productHouseholdPanel = displayPanel.getPanel(cart, "5", panelWidth);
+        productToolsPanel = displayPanel.getPanel(cart, "6", panelWidth);
+        productSportPanel = displayPanel.getPanel(cart, "7", panelWidth);
+        productToyPanel = displayPanel.getPanel(cart, "8", panelWidth);
+
+        outerBody.add(allProductPanel, BorderLayout.CENTER);
 
         container.add(cart, BorderLayout.EAST);
     }
@@ -328,15 +286,10 @@ public class MainFrame extends JFrame {
         searchBtn.addActionListener(e -> {
             String searchData = searchArea.getText();
             if (!searchData.isEmpty()) {
-                productPanel.remove(Search);
-                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData,
-                        (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-                this.Search.setName("Search");
-                productPanel.add(Search, "Search");
-                CardLayout pr = (CardLayout) productPanel.getLayout();
-                productPanel.revalidate();
-                productPanel.repaint();
-                pr.show(productPanel, "Search");
+                outerBody.remove(1);
+                outerBody.add(new DisplayProductPanel().getSearchPanel(cart, searchData,
+                        (this.getWidth() - sideBar.getWidth() - cart.getWidth())), BorderLayout.CENTER);
+                outerBody.revalidate();
                 searchArea.setText("");
             }
         });
@@ -344,15 +297,10 @@ public class MainFrame extends JFrame {
         searchArea.addActionListener(e -> {
             String searchData = searchArea.getText();
             if (!searchData.isEmpty()) {
-                productPanel.remove(Search);
-                this.Search = new DisplayProductPanel().getSearchPanel(cart, searchData,
-                        (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-                this.Search.setName("Search");
-                productPanel.add(Search, "Search");
-                CardLayout pr = (CardLayout) productPanel.getLayout();
-                productPanel.revalidate();
-                productPanel.repaint();
-                pr.show(productPanel, "Search");
+                outerBody.remove(1);
+                outerBody.add(new DisplayProductPanel().getSearchPanel(cart, searchData,
+                        (this.getWidth() - sideBar.getWidth() - cart.getWidth())), BorderLayout.CENTER);
+                outerBody.revalidate();
                 searchArea.setText("");
             }
         });
@@ -369,10 +317,8 @@ public class MainFrame extends JFrame {
         searchPanel.add(searchArea);
         searchPanel.add(searchBtn);
 
-        // Add search components to the area
         area.add(searchPanel);
 
-        // Product Type Buttons
         JButton ElectronicsBtn = new JButton("Electronics");
         JButton FoodsBtn = new JButton("Food");
         JButton FashionsBtn = new JButton("Fashion");
@@ -403,204 +349,52 @@ public class MainFrame extends JFrame {
 
             // Add action listeners for each button
             FoodsBtn.addActionListener(e -> {
-                SwingWorker<JScrollPane, Void> worker = new SwingWorker<>() {
-                    @Override
-                    protected JScrollPane doInBackground() throws Exception {
-                        return new DisplayProductPanel().getPanel(cart, "2",
-                                (getWidth() - sideBar.getWidth() - cart.getWidth()));
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            JScrollPane newFoods = get();
-                            productPanel.remove(Foods);
-                            Foods = newFoods;
-                            productPanel.add(Foods, "Foods");
-                            productPanel.revalidate();
-                            productPanel.repaint();
-                            ((CardLayout) productPanel.getLayout()).show(productPanel, "Foods");
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                };
-                worker.execute();
+                outerBody.remove(1);
+                outerBody.add(productFoodPanel, BorderLayout.CENTER);
+                outerBody.revalidate();
+                outerBody.repaint();
             });
             ElectronicsBtn.addActionListener(e -> {
-                SwingWorker<JScrollPane, Void> worker = new SwingWorker<>() {
-                    @Override
-                    protected JScrollPane doInBackground() throws Exception {
-                        return new DisplayProductPanel().getPanel(cart, "1",
-                                (getWidth() - sideBar.getWidth() - cart.getWidth()));
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            JScrollPane newElectronics = get();
-                            productPanel.remove(Electronics);
-                            Electronics = newElectronics;
-                            productPanel.add(Electronics, "Electronics");
-                            productPanel.revalidate();
-                            productPanel.repaint();
-                            ((CardLayout) productPanel.getLayout()).show(productPanel, "Electronics");
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                };
-                worker.execute();
+                outerBody.remove(1);
+                outerBody.add(productElectronicsPanel, BorderLayout.CENTER);
+                outerBody.revalidate();
+                outerBody.repaint();
             });
             FashionsBtn.addActionListener(e -> {
-                SwingWorker<JScrollPane, Void> worker = new SwingWorker<>() {
-                    @Override
-                    protected JScrollPane doInBackground() throws Exception {
-                        return new DisplayProductPanel().getPanel(cart, "3",
-                                (getWidth() - sideBar.getWidth() - cart.getWidth()));
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            JScrollPane newFashions = get();
-                            productPanel.remove(Fashions);
-                            Fashions = newFashions;
-                            productPanel.add(Fashions, "Fashions");
-                            productPanel.revalidate();
-                            productPanel.repaint();
-                            ((CardLayout) productPanel.getLayout()).show(productPanel, "Fashions");
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                };
-                worker.execute();
+                outerBody.remove(1);
+                outerBody.add(productFashionPanel, BorderLayout.CENTER);
+                outerBody.revalidate();
+                outerBody.repaint();
             });
             CosmeticsBtn.addActionListener(e -> {
-                SwingWorker<JScrollPane, Void> worker = new SwingWorker<>() {
-                    @Override
-                    protected JScrollPane doInBackground() throws Exception {
-                        return new DisplayProductPanel().getPanel(cart, "4",
-                                (getWidth() - sideBar.getWidth() - cart.getWidth()));
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            JScrollPane newCosmetics = get();
-                            productPanel.remove(Cosmetics);
-                            Cosmetics = newCosmetics;
-                            productPanel.add(Cosmetics, "Cosmetics");
-                            productPanel.revalidate();
-                            productPanel.repaint();
-                            ((CardLayout) productPanel.getLayout()).show(productPanel, "Cosmetics");
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                };
-                worker.execute();
+                outerBody.remove(1);
+                outerBody.add(productCosmeticsPanel, BorderLayout.CENTER);
+                outerBody.revalidate();
+                outerBody.repaint();
             });
             HouseholdsBtn.addActionListener(e -> {
-                SwingWorker<JScrollPane, Void> worker = new SwingWorker<>() {
-                    @Override
-                    protected JScrollPane doInBackground() throws Exception {
-                        return new DisplayProductPanel().getPanel(cart, "5",
-                                (getWidth() - sideBar.getWidth() - cart.getWidth()));
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            JScrollPane newHouseholds = get();
-                            productPanel.remove(Households);
-                            Households = newHouseholds;
-                            productPanel.add(Households, "Households");
-                            productPanel.revalidate();
-                            productPanel.repaint();
-                            ((CardLayout) productPanel.getLayout()).show(productPanel, "Households");
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                };
-                worker.execute();
+                outerBody.remove(1);
+                outerBody.add(productHouseholdPanel, BorderLayout.CENTER);
+                outerBody.revalidate();
+                outerBody.repaint();
             });
             ToolsBtn.addActionListener(e -> {
-                SwingWorker<JScrollPane, Void> worker = new SwingWorker<>() {
-                    @Override
-                    protected JScrollPane doInBackground() throws Exception {
-                        return new DisplayProductPanel().getPanel(cart, "6",
-                                (getWidth() - sideBar.getWidth() - cart.getWidth()));
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            JScrollPane newTools = get();
-                            productPanel.remove(Tools);
-                            Tools = newTools;
-                            productPanel.add(Tools, "Tools");
-                            productPanel.revalidate();
-                            productPanel.repaint();
-                            ((CardLayout) productPanel.getLayout()).show(productPanel, "Tools");
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                };
-                worker.execute();
+                outerBody.remove(1);
+                outerBody.add(productToolsPanel, BorderLayout.CENTER);
+                outerBody.revalidate();
+                outerBody.repaint();
             });
             SportsBtn.addActionListener(e -> {
-                SwingWorker<JScrollPane, Void> worker = new SwingWorker<>() {
-                    @Override
-                    protected JScrollPane doInBackground() throws Exception {
-                        return new DisplayProductPanel().getPanel(cart, "7",
-                                (getWidth() - sideBar.getWidth() - cart.getWidth()));
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            JScrollPane newSports = get();
-                            productPanel.remove(Sports);
-                            Sports = newSports;
-                            productPanel.add(Sports, "Sports");
-                            productPanel.revalidate();
-                            productPanel.repaint();
-                            ((CardLayout) productPanel.getLayout()).show(productPanel, "Sports");
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                };
-                worker.execute();
+                outerBody.remove(1);
+                outerBody.add(productSportPanel, BorderLayout.CENTER);
+                outerBody.revalidate();
+                outerBody.repaint();
             });
             ToysBtn.addActionListener(e -> {
-                SwingWorker<JScrollPane, Void> worker = new SwingWorker<>() {
-                    @Override
-                    protected JScrollPane doInBackground() throws Exception {
-                        return new DisplayProductPanel().getPanel(cart, "8",
-                                (getWidth() - sideBar.getWidth() - cart.getWidth()));
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            JScrollPane newToys = get();
-                            productPanel.remove(Toys);
-                            Toys = newToys;
-                            productPanel.add(Toys, "Toys");
-                            productPanel.revalidate();
-                            productPanel.repaint();
-                            ((CardLayout) productPanel.getLayout()).show(productPanel, "Toys");
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                };
-                worker.execute();
+                outerBody.remove(1);
+                outerBody.add(productToyPanel, BorderLayout.CENTER);
+                outerBody.revalidate();
+                outerBody.repaint();
             });
 
             areaBtn.add(button);
@@ -622,54 +416,29 @@ public class MainFrame extends JFrame {
     }
 
     public void resetPage() {
-        CardLayout pr = (CardLayout) productPanel.getLayout();
-        String page = "";
-        for (Component comp : productPanel.getComponents()) {
-            if (comp.isVisible() && comp.getName() != null) {
-                page = comp.getName();
-            }
+        int currentProductCount = new InventoryService().getProductDataNow().length;
+        if (amountProductFirst != currentProductCount || allProductPanel == null) {
+            DisplayProductPanel displayPanel = new DisplayProductPanel();
+            int panelWidth = this.getWidth() - sideBar.getWidth() - cart.getWidth();
+
+            allProductPanel = displayPanel.getPanel(cart, "all", panelWidth);
+            productFoodPanel = displayPanel.getPanel(cart, "2", panelWidth);
+            productElectronicsPanel = displayPanel.getPanel(cart, "1", panelWidth);
+            productFashionPanel = displayPanel.getPanel(cart, "3", panelWidth);
+            productCosmeticsPanel = displayPanel.getPanel(cart, "4", panelWidth);
+            productHouseholdPanel = displayPanel.getPanel(cart, "5", panelWidth);
+            productToolsPanel = displayPanel.getPanel(cart, "6", panelWidth);
+            productSportPanel = displayPanel.getPanel(cart, "7", panelWidth);
+            productToyPanel = displayPanel.getPanel(cart, "8", panelWidth);
+
+            amountProductFirst = currentProductCount;
         }
-
-        All = new DisplayProductPanel().getPanel(cart, "all", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Electronics = new DisplayProductPanel().getPanel(cart, "1",
-                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Foods = new DisplayProductPanel().getPanel(cart, "2", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Fashions = new DisplayProductPanel().getPanel(cart, "3",
-                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Cosmetics = new DisplayProductPanel().getPanel(cart, "4",
-                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Households = new DisplayProductPanel().getPanel(cart, "5",
-                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Tools = new DisplayProductPanel().getPanel(cart, "6", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Sports = new DisplayProductPanel().getPanel(cart, "7",
-                (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-        Toys = new DisplayProductPanel().getPanel(cart, "8", (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-
-        All.setName("All");
-        Electronics.setName("Electronics");
-        Foods.setName("Foods");
-        Fashions.setName("Fashions");
-        Cosmetics.setName("Cosmetics");
-        Households.setName("Households");
-        Tools.setName("Tools");
-        Sports.setName("Sports");
-        Toys.setName("Toys");
-
-        productPanel.removeAll();
-
-        productPanel.add(All, "All");
-        productPanel.add(Electronics, "Electronics");
-        productPanel.add(Foods, "Foods");
-        productPanel.add(Fashions, "Fashions");
-        productPanel.add(Cosmetics, "Cosmetics");
-        productPanel.add(Households, "Households");
-        productPanel.add(Tools, "Tools");
-        productPanel.add(Sports, "Sports");
-        productPanel.add(Toys, "Toys");
-
-        productPanel.revalidate();
-        productPanel.repaint();
-        pr.show(productPanel, page);
+        outerBody.remove(1);
+        outerBody.add(allProductPanel, BorderLayout.CENTER);
+        outerBody.revalidate();
+        outerBody.repaint();
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
 
     private JButton ButtonToHome() {
@@ -679,14 +448,12 @@ public class MainFrame extends JFrame {
         Home.setPreferredSize(new Dimension(120, 40));
         Home.setFont(new SetPreferences().getFont(14));
         Home.addActionListener(e -> {
+            outerBody.remove(1);
+            outerBody.add(allProductPanel, BorderLayout.CENTER);
+            outerBody.revalidate();
+            outerBody.repaint();
             CardLayout cl = (CardLayout) mainPanel.getLayout();
-            CardLayout pr = (CardLayout) productPanel.getLayout();
             cl.show(mainPanel, "Body");
-            productPanel.remove(All);
-            All = new DisplayProductPanel().getPanel(cart, "all",
-                    (this.getWidth() - sideBar.getWidth() - cart.getWidth()));
-            productPanel.add(All, "All");
-            pr.show(productPanel, "All");
             cart.setVisible(true);
         });
 

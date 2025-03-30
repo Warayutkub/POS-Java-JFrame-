@@ -1,13 +1,13 @@
-1,My teams,0631673569,s6706021612038@email.kmutnb.ac.th,Warayut2548,Manager
-2,IOA,0631673569,s6706021612038@email.kmutnb.ac.th,Warayut2548,Manager
-3,Ramati,085666666,Ramati@email.kmutnb.ac.th,Warayut2548,Manager
-5,Hana,0987777777,Hana7@gmail.com,Hana0987777777,Employee
-6,rara,0988888888,rara@gmail.com,rara11,Employee
-13,rara,0988888888,rara@gmail.com,rara11,Employee
-16,rara,0988888888,rara@gmail.com,rara11,Employee
-18,rara,0988888888,rara@gmail.com,rara11,Employee
-19,rara,0988888888,rara@gmail.com,rara11,Employee
-22,Wara,adwad,dwadawdwda,Wara,Employee
-23,Warat,wew,wewe,we,Employee
+1,My teams,06xxxxxxxx,myTeam@email.kmutnb.ac.th,myTeam,Manager
+2,Kanticha,0858247012,Kanticha.P@gmail.com,Kanticha02,Manager
+3,Warayut,0631673569,Warayut@gmail.com,Warayut,Manager
 
+4,Panyapon,0949843969,kampanps@gmail.com,Pan2005 ,Manager
 
+5,Cholthicha,0655394259,cholthicha3148@gmail.com,cholthichaaa,Manager
+
+6,Frank,0655694268,Frank@gmail.com,Frank065,Employee
+
+7,Kotlin,03547795,Kotlin@gmail.com,Kotlin035,Employee
+
+8,Dart,0654259875,Dart@gmail.com,Dart065,Employee

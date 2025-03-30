@@ -72,10 +72,15 @@ public class InsertImage extends JPanel {
 
         if (option == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            pathFinal = SaveImageDirection + selectedFile.getName();
-            pathSelect = String.valueOf(selectedFile.toPath());
-            originalPath = pathSelect;
-
+            if (selectedFile != null) {
+                pathFinal = SaveImageDirection + selectedFile.getName();
+                pathSelect = String.valueOf(selectedFile.toPath());
+                originalPath = pathSelect;
+            } else {
+                pathFinal = this.defaultPathImage;
+                pathSelect = this.defaultPathImage;
+                originalPath = this.defaultPathImage;
+            }
         }
 
     }

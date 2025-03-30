@@ -33,17 +33,12 @@ public class Tools {
     }
 
     public String genNewId(String[][] data) {
-        String[] ids = new String[data.length];
         String newId = "";
 
-        for (int i = 0; i < data.length; i++) {
-            ids[i] = data[i][0];
-        }
-
-        if (ids.length == 0) {
+        if (data.length == 0) {
             newId = "1";
         } else {
-            newId = String.valueOf(Integer.parseInt(ids[ids.length - 1]) + 1);
+            newId = String.valueOf(Integer.parseInt(data[data.length - 1][0]) + 1);
         }
         return newId;
     }

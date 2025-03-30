@@ -57,6 +57,9 @@ public class Dashboard extends JPanel {
         dateSelect.setSelectedIndex(0);
         dateGet = (String) dateSelect.getSelectedItem();
         JButton findBillBtn = new JButton("Find Bill");
+        float[] hsbValues = Color.RGBtoHSB(3, 153, 254, null);
+        findBillBtn.setBackground(Color.getHSBColor(hsbValues[0], hsbValues[1], hsbValues[2]));
+        findBillBtn.setForeground(Color.WHITE);
         findBillBtn.addActionListener(e -> {
             if(fb.isVisible() == false) {
                 fb = new FindBill(mainFrame);
