@@ -1,1 +1,1 @@
-1,Aroma ,99,0,48,5,./src/backend/data/images/Aroma Diffuser.jpg
+1,Aroma,100,0,48,5,./src/backend/data/images/Aroma Diffuser.jpg

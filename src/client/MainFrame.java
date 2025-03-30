@@ -441,6 +441,21 @@ public class MainFrame extends JFrame {
         mainPanel.repaint();
     }
 
+    public void reValuePage() {
+        DisplayProductPanel displayPanel = new DisplayProductPanel();
+        int panelWidth = this.getWidth() - sideBar.getWidth() - cart.getWidth();
+
+        allProductPanel = displayPanel.getPanel(cart, "all", panelWidth);
+        productFoodPanel = displayPanel.getPanel(cart, "2", panelWidth);
+        productElectronicsPanel = displayPanel.getPanel(cart, "1", panelWidth);
+        productFashionPanel = displayPanel.getPanel(cart, "3", panelWidth);
+        productCosmeticsPanel = displayPanel.getPanel(cart, "4", panelWidth);
+        productHouseholdPanel = displayPanel.getPanel(cart, "5", panelWidth);
+        productToolsPanel = displayPanel.getPanel(cart, "6", panelWidth);
+        productSportPanel = displayPanel.getPanel(cart, "7", panelWidth);
+        productToyPanel = displayPanel.getPanel(cart, "8", panelWidth);
+    }
+
     private JButton ButtonToHome() {
         JButton Home = new JButton("Home");
         Home.setBackground(null);

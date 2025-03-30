@@ -512,6 +512,7 @@ class Card extends JPanel {
             productThis.setPrice(priceField.getText().trim());
             productThis.setType(manageProduct.transformType(typeComboBox.getSelectedItem().toString(), "number"));
             saveEditProduct();
+            mainFrame.reValuePage();
             editProductDialog.dispose();
             refreshPageInfoProductDialog();
             manageProduct.refreshPage();
