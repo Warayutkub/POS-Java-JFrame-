@@ -79,12 +79,7 @@ public class SalesServices {
         return null;
     }
 
-    public double CalDisCount(String id, int amount) {
-        String[] product = genDataProduct(id);
-        double discount = Double.parseDouble(product[3]);
-        double price = Double.parseDouble(product[2]);
-        return ((discount / 100) * price * amount);
-    }
+    
 
     public void NotificationLowProduct(String[][] dataInCart) {
         ArrayList<String> LowStock = new ArrayList<>();

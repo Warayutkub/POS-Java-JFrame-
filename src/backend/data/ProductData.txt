@@ -1,1 +1,43 @@
-1,Aroma,100,0,48,5,./src/backend/data/images/Aroma Diffuser.jpg
+1,Aroma ,99,0,48,5,./src/backend/data/images/Aroma Diffuser.jpg
+2,3/4-length-sleeve blazer,94.0,0,15,3,./src/backend/data/images/sleeve blazer.jpg
+3,Crêpe shirt,89,0,20,3,./src/backend/data/images/shirt.jpg
+4,Slim capri trousers,89,0,25,3,./src/backend/data/images/Slim capri trousers.jpg
+5,kaftan dress,67.7,0,12,3,./src/backend/data/images/kaftan dress.jpg
+6,Asymmetric metal clutch,99,0,0,3,./src/backend/data/images/Asymmetric metal clutch.jpg
+7,Satin kaftan dress,58,0,32,3,./src/backend/data/images/Satin kaftan dress.jpg
+8,Rhinestone handbag,44,0,2,3,./src/backend/data/images/Rhinestone handbag.jpg
+9,Nike Dunk Low Retro SE,138.53,0,8,3,./src/backend/data/images/NIKE+DUNK+LOW+RETRO+SE.jpg
+10,Nike ReactX Rejuven8,61.90,0,11,3,./src/backend/data/images/WMNS+NIKE+REACTX+REJUVEN8.png
+11,iPad Pro,1117,0,20,1,./src/backend/data/images/iPad Pro.png
+12,MacBook Air 13,1028,0,20,1,./src/backend/data/images/MacBook Air 13.png
+13,MacBook Pro 14,1618,0,14,1,./src/backend/data/images/MacBook Pro 14.png
+14,iPhone 16 Pro,1176,0,7,1,./src/backend/data/images/iPhone 16 Pro.png
+15,Apple Studio Display,1620,0,27,1,./src/backend/data/images/Apple Studio Display.png
+16,Magic Trackpad (USB‑C) - Multi-Touch,144,0,1,1,./src/backend/data/images/MXKA3.jpg
+17,Magic Keyboard - Touch ID,194,0,24,1,./src/backend/data/images/Magic Keyboard - Touch ID.jfif
+18,4U2 TWOGETHER MATTE AND GLOSS LIP,5.87,0,52,4,./src/backend/data/images/4U2 TWOGETHER MATTE AND GLOSS LIP.jpg
+19,4U2 GIRLFRIENDS' MOUSSE LIP CUP,6.57,0,50,4,./src/backend/data/images/lips.jpg
+20,4U2 GIRLFRIENDS' MOUSSE LIP TINT,6,0,51,4,./src/backend/data/images/lipsTINT.jpg
+21,4U2 HEART BLUSH,5.87,0,50,4,./src/backend/data/images/4U2 HEART BLUSH.jpg
+22,4U2 X BEAUTRIUM FILTER FINISH PRIMER,6.57,0,50,4,./src/backend/data/images/4U2 X BEAUTRIUM FILTER FINISH PRIMER.jpg
+23,4U2 MELTED YET,5,0,50,4,./src/backend/data/images/4U2 MELTED YET.jpg
+24,4U2 HARDER-X LIQUID LIP,5.87,0,50,4,./src/backend/data/images/4U2 HARDER-X LIQUID LIP.jpg
+25,4U2 SKIN BLUSH & HIGHLIGHT DUO CREAM,6.57,0,50,4,./src/backend/data/images/4U2 SKIN BLUSH & HIGHLIGHT DUO CREAM.jpg
+26,4U2 FLOWER BLUSH,5.87,0,50,4,./src/backend/data/images/FWB_a_2.jpg
+27,4U2 SKIN TONE-UP SUN CUSHION SPF50 PA+++,7.57,0,50,4,./src/backend/data/images/4U2 SKIN TONE-UP SUN CUSHION SPF50 PA+++.jpg
+28,4U2 SKIN ROSE GLOW LOOSE POWDER,6.57,0,50,4,./src/backend/data/images/4U2 SKIN ROSE GLOW LOOSE POWDER.jpg
+29,4U2 SKIN SOFT ROSE BLURRING POWDER,5.57,0,50,4,./src/backend/data/images/4U2 SKIN SOFT ROSE BLURRING POWDER.jpg
+30,4U2 JEWELRY BOX,5.57,0,50,4,./src/backend/data/images/4U2 JEWELRY BOX.jpg
+31,4U2 FOR YOU TOO MATTE BLUSH,2.89,0,0,4,./src/backend/data/images/BURH.jpg
+32,SKULLPANDA The Sound Series Figures,10.99,0,5,8,./src/backend/data/images/Skullpanda The Sound Series Figures.jpg
+33,SKULLPANDA Image Of Reality Series Figures,10.99,0,5,8,./src/backend/data/images/Skullpanda Image Of Reality Series Figures.jpg
+34,SKULLPANDA The Warmth Series,10.99,0,5,8,./src/backend/data/images/Skullpanda The Warmth Series.jpg
+35,SKULLPANDA Everyday Wonderland Series,10.99,0,5,8,./src/backend/data/images/Skullpanda Everyday Wonderland Series.jpg
+36,Skullpanda City of Night Series,10.99,0,5,8,./src/backend/data/images/SkullpandaCityofNightSeries.jpg
+37,SKULLPANDA Bunny or Doggy Figure,32.52,0,5,8,./src/backend/data/images/Skullpanda Bunny or Doggy Figure.jpg
+38,Hirono × Gary Baseman Figure,10.99,0,5,8,./src/backend/data/images/HironoGaryBasemanFigure.jpg
+39,Hirono Doll Panda Figure,10.99,0,5,8,./src/backend/data/images/Hirono Doll Panda Figure.jpg
+40,Hirono Shelter Series Figures,10.99,0,5,8,./src/backend/data/images/Hirono Shelter Series Figures.jpg
+41,Hirono Mime Series Figures,10.99,0,5,8,./src/backend/data/images/Hirono Mime Series Figures.jpg
+42,Finding MOKOKO Series Figures,10.99,0,5,8,./src/backend/data/images/Finding MOKOKO Series Figures.jpg
+43,PUCKY Forest Party Series-Vinyl Plush Pendant Blind Box,16.99,0,5,8,./src/backend/data/images/PUCKY Forest Party Series-Vinyl Plush Pendant Blind Box.jpg
