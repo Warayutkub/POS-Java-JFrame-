@@ -1,8 +1,8 @@
 1,Aroma ,99,0,48,5,./src/backend/data/images/Aroma Diffuser.jpg
 2,3/4-length-sleeve blazer,94.0,0,15,3,./src/backend/data/images/sleeve blazer.jpg
-3,Crêpe shirt,89,0,20,3,./src/backend/data/images/shirt.jpg
-4,Slim capri trousers,89,0,25,3,./src/backend/data/images/Slim capri trousers.jpg
-5,kaftan dress,67.7,0,12,3,./src/backend/data/images/kaftan dress.jpg
+3,Crêpe shirt,89,0,19,3,./src/backend/data/images/shirt.jpg
+4,Slim capri trousers,89,0,24,3,./src/backend/data/images/Slim capri trousers.jpg
+5,kaftan dress,67.7,0,10,3,./src/backend/data/images/kaftan dress.jpg
 6,Asymmetric metal clutch,99,0,0,3,./src/backend/data/images/Asymmetric metal clutch.jpg
 7,Satin kaftan dress,58,0,32,3,./src/backend/data/images/Satin kaftan dress.jpg
 8,Rhinestone handbag,44,0,2,3,./src/backend/data/images/Rhinestone handbag.jpg
@@ -31,7 +31,7 @@
 31,4U2 FOR YOU TOO MATTE BLUSH,2.89,0,0,4,./src/backend/data/images/BURH.jpg
 32,SKULLPANDA The Sound Series Figures,10.99,0,5,8,./src/backend/data/images/Skullpanda The Sound Series Figures.jpg
 33,SKULLPANDA Image Of Reality Series Figures,10.99,0,5,8,./src/backend/data/images/Skullpanda Image Of Reality Series Figures.jpg
-34,SKULLPANDA The Warmth Series,10.99,0,5,8,./src/backend/data/images/Skullpanda The Warmth Series.jpg
+34,SKULLPANDA The Warmth Series,10.99,0,4,8,./src/backend/data/images/Skullpanda The Warmth Series.jpg
 35,SKULLPANDA Everyday Wonderland Series,10.99,0,5,8,./src/backend/data/images/Skullpanda Everyday Wonderland Series.jpg
 36,Skullpanda City of Night Series,10.99,0,5,8,./src/backend/data/images/SkullpandaCityofNightSeries.jpg
 37,SKULLPANDA Bunny or Doggy Figure,3.52,0,5,8,./src/backend/data/images/Skullpanda Bunny or Doggy Figure.jpg
@@ -40,4 +40,7 @@
 40,Hirono Shelter Series Figures,10.99,0,5,8,./src/backend/data/images/Hirono Shelter Series Figures.jpg
 41,Hirono Mime Series Figures,10.99,0,5,8,./src/backend/data/images/Hirono Mime Series Figures.jpg
 42,Finding MOKOKO Series Figures,10.99,0,5,8,./src/backend/data/images/Finding MOKOKO Series Figures.jpg
-43,PUCKY Forest Party Series-Vinyl Plush Pendant Blind Box,16.99,0,5,8,./src/backend/data/images/PUCKY Forest Party Series-Vinyl Plush Pendant Blind Box.jpg
+43,PUCKY Forest Party Series-Vinyl Plush Pendant Blind Box,16.99,0,5,8,./src/backend/data/images/PUCKY Forest Party Series-Vinyl Plush Pendant Blind Box.jpg44,MAMA TOM YUM,7,0,49,2,./src/backend/data/images/TOMYUMMAMA.jpg
+44,MAMA TOM YUM,7,0,49,2,./src/backend/data/images/TOMYUMMAMA.jpg
+45,scissors,20,0,20,6,./src/backend/data/images/scissors.jpg
+46,Yonex Arcsaber 003 Badminton,3099,0,9,7,./src/backend/data/images/Yonex Arcsaber 003 Badminton.jpg
